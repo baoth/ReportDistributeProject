@@ -1,0 +1,7 @@
+*.exe
+obj/
+[Rr]elease*/
+[Bb]in/
+[Pp]roperties/
+Web.Debug.config
+Web.Release.config
