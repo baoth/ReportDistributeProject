@@ -78,6 +78,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Model\General.cs" />
+    <Compile Include="Model\SS_CompanyAccount.cs" />
+    <Compile Include="Model\SS_Lisence.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
