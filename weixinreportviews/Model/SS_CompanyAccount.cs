@@ -12,7 +12,7 @@ namespace weixinreportviews.Model
     public class SS_CompanyAccount:QSmartEntity
     {
         private Guid _Id = Guid.NewGuid();
-
+        [PrimaryKey]
         public Guid Id
         {
             get { return _Id; }
