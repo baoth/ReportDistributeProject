@@ -9,12 +9,12 @@ namespace weixinreportviews.Controllers
     public class TestController : Controller
     {
         //三级1
-        public ActionResult Index1()
+        public ActionResult Grid()
         {
             return View("connext");
         }
         //三级2
-        public ActionResult Index2()
+        public ActionResult Model()
         {
             
             return View("connext1");

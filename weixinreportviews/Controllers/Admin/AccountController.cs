@@ -15,9 +15,9 @@ namespace weixinreportviews.Controllers.Admin
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Index(string id)
+        public ActionResult Model(string id)
         {
-            return View();
+            return View("model");
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace weixinreportviews.Controllers.Admin
         [HttpGet]
         public ActionResult Grid()
         {
-            return View();
+            return View("Index");
         }
 
         /// <summary>
@@ -47,6 +47,7 @@ namespace weixinreportviews.Controllers.Admin
         [HttpPost]
         public JsonResult GridDatas()
         {
+
             return null;
         }
 
