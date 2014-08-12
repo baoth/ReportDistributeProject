@@ -6,9 +6,7 @@ using System.Web.Mvc;
 
 namespace weixinreportviews.Controllers.Admin
 {
-    /// <summary>
-    /// 账户
-    /// </summary>
+ 
     public class AccountController : BaseController
     {
         /// <summary>
