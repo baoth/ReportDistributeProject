@@ -8,7 +8,8 @@ namespace weixinreportviews.Controllers
 {
     public class HomeController : BaseController
     {
-        //主页
+        //主页123123
+
         public ActionResult Index()
         {
             return View();
