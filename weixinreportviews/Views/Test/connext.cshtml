@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>账户管理</title>
+    <link href="../../Content/Css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/public.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            $('.manage_nav li a').bind('click', function () {
+                alert(11)
+                debugger
+                window.parent.ControlIFrame(false);
+            })
+        });
+        
+    </script>
+    <style>
+        .manage_r {
+    width: 100%;
+    min-height: 100%;
+    float: left;
+    background: #f6f6f6;
+}
+    </style>
+</head>
+<body>
+
+    <div class="manage_r">
+        <div class="manage_rr">
+            <div class="manage_nav">
+                <ul>
+                    <li class="hover menu_active" style="cursor:pointer;">
+                        <span><a href="javascript:void(0)">公众账号管理</a></span>
+                        <!--div onmouseout="mclosetime()" onmouseover="mcancelclosetime()" id="Div1" class="pop">
+                        <a class="area" href="">创建账号管理</a>
+                        <a class="area" href="">管理账号管理</a>
+                        </div-->
+                    </li>
+                    <li class=""><a href="javascript:void(0)">个人资料修改</a></li>
+                    <li class=""><a href="javascript:void(0)">公告栏修改</a></li>
+                    <!--li class=""><a href="/member/biz/sms">短信设置</a></li>-->
+                </ul>
+            </div>
+
+           
+            <div class="manage_content">
+                <div class="manage_jian"><img src="/static/weixinhai/images/manage_jian.png" width="26" height="30"></div>
+                <div class="manage_content1">
+                    <p>公众账号管理</p>
+                    <!-- <div class="manage_content2"><button name=""  class="manage_bt1">添加公众账号</button></div> -->
+                    <div class="manage_content3">
+                        <table cellspacing="1" cellpadding="1">
+                            <tbody><tr>
+                                <th width="22%">公众号名称</th>
+                                <th width="19%">公众号类型</th>
+                                <th width="22%">会员套餐</th>
+                                <th width="18%">创建时间</th>
+                                <th width="18%">操作</th>
+                            </tr>
+                            <tr class="manage_tr1">
+                                <td class="manage_td1"><img src="/static/weixinhai/images/userface.png"><span>嘉联印刷</span></td>
+                                <td>服务号</td>
+                                <td class="manage_td2">
+                                    正式版（2015-06-06）
+                                    <span><a href="http://wpa.qq.com/msgrd?v=3&amp;uin=4007716088&amp;site=qq&amp;menu=yes" target="_blank">升级</a></span></td>
+                                <td>2014-06-06</td>
+                                <td class="manage_td3">
+                                    <div class="manage_td3a"><a href="/member/member/wxsea_manage/10165">管理<span><img src="/static/weixinhai/images/manage_gl.png"></span></a></div>
+                                    <div class="manage_td3b"><a href="/member/index/setInterface_status/10165">编辑<span><img src="/static/weixinhai/images/manage_bj.png"></span></a></div>
+                                </td>
+                            </tr>
+
+
+                            </tbody></table>
+                    </div>
+                </div>
+            </div>
+        </div><!--class="manage_rr"-->
+    </div><!--class="manage_r"-->
+
+
+</body>
+</html>
