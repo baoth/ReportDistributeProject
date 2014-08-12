@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using weixinreportviews.Model;
 
 namespace weixinreportviews.Controllers.Admin
 {
@@ -15,9 +16,15 @@ namespace weixinreportviews.Controllers.Admin
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Model(string id)
+        public ActionResult Index(string id)
         {
-            return View("model");
+            if (!string.IsNullOrEmpty(id))
+            {
+                DbSession session = General.CreateDbSession();
+                SS_CompanyAccount account = session.Retrieve<SS_CompanyAccount>(
+                    "Id", Guid.Parse(id));
+            }
+            return View();
         }
 
         /// <summary>
@@ -35,9 +42,9 @@ namespace weixinreportviews.Controllers.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Grid()
+        public ActionResult GridIndex()
         {
-            return View("Index");
+            return View();
         }
 
         /// <summary>
@@ -45,9 +52,13 @@ namespace weixinreportviews.Controllers.Admin
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult GridDatas()
+        public JsonResult GridDatas(int pageindex,int pagecount)
         {
+//select a.*,b.* from
 
+//(select top 1000 * from bx_main where guid not in (select top 10000 guid from bx_main order by docnum) order by docnum) a 
+//, 
+//(select count(*) as count1 from bx_main) b        
             return null;
         }
 
