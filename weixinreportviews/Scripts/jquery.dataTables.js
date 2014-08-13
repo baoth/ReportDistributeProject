@@ -2495,7 +2495,7 @@
 	
 		// DataTables 1.9- compatible method
 		param( 'sEcho',          settings.iDraw );
-		param( 'iColumns',       columnCount );
+		param('iColumns', columnCount);
 		param( 'sColumns',       _pluck( columns, 'sName' ).join(',') );
 		param( 'iDisplayStart',  displayStart );
 		param( 'iDisplayLength', displayLength );
