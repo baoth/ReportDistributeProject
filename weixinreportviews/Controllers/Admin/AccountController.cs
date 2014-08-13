@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using weixinreportviews.Model;
+using System.Reflection;
 
 namespace weixinreportviews.Controllers.Admin
 {
@@ -63,13 +64,9 @@ namespace weixinreportviews.Controllers.Admin
                     new SS_CompanyAccount { Name = "1213123", OrderNumber = "1", Phone = "123123", Address ="11111"},
                      new SS_CompanyAccount { Name = "12131123", OrderNumber = "1", Phone = "123123", Address ="111111"},
             };
-//select a.*,b.* from
-
-//(select top 1000 * from bx_main where guid not in (select top 10000 guid from bx_main order by docnum) order by docnum) a 
-//, 
-//(select count(*) as count1 from bx_main) b        
+            var dp = ObjectExtend<DataTablesParameter>.BindToObject(Request);
             return Json(new {
-                sEcho =1,// param.sEcho,
+                sEcho =dp.sEcho,// param.sEcho,
                 iTotalRecords = 50,
                 iTotalDisplayRecords = 50,
                 aaData=d
@@ -78,8 +75,9 @@ namespace weixinreportviews.Controllers.Admin
 
 
     }
-    public class DataTableParameter
+    public class DataTablesParameter
     {
+        public DataTablesParameter() { }
         /// <summary>
         /// DataTable请求服务器端次数
         /// </summary> 
@@ -114,5 +112,107 @@ namespace weixinreportviews.Controllers.Admin
         /// 逗号分割所有的列
         /// </summary>
         public string sColumns { get; set; }
+    }
+    public static class ObjectExtend<T> where T : new()
+    {
+        public static T BindToObject(HttpRequestBase request)
+        {
+            T t = new T();
+            PropertyInfo[] arrProperty = t.GetType().GetProperties();
+            foreach (PropertyInfo pi in arrProperty)
+            {
+                if (!string.IsNullOrEmpty(request[pi.Name]))
+                {
+                    object value = ParseObj(request[pi.Name], pi);
+                    pi.SetValue(t, value, null);
+                }
+            }
+            return t;
+        }
+        public static object ParseObj(string s, PropertyInfo pi)
+        {
+            if (pi.PropertyType == typeof(String))
+            {
+                return s;
+            }
+            else if (pi.PropertyType == typeof(Int16) || pi.PropertyType == typeof(Nullable<Int16>))
+            {
+                Int16 result = 0;
+                Int16.TryParse(s, out result);
+                return result;
+            }
+            else if (pi.PropertyType == typeof(Int32) || pi.PropertyType == typeof(Nullable<Int32>))
+            {
+                Int32 result = 0;
+                Int32.TryParse(s, out result);
+                return result;
+            }
+            else if (pi.PropertyType == typeof(Int64) || pi.PropertyType == typeof(Nullable<Int64>))
+            {
+                Int64 result = 0;
+                Int64.TryParse(s, out result);
+                return result;
+            }
+            else if (pi.PropertyType == typeof(float) || pi.PropertyType == typeof(Nullable<float>))
+            {
+                float result = 0;
+                float.TryParse(s, out result);
+                return result;
+            }
+            else if (pi.PropertyType == typeof(double) || pi.PropertyType == typeof(Nullable<double>))
+            {
+                double result = 0;
+                double.TryParse(s, out result);
+                return result;
+            }
+            else if (pi.PropertyType == typeof(decimal) || pi.PropertyType == typeof(Nullable<decimal>))
+            {
+                decimal result = 0;
+                decimal.TryParse(s, out result);
+                return result;
+            }
+            else if (pi.PropertyType == typeof(Boolean) || pi.PropertyType == typeof(Nullable<Boolean>))
+            {
+                bool result = false;
+                s = s.ToLower();
+                //加上是 和 1 hanyx 2012.5.30
+                s = (s == "on" || s == "true" || s == "是" || s == "1" ? "true" : "false");
+                Boolean.TryParse(s, out result);
+                return result;
+            }
+            else if (pi.PropertyType == typeof(Double) || pi.PropertyType == typeof(Nullable<Double>))
+            {
+                double result = 0.0;
+                Double.TryParse(s, out  result);
+                return result;
+            }
+            else if (pi.PropertyType == typeof(Array))
+            {
+                string[] arr = s.Split(',');
+                return arr;
+            }
+            else if (pi.PropertyType == typeof(DateTime) || pi.PropertyType == typeof(Nullable<DateTime>))
+            {
+                DateTime dateTime = DateTime.Now;
+                DateTime.TryParse(s, out dateTime);
+                return dateTime;
+            }
+            else if (pi.PropertyType == typeof(Guid) || pi.PropertyType == typeof(Nullable<Guid>))
+            {
+                if (string.IsNullOrEmpty(s))
+                {
+                    s = Guid.Empty.ToString();
+                }
+                return new Guid(s);
+            }
+            else if (pi.PropertyType == typeof(byte[]))
+            {
+                return null;
+            }
+            else
+            {
+                throw new Exception("不支持的类型解析");
+            }
+        }
     }
 }
