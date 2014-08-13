@@ -20,11 +20,27 @@ namespace weixinreportviews.Controllers.Admin
         [HttpGet]
         public ActionResult Model(string id)
         {
+            ViewData["stateType"] = "0";
+            ViewData["title"] = "添加";
             if (!string.IsNullOrEmpty(id))
             {
                 DbSession session = General.CreateDbSession();
                 SS_CompanyAccount account = session.Retrieve<SS_CompanyAccount>(
                     "Id", Guid.Parse(id));
+                ViewData["CompanyName"] = account.Name;
+                ViewData["OrderNumber"] = account.OrderNumber;
+                ViewData["ComPanyKey"] = account.LoginKey;
+                ViewData["Password"] = account.Password;
+                ViewData["Address"] = account.Address;
+                ViewData["TelePhone"] = account.Phone;
+                ViewData["IsStop"] = account.Stoped;
+                ViewData["CreateorName"] = account.Creator;
+                ViewData["CreateDate"] = account.CreateDate.ToString("yyyy-MM-dd");
+                ViewData["ModifiedDate"] =account.ModifyDate==null?"":((DateTime) account.ModifyDate).ToString("yyyy-MM-dd");
+                ViewData["Id"] = account.Id;
+
+                ViewData["stateType"] = "1";
+                ViewData["title"] = "修改";
                 
             }
             return View("Model");
