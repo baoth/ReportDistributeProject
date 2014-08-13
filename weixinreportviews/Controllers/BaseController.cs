@@ -14,4 +14,6 @@ namespace weixinreportviews.Controllers
             //Response.Redirect("")
         }
     }
+
+    
 }

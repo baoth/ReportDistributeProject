@@ -131,6 +131,11 @@ namespace weixinreportviews.Model
                 string[] arr = value.Split(',');
                 return arr;
             }
+            else if (PropertyType == typeof(String[]))
+            {
+                string[] arr = value.Split(',');
+                return arr;
+            }
             else if (PropertyType == typeof(DateTime) || PropertyType == typeof(Nullable<DateTime>))
             {
                 DateTime dateTime = DateTime.Now;
@@ -266,5 +271,64 @@ namespace weixinreportviews.Model
         public DbSessionInstance() : base("db") { }
     }
 
-    
+    public class DataTablesParameter
+    {
+        /// <summary>
+        /// DataTable请求服务器端次数
+        /// </summary> 
+        public string sEcho { get; set; }
+
+        /// <summary>
+        /// 过滤文本
+        /// </summary>
+        public string sSearch { get; set; }
+
+        /// <summary>
+        /// 每页显示的数量
+        /// </summary>
+        public int iDisplayLength { get; set; }
+
+        /// <summary>
+        /// 分页时每页跨度数量
+        /// </summary>
+        public int iDisplayStart { get; set; }
+
+        /// <summary>
+        /// 所有排序列名称
+        /// </summary>
+        public string[] allSortCol { get; set; }
+
+        /// <summary>
+        /// 对应排序列排序方式
+        /// </summary>
+        public string[] allDir { get; set; }
+
+        public List<QSmartQueryFilterCondition> GetFilters(List<string> cols)
+        {
+            if (string.IsNullOrEmpty(sSearch) || cols==null || cols.Count==0) return null;
+            List<QSmartQueryFilterCondition> result = new List<QSmartQueryFilterCondition>();
+            foreach (string col in cols)
+            {
+                result.Add(new QSmartQueryFilterCondition
+                {
+                    Column = new QSmartQueryColumn { columnName = col, dataType = typeof(string) },
+                    Operator= QSmartOperatorEnum.like,
+                    Values=new List<object>{sSearch}
+                });
+            }
+            return result;
+        }
+
+        public Dictionary<QSmartQueryColumn, QSmartOrderByEnum> GetOrderBys()
+        {
+            if (allSortCol == null || allSortCol.Length == 0) return null;
+            Dictionary<QSmartQueryColumn, QSmartOrderByEnum> result = new Dictionary<QSmartQueryColumn, QSmartOrderByEnum>();
+            for (int i = 0; i < allSortCol.Length; i++)
+            {
+                result.Add(new QSmartQueryColumn { columnName = allSortCol[i] },
+                     (QSmartOrderByEnum)Enum.Parse(typeof(QSmartOrderByEnum), allDir[i].ToLower()));
+            }
+            return result;
+        }
+    }
 }
