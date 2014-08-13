@@ -10,24 +10,43 @@
     <link href="../../Content/Css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="../../Scripts/jquery.dataTables.js" type="text/javascript"></script>
- 
     <script>
         $(document).ready(function () {
-            $(document).ready(function () {
                 $('#example').dataTable({
                     "processing": true,
-                    "ajax": "/Account/GetList",
-                    "columns": [
-                        { "data": "name" },
-                        { "data": "position" },
-                        { "data": "contact" },
-                        { "data": "start_date" },
-                        { "data": "salary" }
+                    "bServerSide": true,
+                    "sAjaxSource": "/Account/GridDatas",
+                    "sPaginationType": "full_numbers",
+                    "oLanguage": {
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "抱歉， 没有找到",
+                        "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                        "sInfoEmpty": "没有数据",
+                        "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                        "sZeroRecords": "没有检索到数据",
+                        "sSearch": "名称:",
+                        "oPaginate": {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                        }
+
+                    },
+                    "aoColumns": [
+                        { "data": "Name",
+                            "bSearchable": false,
+                            "bSortable": false,
+                            "mRender": function (val, isShow, row) {
+                                return '<a href="#" onclick="alert(/"hh/")">'+val+'</a>';
+                            } //自定义列的样式
+                        },
+                        { "data": "OrderNumber" },
+                        { "data": "Phone" },
+                        { "data": "Address" }
                     ]
                 });
             });
-
-        });
     </script>
 </head>
 <body>
@@ -35,25 +54,13 @@
         <thead>
         <tr>
             <th>Name</th>
-            <th>Position</th>
-            <th>Office</th>
-            <th>Extn.</th>
-            <th>Start date</th>
-            <th>Salary</th>
+            <th>OrderNumber</th>
+            <th>Phone</th>
+            <th>Address</th>
         </tr>
     </thead>
  
-    <tfoot>
-        <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Office</th>
-            <th>Extn.</th>
-            <th>Start date</th>
-            <th>Salary</th>
-        </tr>
-    </tfoot>
-
+    
 
        @* <thead>
             <tr>
