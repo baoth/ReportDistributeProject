@@ -89,8 +89,10 @@
     <Content Include="Cbin\System.Web.Extensions.dll" />
     <Content Include="Content\Css\bootstrap-theme.css" />
     <Content Include="Content\Css\bootstrap.css" />
-    <Content Include="Content\Css\demo_page.css" />
+    <Content Include="Content\Css\button.css" />
     <Content Include="Content\Css\demo_table.css" />
+    <Content Include="Content\Css\font-awesome.min.css" />
+    <Content Include="Content\Css\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Css\jquery.dataTables.css" />
     <Content Include="Content\Css\jquery.dataTables.min.css" />
     <Content Include="Content\Css\jquery.dataTables_themeroller.css" />
@@ -116,6 +118,10 @@
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Model.cshtml" />
+    <None Include="Content\Css\fonts\fontawesome-webfont.eot" />
+    <None Include="Content\Css\fonts\fontawesome-webfont.ttf" />
+    <None Include="Content\Css\fonts\fontawesome-webfont.woff" />
+    <None Include="Content\Css\fonts\FontAwesome.otf" />
     <None Include="Content\Img\Sorting icons.psd" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
