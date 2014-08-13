@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using QSmart.Core.Object;
+using QSmart.Core.DataBase;
 
 namespace weixinreportviews.Model
 {
@@ -11,7 +12,8 @@ namespace weixinreportviews.Model
     /// </summary>
     public class SS_CompanyAccount:QSmartEntity
     {
-        private Guid _Id = Guid.NewGuid();
+        #region 属性
+        private Guid _Id = Guid.Empty;
         [PrimaryKey]
         public Guid Id
         {
@@ -67,7 +69,7 @@ namespace weixinreportviews.Model
             set { _ModifyDate = value; }
         }
 
-        private Guid _Creator = Guid.NewGuid();
+        private Guid _Creator = Guid.Empty;
 
         public Guid Creator
         {
@@ -92,11 +94,43 @@ namespace weixinreportviews.Model
         }
 
         private string _OrderNumber = string.Empty;
-
+        [StringMaxLength(16)]
         public string OrderNumber
         {
             get { return _OrderNumber; }
             set { _OrderNumber = value; }
         }
+        #endregion
+        public List<QObject> CreateDeleteCommand()
+        {
+            if (this.Id != Guid.Empty)
+            {
+                QSmartQuery QueryA = new QSmartQuery();
+
+                QueryA.Tables.Add(new QSmartQueryTable { tableName = typeof(SS_CompanyAccount).Name });
+
+                QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
+                {
+                    Column = new QSmartQueryColumn { columnName = "Id", dataType = typeof(Guid) },
+                    Operator = QSmartOperatorEnum.equal,
+                    Values = new List<object> { this.Id }
+                });
+
+                QSmartQuery QueryB = new QSmartQuery();
+
+                QueryB.Tables.Add(new QSmartQueryTable { tableName = typeof(SS_Lisence).Name });
+
+                QueryB.FilterConditions.Add(new QSmartQueryFilterCondition
+                {
+                    Column = new QSmartQueryColumn { columnName = "AccountId", dataType = typeof(Guid) },
+                    Operator = QSmartOperatorEnum.equal,
+                    Values = new List<object> { this.Id }
+                });
+
+                return new List<QObject> { QueryA, QueryB };
+            }
+            return null;
+        }
+        
     }
 }

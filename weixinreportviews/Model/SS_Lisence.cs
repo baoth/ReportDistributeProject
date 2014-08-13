@@ -17,7 +17,7 @@ namespace weixinreportviews.Model
             set { _Id = value; }
         }
 
-        private Guid _AccountId = Guid.NewGuid();
+        private Guid _AccountId = Guid.Empty;
         /// <summary>
         /// 账户Id
         /// </summary>
@@ -45,7 +45,7 @@ namespace weixinreportviews.Model
             set { _CreateDate = value; }
         }
 
-        private Guid _Creator = Guid.NewGuid();
+        private Guid _Creator = Guid.Empty;
 
         public Guid Creator
         {
@@ -81,6 +81,14 @@ namespace weixinreportviews.Model
         {
             get { return _ExpiryDate; }
             set { _ExpiryDate = value; }
+        }
+
+        private string _OrderNumber = string.Empty;
+        [StringMaxLength(16)]
+        public string OrderNumber
+        {
+            get { return _OrderNumber; }
+            set { _OrderNumber = value; }
         }
     }
 }
