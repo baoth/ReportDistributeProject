@@ -104,36 +104,36 @@ namespace weixinreportviews.Controllers.Admin
        //[HttpPost]
         public JsonResult GridDatas()
         {
-            var d = new List<SS_CompanyAccount>() { 
-                new SS_CompanyAccount { Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="1"},
-                 new SS_CompanyAccount { Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="11"},
-                  new SS_CompanyAccount { Name = "1231213", OrderNumber = "1", Phone = "123123", Address ="111"},
-                   new SS_CompanyAccount { Name = "12311213", OrderNumber = "1", Phone = "123123", Address ="1111"},
-                    new SS_CompanyAccount { Name = "1213123", OrderNumber = "1", Phone = "123123", Address ="11111"},
-                     new SS_CompanyAccount { Name = "12131123", OrderNumber = "1", Phone = "123123", Address ="111111"},
-            };
-            var dp = General.CreateInstance<DataTablesParameter>(Request);
-            return Json(new
-            {
-                sEcho = dp.sEcho,// param.sEcho,
-                iTotalRecords = 50,
-                iTotalDisplayRecords = 50,
-                aaData = d
-            }, JsonRequestBehavior.AllowGet);
-
-            //DataTablesParameter dtp = General.CreateInstance<DataTablesParameter>(Request);
-            //int totalcount = 0;
-            //DbSession session = General.CreateDbSession();
-            //var rows = session.PaginationRetrieve<SS_CompanyAccount>(dtp.iDisplayStart,
-            //    dtp.iDisplayLength, dtp.GetFilters(new List<string> { "Name", "OrderNumber" }),
-            //    dtp.GetOrderBys(), out totalcount);
+            //var d = new List<SS_CompanyAccount>() { 
+            //    new SS_CompanyAccount { Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="1"},
+            //     new SS_CompanyAccount { Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="11"},
+            //      new SS_CompanyAccount { Name = "1231213", OrderNumber = "1", Phone = "123123", Address ="111"},
+            //       new SS_CompanyAccount { Name = "12311213", OrderNumber = "1", Phone = "123123", Address ="1111"},
+            //        new SS_CompanyAccount { Name = "1213123", OrderNumber = "1", Phone = "123123", Address ="11111"},
+            //         new SS_CompanyAccount { Name = "12131123", OrderNumber = "1", Phone = "123123", Address ="111111"},
+            //};
+            //var dp = General.CreateInstance<DataTablesParameter>(Request);
             //return Json(new
             //{
-            //    sEcho = dtp.sEcho,// param.sEcho,
-            //    iTotalRecords = totalcount,
-            //    iTotalDisplayRecords = totalcount,
-            //    aaData = rows
+            //    sEcho = dp.sEcho,// param.sEcho,
+            //    iTotalRecords = 50,
+            //    iTotalDisplayRecords = 50,
+            //    aaData = d
             //}, JsonRequestBehavior.AllowGet);
+
+            DataTablesParameter dtp = General.CreateInstance<DataTablesParameter>(Request);
+            int totalcount = 0;
+            DbSession session = General.CreateDbSession();
+            var rows = session.PaginationRetrieve<SS_CompanyAccount>(dtp.iDisplayStart,
+                dtp.iDisplayLength, dtp.GetFilters(new List<string> { "Name", "OrderNumber" }),
+                dtp.GetOrderBys(), out totalcount);
+            return Json(new
+            {
+                sEcho = dtp.sEcho,// param.sEcho,
+                iTotalRecords = totalcount,
+                iTotalDisplayRecords = totalcount,
+                aaData = rows
+            }, JsonRequestBehavior.AllowGet);
         }
 
 
