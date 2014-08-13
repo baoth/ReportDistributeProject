@@ -82,5 +82,13 @@ namespace weixinreportviews.Model
             get { return _ExpiryDate; }
             set { _ExpiryDate = value; }
         }
+
+        private string _OrderNumber = string.Empty;
+        [StringMaxLength(16)]
+        public string OrderNumber
+        {
+            get { return _OrderNumber; }
+            set { _OrderNumber = value; }
+        }
     }
 }

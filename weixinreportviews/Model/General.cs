@@ -22,6 +22,21 @@ namespace weixinreportviews.Model
         }
 
         public static DbSession CreateDbSession() { return new DbSessionInstance(); }
+
+        /// <summary>
+        /// 生成16位的订单号
+        /// </summary>
+        /// <param name="Prefix">订单号前缀(2位）</param>
+        /// <returns>订单号</returns>
+        public static string CreateOrderNumber(string Prefix)
+        {
+            Prefix = Prefix.ToUpper();
+            if (Prefix.Length > 2) Prefix = Prefix.Substring(0, 2);
+            string subfix = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper();
+            DateTime dt=DateTime.Now;
+            return Prefix + dt.Year.ToString().Substring(2, 2) +
+                string.Format("{0:D2}", dt.Month) + string.Format("{0:D2}", dt.Day) + subfix;
+        }
     }
 
     public abstract class DbSession: QSmartSession
