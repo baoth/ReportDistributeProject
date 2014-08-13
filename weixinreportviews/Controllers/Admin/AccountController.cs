@@ -57,13 +57,24 @@ namespace weixinreportviews.Controllers.Admin
 
         {
             var d = new List<SS_CompanyAccount>() { 
-                new SS_CompanyAccount { Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="1"},
-                 new SS_CompanyAccount { Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="11"},
-                  new SS_CompanyAccount { Name = "1231213", OrderNumber = "1", Phone = "123123", Address ="111"},
-                   new SS_CompanyAccount { Name = "12311213", OrderNumber = "1", Phone = "123123", Address ="1111"},
-                    new SS_CompanyAccount { Name = "1213123", OrderNumber = "1", Phone = "123123", Address ="11111"},
-                     new SS_CompanyAccount { Name = "12131123", OrderNumber = "1", Phone = "123123", Address ="111111"},
+                new SS_CompanyAccount {Id=Guid.NewGuid(), Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="1"},
+                 new SS_CompanyAccount {Id=Guid.NewGuid(), Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="11"},
+                  new SS_CompanyAccount {Id=Guid.NewGuid(), Name = "1231213", OrderNumber = "1", Phone = "123123", Address ="111"},
+                   new SS_CompanyAccount {Id=Guid.NewGuid(), Name = "12311213", OrderNumber = "1", Phone = "123123", Address ="1111"},
+                    new SS_CompanyAccount {Id=Guid.NewGuid(), Name = "1213123", OrderNumber = "1", Phone = "123123", Address ="11111"},
+                     new SS_CompanyAccount {Id=Guid.NewGuid(), Name = "12131123", OrderNumber = "1", Phone = "123123", Address ="111111"},
             };
+            var t = d.Select(e => new
+            {
+                e.Id,
+                e.Name,
+                e.OrderNumber,
+                e.Phone,
+                e.Address,
+                e.CreateDate,
+                e.LoginKey
+
+            });
             var dp = ObjectExtend<DataTablesParameter>.BindToObject(Request);
             return Json(new {
                 sEcho =dp.sEcho,// param.sEcho,
