@@ -18,7 +18,7 @@ namespace weixinreportviews.Controllers.Admin
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Index(string id)
+        public ActionResult Model(string id)
         {
             if (!string.IsNullOrEmpty(id))
             {
@@ -27,7 +27,7 @@ namespace weixinreportviews.Controllers.Admin
                     "Id", Guid.Parse(id));
                 
             }
-            return View();
+            return View("Model");
         }
 
         /// <summary>
@@ -47,6 +47,8 @@ namespace weixinreportviews.Controllers.Admin
                 }
                 else
                 {
+                    account.Id = Guid.NewGuid();
+                    account.OrderNumber = General.CreateOrderNumber("AC");
                     session.Context.InsertEntity(account.CreateQSmartObject());
                 }
                 session.Context.SaveChange();
@@ -100,8 +102,7 @@ namespace weixinreportviews.Controllers.Admin
         /// </summary>
         /// <returns></returns>
        //[HttpPost]
-        public JsonResult GridDatas()//int pageindex,int pagecount)
-
+        public JsonResult GridDatas()
         {
             var d = new List<SS_CompanyAccount>() { 
                 new SS_CompanyAccount { Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="1"},
@@ -112,53 +113,31 @@ namespace weixinreportviews.Controllers.Admin
                      new SS_CompanyAccount { Name = "12131123", OrderNumber = "1", Phone = "123123", Address ="111111"},
             };
             var dp = General.CreateInstance<DataTablesParameter>(Request);
-            return Json(new {
-                sEcho =dp.sEcho,// param.sEcho,
+            return Json(new
+            {
+                sEcho = dp.sEcho,// param.sEcho,
                 iTotalRecords = 50,
                 iTotalDisplayRecords = 50,
-                aaData=d
-            },JsonRequestBehavior.AllowGet) ;
+                aaData = d
+            }, JsonRequestBehavior.AllowGet);
+
+            //DataTablesParameter dtp = General.CreateInstance<DataTablesParameter>(Request);
+            //int totalcount = 0;
+            //DbSession session = General.CreateDbSession();
+            //var rows = session.PaginationRetrieve<SS_CompanyAccount>(dtp.iDisplayStart,
+            //    dtp.iDisplayLength, dtp.GetFilters(new List<string> { "Name", "OrderNumber" }),
+            //    dtp.GetOrderBys(), out totalcount);
+            //return Json(new
+            //{
+            //    sEcho = dtp.sEcho,// param.sEcho,
+            //    iTotalRecords = totalcount,
+            //    iTotalDisplayRecords = totalcount,
+            //    aaData = rows
+            //}, JsonRequestBehavior.AllowGet);
         }
 
 
     }
-    public class DataTablesParameter
-    {
-        public DataTablesParameter() { }
-        /// <summary>
-        /// DataTable请求服务器端次数
-        /// </summary> 
-        public string sEcho { get; set; }
-
-        /// <summary>
-        /// 过滤文本
-        /// </summary>
-        public string sSearch { get; set; }
-
-        /// <summary>
-        /// 每页显示的数量
-        /// </summary>
-        public int iDisplayLength { get; set; }
-
-        /// <summary>
-        /// 分页时每页跨度数量
-        /// </summary>
-        public int iDisplayStart { get; set; }
-
-        /// <summary>
-        /// 列数
-        /// </summary>
-        public int iColumns { get; set; }
-
-        /// <summary>
-        /// 排序列的数量
-        /// </summary>
-        public int iSortingCols { get; set; }
-
-        /// <summary>
-        /// 逗号分割所有的列
-        /// </summary>
-        public string sColumns { get; set; }
-    }
+    
     
 }
