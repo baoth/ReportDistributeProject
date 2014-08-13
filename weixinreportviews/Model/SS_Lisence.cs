@@ -9,6 +9,7 @@ namespace weixinreportviews.Model
     public class SS_Lisence:QSmartEntity
     {
         private int _Id = 0;
+        [PrimaryKey]
         [AutoIncrement]
         public int Id
         {
