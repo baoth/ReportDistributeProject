@@ -89,6 +89,8 @@
     <Content Include="Cbin\System.Web.Extensions.dll" />
     <Content Include="Content\Css\bootstrap-theme.css" />
     <Content Include="Content\Css\bootstrap.css" />
+    <Content Include="Content\Css\demo_page.css" />
+    <Content Include="Content\Css\demo_table.css" />
     <Content Include="Content\Css\jquery.dataTables.css" />
     <Content Include="Content\Css\jquery.dataTables.min.css" />
     <Content Include="Content\Css\jquery.dataTables_themeroller.css" />
@@ -113,7 +115,7 @@
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
-    <Content Include="Views\Account\model.cshtml" />
+    <Content Include="Views\Account\Model.cshtml" />
     <None Include="Content\Img\Sorting icons.psd" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
