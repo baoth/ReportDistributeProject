@@ -33,13 +33,15 @@
         });
 
         function Save() {
+        debugger
             //检查
             if (Check() == false) return;
             var Name = $("#Name").val();            
             var LoginKey = $("#LoginKey").val();
             var Address = $("#Address").val();
-            var Phone= $("#Phone").val();
-            var Stoped = $("#Stoped").val() == "1" ? true : false;
+            var Phone = $("#Phone").val();
+            var isStop=$("#Stoped").attr("checked");
+            var Stoped = (isStop == "checked" || isStop=="true") ? true : false;
             // data["CreateDate"] = $("#CreateDate").val();
             // data["ModifyDate"] = $("#ModifiedDate").val();
             var Password = $("#Password").val();
@@ -120,8 +122,7 @@
         }
     
     //匹配国内电话号码(0511-4405222 或 021-87888822)
-        function istell(str) {
-    debugger
+        function istell(str) {   
 //        var result = str.match(/\d{3}-\d{8}|\d{4}-\d{7}/);
 //        var phone = str.match(/^1[35]\d{9}$/);
 //        if (result == null && phone == null) return false;
@@ -217,7 +218,7 @@
          <tr>
             <td class="tdtitle"><label class="control-label">是否可用  &nbsp </label></td>
             <td class="tdText">
-              <input type="checkbox" id="selectIsStop" checked="@ViewData["Stoped"]" value="@ViewData["Stoped"]" />           
+              <input type="checkbox" id="Stoped" name="Stoped" checked="@ViewData["Stoped"]" />           
             
             </td>
             <td class="tdtitle">
