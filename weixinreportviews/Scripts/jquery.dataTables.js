@@ -2490,7 +2490,7 @@
         var language = settings.oLanguage;
         var previousSearch = settings.oPreviousSearch;
         var features = settings.aanFeatures;
-        var input = '<input type="search"  class="' + classes.sFilterInput + '"/><a href="#" title="搜索" onclick="return false" id="play-btn" class="searchIcon"></a>';
+        var input = '<table><tr><td><input type="search"  class="' + classes.sFilterInput + '"/></td><td><a href="#" title="搜索" onclick="return false" id="play-btn" class="searchIcon"></a></td></tr></table>';
 
         var str = language.sSearch;
         str = str.match(/_INPUT_/) ?
