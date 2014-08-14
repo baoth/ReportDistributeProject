@@ -10792,7 +10792,7 @@ DataTable.defaults = {
         *      } );
         *    } );
         */
-        "sProcessing": "Processing...",
+        "sProcessing": "加载中...",
 
 
         /**
