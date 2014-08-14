@@ -311,6 +311,7 @@ table.dataTable td {
 }
 .dataTables_wrapper .dataTables_filter input {
   margin-left: 0.5em;
+  width:200px;
 }
 .dataTables_wrapper .dataTables_info {
   clear: both;
@@ -474,3 +475,31 @@ table.dataTable td {
     margin-top: 0.5em;
   }
 }
+/*custom*/
+ input{border: 1px solid #ccc;border-radius: 4px;height: 26px;line-height: 24px;vertical-align:middle;}
+		input:focus{
+			border-color: rgba(82, 168, 236, 0.8);
+			outline: 0;
+			outline: thin dotted \9;
+			/* IE6-9 */
+			-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+			-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+		}
+		tr:hover
+		{
+		    background-color: whitesmoke !important;
+		}
+		.dataTables_filter label {
+            display:inline-flex;
+        }
+	    .searchIcon 
+	    {
+	        display:block;
+            background: url('../../Content/Img/search.png') no-repeat;
+            _background: url('../../Content/Img/search.png') no-repeat;
+            width: 35px;
+            height: 30px;
+            line-height: 24px;
+            vertical-align: middle;
+        }
