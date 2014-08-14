@@ -104,6 +104,8 @@
     <Content Include="Content\Img\forward_disabled.png" />
     <Content Include="Content\Img\forward_enabled.png" />
     <Content Include="Content\Img\forward_enabled_hover.png" />
+    <Content Include="Content\Img\imageError.jpg" />
+    <Content Include="Content\Img\imageSuccess.jpg" />
     <Content Include="Content\Img\manage_01.png" />
     <Content Include="Content\Img\search.png" />
     <Content Include="Content\Img\sort_asc.png" />
