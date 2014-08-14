@@ -2387,7 +2387,8 @@
             param('allDir', allDir.join(','));
             param('iSortingCols', sort.length);
         }
-        param('allFilter', settings.allFilter);
+        
+        param('allFilter', settings.oLanguage.allFilter);
         // If the legacy.ajax parameter is null, then we automatically decide which
         // form to use, based on sAjaxSource
         var legacy = DataTable.ext.legacy.ajax;
@@ -10950,7 +10951,7 @@ DataTable.defaults = {
     *  @deprecated 1.10. Please use `ajax` for this functionality now.
     */
     "sAjaxSource": null,
-
+    "allFilter":null,
 
     /**
     * This initialisation variable allows you to specify exactly where in the
