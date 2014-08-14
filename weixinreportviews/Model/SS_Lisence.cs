@@ -27,6 +27,17 @@ namespace weixinreportviews.Model
             set { _AccountId = value; }
         }
 
+        private string _ProductKey = string.Empty;
+        /// <summary>
+        /// 产品模块Key
+        /// </summary>
+        [StringMaxLength(16)]
+        public string ProductKey
+        {
+            get { return _ProductKey; }
+            set { _ProductKey = value; }
+        }
+
         private short _LisencePoint = 0;
         /// <summary>
         /// 授权点数

@@ -20,28 +20,17 @@ namespace weixinreportviews.Controllers.Admin
         [HttpGet]
         public ActionResult Model(string id)
         {
-            ViewData["stateType"] = "0";
-            ViewData["title"] = "添加";
+            
             if (!string.IsNullOrEmpty(id))
             {
                 DbSession session = General.CreateDbSession();
                 SS_CompanyAccount account = session.Retrieve<SS_CompanyAccount>(
                     "Id", Guid.Parse(id));
-                ViewData["CompanyName"] = account.Name;
-                ViewData["OrderNumber"] = account.OrderNumber;
-                ViewData["ComPanyKey"] = account.LoginKey;
-                ViewData["Password"] = account.Password;
-                ViewData["Address"] = account.Address;
-                ViewData["TelePhone"] = account.Phone;
-                ViewData["IsStop"] = account.Stoped;
-                ViewData["CreateorName"] = account.Creator;
-                ViewData["CreateDate"] = account.CreateDate.ToString("yyyy-MM-dd");
-                ViewData["ModifiedDate"] =account.ModifyDate==null?"":((DateTime) account.ModifyDate).ToString("yyyy-MM-dd");
-                ViewData["Id"] = account.Id;
-
-                ViewData["stateType"] = "1";
-                ViewData["title"] = "修改";
-                
+                PropertyInfo[] pis = account.GetType().GetProperties();
+                for (int i = 0; i < pis.Length; i++)
+                {
+                    ViewData.Add(pis[i].Name, pis[i].GetValue(account, null).ToString());
+                }
             }
             return View("Model");
         }
@@ -120,23 +109,6 @@ namespace weixinreportviews.Controllers.Admin
        //[HttpPost]
         public JsonResult GridDatas()
         {
-            //var d = new List<SS_CompanyAccount>() { 
-            //    new SS_CompanyAccount { Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="1"},
-            //     new SS_CompanyAccount { Name = "12311231", OrderNumber = "1", Phone = "123123", Address ="11"},
-            //      new SS_CompanyAccount { Name = "1231213", OrderNumber = "1", Phone = "123123", Address ="111"},
-            //       new SS_CompanyAccount { Name = "12311213", OrderNumber = "1", Phone = "123123", Address ="1111"},
-            //        new SS_CompanyAccount { Name = "1213123", OrderNumber = "1", Phone = "123123", Address ="11111"},
-            //         new SS_CompanyAccount { Name = "12131123", OrderNumber = "1", Phone = "123123", Address ="111111"},
-            //};
-            //var dp = General.CreateInstance<DataTablesParameter>(Request);
-            //return Json(new
-            //{
-            //    sEcho = dp.sEcho,// param.sEcho,
-            //    iTotalRecords = 50,
-            //    iTotalDisplayRecords = 50,
-            //    aaData = d
-            //}, JsonRequestBehavior.AllowGet);
-
             DataTablesParameter dtp = General.CreateInstance<DataTablesParameter>(Request);
             int totalcount = 0;
             DbSession session = General.CreateDbSession();
