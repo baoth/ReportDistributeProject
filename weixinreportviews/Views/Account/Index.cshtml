@@ -27,7 +27,7 @@
         };
         $(document).ready(function () {
             var table = $('#example').dataTable({
-                "order": [[1, 'asc']],
+                "order": [[0, 'asc']],
                 "processing": true,
                 "bServerSide": true,
                 "scrollCollapse": true,
@@ -66,16 +66,15 @@
                 },
                 "aoColumns": [
 
-                //                        { "data": "Order", "sTitle": "序号" },
                         {"data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
-                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 }, // "bSearchable": false,// "bSortable": false,
+                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 },
                         {"data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户" },
                         { "data": "Stoped", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false },
                         { "data": "CreateDate", "sName": 'CreateDate', "sTitle": "创建日期" },
-                        { "data": "Id", "sTitle": "操作",
+                        { "data": "Id", "sTitle": "操作","bSortable": false,
                             "mRender": function (val, isShow, row) {
                                 return '<div class="settings-button"><img src="../../Content/Img/icon-cog-small.png" /></div>';
-                            } //自定义列的样式
+                            }
                         }
                     ]
             });
