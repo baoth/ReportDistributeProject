@@ -23,6 +23,7 @@ namespace weixinreportviews.Model
 
         private string _Name = string.Empty;
         [StringMaxLength(50)]
+        [Unique]
         public string Name
         {
             get { return _Name; }
@@ -79,6 +80,7 @@ namespace weixinreportviews.Model
 
         private string _LoginKey = string.Empty;
         [StringMaxLength(15)]
+        [Unique]
         public string LoginKey
         {
             get { return _LoginKey; }
@@ -95,6 +97,7 @@ namespace weixinreportviews.Model
 
         private string _OrderNumber = string.Empty;
         [StringMaxLength(16)]
+        [Unique]
         public string OrderNumber
         {
             get { return _OrderNumber; }

@@ -166,38 +166,60 @@ namespace weixinreportviews.Model
         protected DbSession(string name) : base(name) { }
 
         /// <summary>
-        /// 通过主键获取模型对象
+        /// 通过唯一键获取模型对象
         /// </summary>
         /// <typeparam name="T">模型类型</typeparam>
-        /// <param name="PrimaryKeyName">主键名称</param>
-        /// <param name="PrimaryKeyValue">主键值</param>
+        /// <param name="UniqueKeyName">唯一键名称</param>
+        /// <param name="UniqueKeyValue">唯一键值</param>
         /// <returns>模型对象</returns>
-        public T Retrieve<T>(string PrimaryKeyName, object PrimaryKeyValue) where T : QSmartEntity
+        public T Retrieve<T>(string UniqueKeyName, object UniqueKeyValue) where T : QSmartEntity
         {
             QSmartQuery Query = new QSmartQuery();
             Query.Tables.Add(new QSmartQueryTable());
             Query.Tables[0].tableName = typeof(T).Name;
             Query.FilterConditions.Add(new QSmartQueryFilterCondition());
             Query.FilterConditions[0].Column = new QSmartQueryColumn();
-            Query.FilterConditions[0].Column.columnName = PrimaryKeyName;
-            Query.FilterConditions[0].Column.dataType = PrimaryKeyValue.GetType();
+            Query.FilterConditions[0].Column.columnName = UniqueKeyName;
+            Query.FilterConditions[0].Column.dataType = UniqueKeyValue.GetType();
             Query.FilterConditions[0].Operator = QSmartOperatorEnum.equal;
-            Query.FilterConditions[0].Values.Add(PrimaryKeyValue);
+            Query.FilterConditions[0].Values.Add(UniqueKeyValue);
             var results = this.Context.QueryEntity<T>(Query);
             return results.Count == 0 ? null : results[0];
+        }
+
+        /// <summary>
+        /// 判断是否存在实例
+        /// </summary>
+        /// <typeparam name="T">模型类型</typeparam>
+        /// <param name="UniqueKeyName">唯一键名称</param>
+        /// <param name="UniqueKeyValue">唯一键值</param>
+        /// <returns>true,存在 false,不存在</returns>
+        public bool Exists<T>(string UniqueKeyName, object UniqueKeyValue) where T : QSmartEntity
+        {
+            QSmartQuery Query = new QSmartQuery();
+            Query.Tables.Add(new QSmartQueryTable());
+            Query.Tables[0].tableName = typeof(T).Name;
+            Query.FilterConditions.Add(new QSmartQueryFilterCondition());
+            Query.FilterConditions[0].Column = new QSmartQueryColumn();
+            Query.FilterConditions[0].Column.columnName = UniqueKeyName;
+            Query.FilterConditions[0].Column.dataType = UniqueKeyValue.GetType();
+            Query.FilterConditions[0].Operator = QSmartOperatorEnum.equal;
+            Query.FilterConditions[0].Values.Add(UniqueKeyValue);
+            DataTable dt = this.Context.QueryTable(Query);
+            return dt.Rows.Count > 0 ? true : false;
         }
 
         /// <summary>
         /// 获取分页数据集合
         /// </summary>
         /// <typeparam name="T">模型类型</typeparam>
-        /// <param name="PageIndex">当前页号</param>
-        /// <param name="PageCount">一页需要显示多少条记录</param>
+        /// <param name="PageStart">起始行index</param>
+        /// <param name="PageLength">一页需要显示多少条记录</param>
         /// <param name="Conditions">过滤条件</param>
         /// <param name="OrderBys">排序条件</param>
         /// <param name="TotalCount">返回总条数</param>
         /// <returns>数据集合</returns>
-        public List<T> PaginationRetrieve<T>(int PageIndex, int PageCount, List<QSmartQueryFilterCondition> Conditions
+        public List<T> PaginationRetrieve<T>(int PageStart, int PageLength, List<QSmartQueryFilterCondition> Conditions
             ,Dictionary<QSmartQueryColumn, QSmartOrderByEnum> OrderBys,out int TotalCount)
             where T : QSmartEntity
         {
@@ -207,8 +229,8 @@ namespace weixinreportviews.Model
             QueryA.Tables.Add(new QSmartQueryTable());
             QueryA.Tables[0].tableName = typeof(T).Name;
             QueryA.TopSetting.Effective = true;
-            QueryA.TopSetting.Value = PageCount;
-            QueryA.TopSetting.BeginValue = (PageIndex-1) * PageCount;
+            QueryA.TopSetting.Value = PageLength;
+            QueryA.TopSetting.BeginValue = PageStart;
             QueryA.TopSetting.PrimaryKeyName = GetPrimaryKeyName<T>();
             if (Conditions != null && Conditions.Count > 0)
             {
@@ -303,17 +325,29 @@ namespace weixinreportviews.Model
         /// </summary>
         public string[] allDir { get; set; }
 
+        /// <summary>
+        /// 所有需要过滤的列
+        /// </summary>
+        public string[] allFilter { get; set; }
+
         public List<QSmartQueryFilterCondition> GetFilters(List<string> cols)
         {
             if (string.IsNullOrEmpty(sSearch) || cols==null || cols.Count==0) return null;
+            return this.GetFilters(cols.ToArray());
+        }
+
+        public List<QSmartQueryFilterCondition> GetFilters(string[] cols)
+        {
+            if (string.IsNullOrEmpty(sSearch) || cols == null || cols.Length == 0) return null;
             List<QSmartQueryFilterCondition> result = new List<QSmartQueryFilterCondition>();
             foreach (string col in cols)
             {
                 result.Add(new QSmartQueryFilterCondition
                 {
                     Column = new QSmartQueryColumn { columnName = col, dataType = typeof(string) },
-                    Operator= QSmartOperatorEnum.like,
-                    Values=new List<object>{sSearch}
+                    Operator = QSmartOperatorEnum.like,
+                    Connector= QSmartConnectorEnum.or,
+                    Values = new List<object> { "%" + sSearch + "%" }
                 });
             }
             return result;

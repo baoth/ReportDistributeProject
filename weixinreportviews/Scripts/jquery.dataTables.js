@@ -2387,7 +2387,8 @@
             param('allDir', allDir.join(','));
             param('iSortingCols', sort.length);
         }
-
+        
+        param('allFilter', settings.oLanguage.allFilter);
         // If the legacy.ajax parameter is null, then we automatically decide which
         // form to use, based on sAjaxSource
         var legacy = DataTable.ext.legacy.ajax;
@@ -2490,7 +2491,7 @@
         var language = settings.oLanguage;
         var previousSearch = settings.oPreviousSearch;
         var features = settings.aanFeatures;
-        var input = '<table><tr><td><input type="search"  class="' + classes.sFilterInput + '"/></td><td><a href="#" title="搜索" onclick="return false" id="play-btn" class="searchIcon"></a></td></tr></table>';
+        var input = '<table><tr><td><input type="search"  class="' + classes.sFilterInput + '"/></td><td id="cbtn-search1"><a href="#"  title="搜索"  id="cbtn-search" class="searchIcon"></a></td></tr></table>';
 
         var str = language.sSearch;
         str = str.match(/_INPUT_/) ?
@@ -2502,12 +2503,11 @@
             'class': classes.sFilter
         })
 			.append($('<label/>').append(str));
-
         var searchFn = function () {
+            var val1 = jqFilter.val();
             /* Update all other filter input elements for the new display */
             var n = features.f;
-            var val = !this.value ? "" : this.value; // mental IE8 fix :-(
-
+            var val = val1 || !this.value ? "" : this.value; // mental IE8 fix :-(
             /* Now do the filter */
             if (val != previousSearch.sSearch) {
                 _fnFilterComplete(settings, {
@@ -2525,20 +2525,33 @@
         var jqFilter = $('input', filter)
 			.val(previousSearch.sSearch)
 			.attr('placeholder', language.sSearchPlaceholder)
-			.bind(
-				'keyup.DT search.DT input.DT paste.DT cut.DT',
-				_fnDataSource(settings) === 'ssp' ?
-					_fnThrottle(searchFn, 400) :
-					searchFn
-			)
+        //			.bind(
+        //				'keyup.DT search.DT input.DT paste.DT cut.DT',
+        //				_fnDataSource(settings) === 'ssp' ?
+        //					_fnThrottle(searchFn, 400) :
+        //					searchFn
+        //			)
 			.bind('keypress.DT', function (e) {
 			    /* Prevent form submission */
 			    if (e.keyCode == 13) {
+			        searchFn
 			        return false;
 			    }
 			})
 			.attr('aria-controls', tableId);
+        $('a', filter).bind("click", function () {
+            var val = jqFilter.val();
+            _fnFilterComplete(settings, {
+                "sSearch": val,
+                "bRegex": previousSearch.bRegex,
+                "bSmart": previousSearch.bSmart,
+                "bCaseInsensitive": previousSearch.bCaseInsensitive
+            });
 
+            // Need to redraw, without resorting
+            settings._iDisplayStart = 0;
+            _fnDraw(settings);
+        });
         // Update the input elements whenever the table is filtered
         $(settings.nTable).on('search.dt.DT', function (ev, s) {
             if (settings === s) {
@@ -10779,7 +10792,7 @@ DataTable.defaults = {
         *      } );
         *    } );
         */
-        "sProcessing": "Processing...",
+        "sProcessing": "加载中...",
 
 
         /**
@@ -10938,7 +10951,7 @@ DataTable.defaults = {
     *  @deprecated 1.10. Please use `ajax` for this functionality now.
     */
     "sAjaxSource": null,
-
+    "allFilter":null,
 
     /**
     * This initialisation variable allows you to specify exactly where in the

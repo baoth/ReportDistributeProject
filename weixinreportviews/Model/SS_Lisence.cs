@@ -96,6 +96,7 @@ namespace weixinreportviews.Model
 
         private string _OrderNumber = string.Empty;
         [StringMaxLength(16)]
+        [Unique]
         public string OrderNumber
         {
             get { return _OrderNumber; }

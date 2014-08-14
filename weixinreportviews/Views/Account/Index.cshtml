@@ -12,25 +12,30 @@
    </style> 
     <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/Css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/jquery.dataTables.css?r=7" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/jquery.dataTables.js?r=1" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.dataTables.js?r=6" type="text/javascript"></script>
+
+    <link href="../../Content/Css/jquery.toolbars.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/bootstrap.icons.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery.toolbar.js" type="text/javascript"></script>
     <script>
 
         var Delete = function () {
             alert(1);
             return false;
         };
-        var lastIdx = null;
         $(document).ready(function () {
             var table = $('#example').dataTable({
-                "order": [[1, 'asc']],
+                "order": [[0, 'asc']],
                 "processing": true,
                 "bServerSide": true,
                 "scrollCollapse": true,
+
                 "sAjaxSource": "/Account/GridDatas",
                 "sPaginationType": "full_numbers",
                 "oLanguage": {
+                    "allFilter": 'OrderNumber', //过滤那些列
                     "sLengthMenu": "每页显示 _MENU_ 条记录",
                     "sZeroRecords": "抱歉， 没有找到",
                     "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -51,18 +56,25 @@
                     orderData: [0, 1]
 
                 }],
+                "fnDrawCallback": function( oSettings ) {
+                    $(".settings-button").each(function () {
+                        $(this).toolbar({
+                            content: '#user-options',
+                            position: 'bottom'
+                        });
+                    });
+                },
                 "aoColumns": [
 
-                //                        { "data": "Order", "sTitle": "序号" },
                         {"data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
-                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 }, // "bSearchable": false,// "bSortable": false,
+                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 },
                         {"data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户" },
                         { "data": "Stoped", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false },
                         { "data": "CreateDate", "sName": 'CreateDate', "sTitle": "创建日期" },
-                        { "data": "Id", "sTitle": "操作",
+                        { "data": "Id", "sTitle": "操作","bSortable": false,
                             "mRender": function (val, isShow, row) {
-                                return ' <a href="#" onclick="Delete(this)">编辑</a>&nbsp;&nbsp;<a href="#" onclick="Delete(this)">删除</a>&nbsp;&nbsp;<a href="#" onclick="Delete(this)">授权</a>'
-                            } //自定义列的样式
+                                return '<div class="settings-button"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                            }
                         }
                     ]
             });
@@ -71,10 +83,10 @@
 </head>
 <body style=" min-height: 100%;margin:10px">
    <div style="width:800px;height:50px;" >
-        <a href="#" class="button button-rounded button-flat-primary"><i class="icon-refresh"></i>新增</a>
-        <a href="#" class="button button-rounded button-flat-action"><i class="icon-cloud"></i> 编辑</a>
-        <a href="#" class="button button-rounded button-flat-highlight"><i class="icon-camera"></i>删除</a>
-        <a href="#" class="button button-rounded button-flat-caution"><i class="icon-code"></i> 授权</a>
+        <a href="#" id="aac" class="button button-rounded button-flat-primary">新增</a>
+        <a href="#" class="button button-rounded button-flat-action">编辑</a>
+        <a href="#" class="button button-rounded button-flat-highlight">删除</a>
+        <a href="#" class="button button-rounded button-flat-caution">授权</a>
    </div>
   <table id="example" class="cell-border" cellspacing="0"  width="100%">
         <thead>
@@ -90,36 +102,15 @@
         </tr>
     </thead>
       <tbody style="height:800px"></tbody>
-    
 
-       @* <thead>
-            <tr>
-                <th>公司名称</th>
-                <th>用户名称</th>
-                <th>地址</th>
-                <th>电话</th>
-                <th>是否可用</th>
-                <th>创建人</th>
-                <th>创建时间</th>
-                <th>操作</th>
-            </tr>
-        </thead>
- 
-        <tfoot>
-            <tr>
-                <th>公司名称</th>
-                <th>用户名称</th>
-                <th>地址</th>
-                <th>电话</th>
-                <th>是否可用</th>
-                <th>创建人</th>
-                <th>创建时间</th>
-                <th>操作</th>
-                
-            </tr>
-        </tfoot>*@
  
        
     </table>
+    
+	<div id="user-options" class="toolbar-icons" style="display: none;">
+		<a href="#"><i class="icon-user"></i></a>
+		<a href="#"><i class="icon-edit"></i></a>
+		<a href="#"><i class="icon-trash"></i></a>
+	</div>
 </body>
 </html>

@@ -89,6 +89,7 @@
     <Content Include="Cbin\System.Web.Extensions.dll" />
     <Content Include="Content\Css\bootstrap-theme.css" />
     <Content Include="Content\Css\bootstrap.css" />
+    <Content Include="Content\Css\bootstrap.icons.css" />
     <Content Include="Content\Css\button.css" />
     <Content Include="Content\Css\demo_table.css" />
     <Content Include="Content\Css\font-awesome.min.css" />
@@ -96,6 +97,7 @@
     <Content Include="Content\Css\jquery.dataTables.css" />
     <Content Include="Content\Css\jquery.dataTables.min.css" />
     <Content Include="Content\Css\jquery.dataTables_themeroller.css" />
+    <Content Include="Content\Css\jquery.toolbars.css" />
     <Content Include="Content\Css\public.css" />
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
@@ -104,8 +106,11 @@
     <Content Include="Content\Img\forward_disabled.png" />
     <Content Include="Content\Img\forward_enabled.png" />
     <Content Include="Content\Img\forward_enabled_hover.png" />
-    <Content Include="Content\Img\imageError.jpg" />
-    <Content Include="Content\Img\imageSuccess.jpg" />
+    <Content Include="Content\Img\glyphicons-halflings-white.png" />
+    <Content Include="Content\Img\glyphicons-halflings.png" />
+    <Content Include="Content\Img\icon-cog-shadow.png" />
+    <Content Include="Content\Img\icon-cog-small.png" />
+    <Content Include="Content\Img\icon-cog.png" />
     <Content Include="Content\Img\manage_01.png" />
     <Content Include="Content\Img\search.png" />
     <Content Include="Content\Img\sort_asc.png" />
@@ -118,6 +123,8 @@
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.toolbar.js" />
+    <Content Include="Scripts\jquery.toolbar.min.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />

@@ -113,7 +113,7 @@ namespace weixinreportviews.Controllers.Admin
             int totalcount = 0;
             DbSession session = General.CreateDbSession();
             var rows = session.PaginationRetrieve<SS_CompanyAccount>(dtp.iDisplayStart,
-                dtp.iDisplayLength, dtp.GetFilters(new List<string> { "Name", "OrderNumber" }),
+                dtp.iDisplayLength, dtp.GetFilters(dtp.allFilter),
                 dtp.GetOrderBys(), out totalcount);
             return Json(new
             {
@@ -124,7 +124,21 @@ namespace weixinreportviews.Controllers.Admin
             }, JsonRequestBehavior.AllowGet);
         }
 
-
+        /// <summary>
+        /// 验证唯一键属性是否在数据库中存在
+        /// </summary>
+        /// <param name="col">唯一键属性名</param>
+        /// <param name="value">唯一键属性值</param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult Validation(string col,string value)
+        {
+            DbSession session=General.CreateDbSession();
+            return Json(new
+            {
+                result=session.Exists<SS_CompanyAccount>(col,value)==true?0:1
+            });
+        }
     }
     
     
