@@ -20,36 +20,46 @@
     <script src="../../Scripts/json2.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
         $(document).ready(function () {
-            var state = $("#stateType").val(); //0表示新增 1 表示修改 3表示删除
-            SetDefault(state);
+            var Id = $("#GUID").val(); //""表示新增  有值 表示修改
+            if (Id == "" || Id == undefined) {
+                $("#title").val("编辑");
+            }
+            else {
+                $("#title").val("添加");
+            }
+
+            SetDefault(Id);
             $("#btn_save").bind("click", Save);
         });
 
         function Save() {
-            var data = {};
-            data["Name"] = $("#CompanyName").val();
-            data["LoginKey"] = $("#ComPanyKey").val();
-            data["Address"] = $("#Address").val();
-            data["Phone"] = $("#TelePhone").val();
-            data["Stoped"] = $("#selectIsStop").val() == "1" ? true : false;
-
+            //检查
+            if (Check() == false) return;
+            var Name = $("#Name").val();            
+            var LoginKey = $("#LoginKey").val();
+            var Address = $("#Address").val();
+            var Phone= $("#Phone").val();
+            var Stoped = $("#Stoped").val() == "1" ? true : false;
             // data["CreateDate"] = $("#CreateDate").val();
             // data["ModifyDate"] = $("#ModifiedDate").val();
-            data["Password"] = $("#Password").val();
+            var Password = $("#Password").val();
             // data["OrderNumber"] = $("#OrderNumbet").val();
             //data["Creator"] = $("#CreateorId").val();
-            data["Id"] = $("#GUID").val();
-            var stateType = $("#stateType").val();
-
-            var jsonData = JSON.stringify(data)
+            var Id = $("#GUID").val();
+            var data={Name:Name,LoginKey:LoginKey,Address:Address,Phone:Phone,Stoped:Stoped,Password:Password,Id:Id};
             $.ajax({
                 url: "/Account/Save",
-                data: { data: jsonData, state: stateType },
+                data: data,
                 dataType: "JSON",
                 type: "POST",
                 success: function (data) {
                     if (data != null) {
-                        alert("保存成功！");
+                        if (data.result == 0) {
+                            alert("保存成功！");
+                        }
+                        else {
+                            alert("保存失败！");
+                        }
                     }
                     else {
                         alert("保存失败！");
@@ -58,18 +68,11 @@
 
             });
         }
-        function SetDefault(state) {
-            switch (state) {
-                case "0":
-
-                    break;
-                case "1":
-                    $("#CompanyName").attr("disabled", "disabled");
-                    $("#ComPanyKey").attr("disabled", "disabled");
-                    break;
-
-
-            }
+        function SetDefault(id) {
+            if (id!= "") {
+                $("#CompanyName").attr("disabled", "disabled");
+                $("#ComPanyKey").attr("disabled", "disabled");
+            }           
         }
         function Close() {
             if (confirm('确定要关闭吗?')) {
@@ -78,7 +81,61 @@
                 window.close();
             }
         }
+        function Check() {
+       
+            var Name = $("#Name").val();
+            if (Name == "") {
+                alert("公司名称不能为空！");
+                return false;
+            }
+            var LoginKey = $("#LoginKey").val();
+            if (LoginKey == "") {
+                alert("账号名称不能为空！");
+                return false;
+            }
+            var Password = $("#Password").val();
+            if (Password == "") {
+                alert("密码不能为空！");
+                return false;
+            }
+            var Address = $("#Address").val();
+            if (Address == "") {
+                alert("地址不能为空！");
+                return false;
+            }
+            var Phone = $("#Phone").val();
+            if (Phone == "") {
+                alert("电话不能为空！");
+                return false;
+            }
+            else {
+                if (istell(Phone) == false) {
+                    alert("电话格式不正确！\n 格式：\n固定电话 0511-4405222 或 021-87888822 \n 或者手机号码");
+                    return false;
+                }
+            }
+            //var Stoped = $("#Stoped").val() == "1" ? true : false;
+            // var Id = $("#GUID").val();
+            return true;
+        }
     
+    //匹配国内电话号码(0511-4405222 或 021-87888822)
+        function istell(str) {
+    debugger
+//        var result = str.match(/\d{3}-\d{8}|\d{4}-\d{7}/);
+//        var phone = str.match(/^1[35]\d{9}$/);
+//        if (result == null && phone == null) return false;
+
+        var reg1 = /\d{3}-\d{8}|\d{4}-\d{7}/;
+        var reg2 = /^1[35]\d{9}$/;
+        var result=reg1.test(str);
+        var phone=reg2.test(str);
+        if(result==false && phone==false)
+        {
+            return false;
+        }
+       return true;
+    }
     </script>
     <style type="text/css">
         table
@@ -125,26 +182,27 @@
         
     </style>
 
+
      
 </head>
 <body>
     <div style="text-align:center">
-    <form class="form-horizontal">
+    <form  id="from" class="form-horizontal">
     <fieldset style="text-align:center">
       <div id="legend" class="">
-        <legend class="">@ViewData["title"]</legend>
+        <legend id="title" class=""></legend>
       </div>
       <table>
         <tr>
             <td class="tdtitle"><label class="control-label" for="input01">公司名 &nbsp </label></td>
-            <td class="tdText"> <input placeholder="请输入公司名称" id="CompanyName" name="CompanyName" value="@ViewData["CompanyName"]" class="input-xlarge" type="text" /></td>
+            <td class="tdText"> <input placeholder="请输入公司名称" id="Name" name="Name" value="@ViewData["Name"]" class="input-xlarge" type="text" /></td>
 
              <td class="tdtitle" ><label class="control-label" for="input01">订单号  &nbsp </label></td>
-            <td class="tdText" ><input disabled="disabled" id="OrderNumber" value="@ViewData["OrderNumber"]" name="ComPanyKey" class="input-xlarge" type="text" /></td>
+            <td class="tdText" ><input disabled="disabled" id="OrderNumber" value="@ViewData["OrderNumber"]" name="OrderNumber" class="input-xlarge" type="text" /></td>
         </tr>
          <tr>            
             <td class="tdtitle" ><label class="control-label" for="input01">账号  &nbsp </label></td>
-            <td class="tdText" ><input placeholder="请输入用户名称" id="ComPanyKey" value="@ViewData["ComPanyKey"]" name="ComPanyKey" class="input-xlarge" type="text" /></td>
+            <td class="tdText" ><input placeholder="请输入用户名称" id="LoginKey" value="@ViewData["LoginKey"]" name="LoginKey" class="input-xlarge" type="text" /></td>
             <td class="tdtitle"><label class="control-label" for="input01">密码 &nbsp </label></td>
             <td class="tdText"> <input placeholder="请输入密码" id="Password" name="Password" value="@ViewData["Password"]" class="input-xlarge" type="text" /></td>
 
@@ -153,13 +211,13 @@
             <td class="tdtitle"><label class="control-label" for="input01">地址  &nbsp </label></td>
             <td class="tdText"> <input placeholder="请输入地址" class="input-xlarge" id="Address" name="Address" value="@ViewData["Address"]"  type="text" /></td>
             <td class="tdtitle"><label class="control-label" for="input01">电话  &nbsp </label></td>
-            <td class="tdText" ><input placeholder="请输入电话" class="input-xlarge" id="TelePhone" name="TelePhone" value="@ViewData["TelePhone"]" type="text" /></td>
+            <td class="tdText" ><input placeholder="请输入电话" class="input-xlarge" id="Phone" name="Phone" value="@ViewData["Phone"]" type="text" /></td>
         </tr>
         
          <tr>
             <td class="tdtitle"><label class="control-label">是否可用  &nbsp </label></td>
             <td class="tdText">
-              <input type="checkbox" id="selectIsStop" checked="@ViewData["IsStop"]" value="@ViewData["IsStop"]" />           
+              <input type="checkbox" id="selectIsStop" checked="@ViewData["Stoped"]" value="@ViewData["Stoped"]" />           
             
             </td>
             <td class="tdtitle">
@@ -185,8 +243,7 @@
         </tr>
 
       </table>
-      <div>
-       <input id="stateType"  type="hidden" value="@ViewData["stateType"]" />
+      <div>       
        <input id="createorID"  type="hidden" value="@ViewData["createorID"]" />
         <input id="GUID" name="Id" type="hidden" value="@ViewData["Id"]" />
       </div>
