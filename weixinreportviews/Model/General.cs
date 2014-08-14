@@ -166,25 +166,47 @@ namespace weixinreportviews.Model
         protected DbSession(string name) : base(name) { }
 
         /// <summary>
-        /// 通过主键获取模型对象
+        /// 通过唯一键获取模型对象
         /// </summary>
         /// <typeparam name="T">模型类型</typeparam>
-        /// <param name="PrimaryKeyName">主键名称</param>
-        /// <param name="PrimaryKeyValue">主键值</param>
+        /// <param name="UniqueKeyName">唯一键名称</param>
+        /// <param name="UniqueKeyValue">唯一键值</param>
         /// <returns>模型对象</returns>
-        public T Retrieve<T>(string PrimaryKeyName, object PrimaryKeyValue) where T : QSmartEntity
+        public T Retrieve<T>(string UniqueKeyName, object UniqueKeyValue) where T : QSmartEntity
         {
             QSmartQuery Query = new QSmartQuery();
             Query.Tables.Add(new QSmartQueryTable());
             Query.Tables[0].tableName = typeof(T).Name;
             Query.FilterConditions.Add(new QSmartQueryFilterCondition());
             Query.FilterConditions[0].Column = new QSmartQueryColumn();
-            Query.FilterConditions[0].Column.columnName = PrimaryKeyName;
-            Query.FilterConditions[0].Column.dataType = PrimaryKeyValue.GetType();
+            Query.FilterConditions[0].Column.columnName = UniqueKeyName;
+            Query.FilterConditions[0].Column.dataType = UniqueKeyValue.GetType();
             Query.FilterConditions[0].Operator = QSmartOperatorEnum.equal;
-            Query.FilterConditions[0].Values.Add(PrimaryKeyValue);
+            Query.FilterConditions[0].Values.Add(UniqueKeyValue);
             var results = this.Context.QueryEntity<T>(Query);
             return results.Count == 0 ? null : results[0];
+        }
+
+        /// <summary>
+        /// 判断是否存在实例
+        /// </summary>
+        /// <typeparam name="T">模型类型</typeparam>
+        /// <param name="UniqueKeyName">唯一键名称</param>
+        /// <param name="UniqueKeyValue">唯一键值</param>
+        /// <returns>true,存在 false,不存在</returns>
+        public bool Exists<T>(string UniqueKeyName, object UniqueKeyValue) where T : QSmartEntity
+        {
+            QSmartQuery Query = new QSmartQuery();
+            Query.Tables.Add(new QSmartQueryTable());
+            Query.Tables[0].tableName = typeof(T).Name;
+            Query.FilterConditions.Add(new QSmartQueryFilterCondition());
+            Query.FilterConditions[0].Column = new QSmartQueryColumn();
+            Query.FilterConditions[0].Column.columnName = UniqueKeyName;
+            Query.FilterConditions[0].Column.dataType = UniqueKeyValue.GetType();
+            Query.FilterConditions[0].Operator = QSmartOperatorEnum.equal;
+            Query.FilterConditions[0].Values.Add(UniqueKeyValue);
+            DataTable dt = this.Context.QueryTable(Query);
+            return dt.Rows.Count > 0 ? true : false;
         }
 
         /// <summary>
