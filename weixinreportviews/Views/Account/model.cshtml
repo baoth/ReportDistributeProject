@@ -7,7 +7,7 @@
 <html>
 <head>
     <title></title>
-     
+    <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/bootstrap.css" rel="stylesheet" type="text/css" />
    <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     @*<link href="../../Content/Css/public.css" rel="stylesheet" type="text/css" />*@
@@ -32,8 +32,7 @@
             $("#btn_save").bind("click", Save);
         });
 
-        function Save() {
-        debugger
+        function Save() {        
             //检查
             if (Check() == false) return;
             var Name = $("#Name").val();            
@@ -90,20 +89,48 @@
                 alert("公司名称不能为空！");
                 return false;
             }
+            else {
+                var nameLen = Name.length;
+                if (nameLen > 100) {
+                    alert("公司名称字符长度不能大于100字节！");
+                    return false;
+                }
+            }
             var LoginKey = $("#LoginKey").val();
             if (LoginKey == "") {
                 alert("账号名称不能为空！");
                 return false;
+            }
+            else {
+                var LoginKeyLen = LoginKey.length;
+                if (LoginKeyLen > 50) {
+                    alert("账号最长不能超过50字节！");
+                    return false;
+                }
             }
             var Password = $("#Password").val();
             if (Password == "") {
                 alert("密码不能为空！");
                 return false;
             }
+            else {
+                var PasswordLen = Password.length;
+                if (PasswordLen > 50) {
+                    alert("密码最长不能超过50字节！");
+                    return false;
+                }
+            }
             var Address = $("#Address").val();
             if (Address == "") {
                 alert("地址不能为空！");
                 return false;
+            }
+            else {
+                var AddressLen = Address.length;
+                if (AddressLen > 150) {
+                    alert("地址最长不能超过150字节！");
+                   return false;
+                }
             }
             var Phone = $("#Phone").val();
             if (Phone == "") {
@@ -111,10 +138,16 @@
                 return false;
             }
             else {
+               
                 if (istell(Phone) == false) {
                     alert("电话格式不正确！\n 格式：\n固定电话 0511-4405222 或 021-87888822 \n 或者手机号码");
                     return false;
                 }
+                var PhoneLen = Phone.length;
+                if (PhoneLen > 20) {
+                    alert("电话最长不能超过20字节！");
+                    return false;
+                }                
             }
             //var Stoped = $("#Stoped").val() == "1" ? true : false;
             // var Id = $("#GUID").val();
@@ -208,19 +241,13 @@
             <td class="tdText"> <input placeholder="请输入密码" id="Password" name="Password" value="@ViewData["Password"]" class="input-xlarge" type="text" /></td>
 
         </tr>
-         <tr>
-            <td class="tdtitle"><label class="control-label" for="input01">地址  &nbsp </label></td>
-            <td class="tdText"> <input placeholder="请输入地址" class="input-xlarge" id="Address" name="Address" value="@ViewData["Address"]"  type="text" /></td>
-            <td class="tdtitle"><label class="control-label" for="input01">电话  &nbsp </label></td>
-            <td class="tdText" ><input placeholder="请输入电话" class="input-xlarge" id="Phone" name="Phone" value="@ViewData["Phone"]" type="text" /></td>
-        </tr>
+         
         
          <tr>
-            <td class="tdtitle"><label class="control-label">是否可用  &nbsp </label></td>
-            <td class="tdText">
-              <input type="checkbox" id="Stoped" name="Stoped" checked="@ViewData["Stoped"]" />           
             
-            </td>
+            <td class="tdtitle"><label class="control-label" for="input01">电话  &nbsp </label></td>
+            <td class="tdText" ><input placeholder="请输入电话" class="input-xlarge" id="Phone" name="Phone" value="@ViewData["Phone"]" type="text" /></td>
+
             <td class="tdtitle">
                 <label class="control-label" for="input01">创建人&nbsp </label>
             </td>
@@ -233,6 +260,20 @@
             <td class="tdText"> <input class="input-xlarge" id="CreateDate" disabled="disabled" name="CreateDate" value="@ViewData["CreateDate"]"  type="text" /></td>
             <td class="tdtitle"><label class="control-label" for="input01">修改时间  &nbsp </label></td>
             <td class="tdText" ><input  class="input-xlarge" disabled="disabled" id="ModifiedDate" name="ModifiedDate" value="@ViewData["ModifiedDate"]" type="text" /></td>
+        </tr>
+        <tr>
+            <td class="tdtitle"><label class="control-label" for="input01">地址  &nbsp </label></td>
+            <td class="tdText" colspan="3"> <input placeholder="请输入地址" style=" width:78%" class="input-xlarge" id="Address" name="Address" value="@ViewData["Address"]"  type="text" /></td>
+           
+        </tr>
+        <tr>
+            <td class="tdtitle"><label class="control-label">可用  &nbsp </label></td>
+            <td class="tdText">
+              <input type="checkbox" id="Stoped" name="Stoped" checked="@ViewData["Stoped"]" />
+            </td>
+            <td></td>
+            <td></td>
+
         </tr>
         <tr>
             <td colspan="4" style="text-align:center"> 
