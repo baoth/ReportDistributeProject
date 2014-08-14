@@ -191,13 +191,13 @@ namespace weixinreportviews.Model
         /// 获取分页数据集合
         /// </summary>
         /// <typeparam name="T">模型类型</typeparam>
-        /// <param name="PageIndex">当前页号</param>
-        /// <param name="PageCount">一页需要显示多少条记录</param>
+        /// <param name="PageStart">起始行index</param>
+        /// <param name="PageLength">一页需要显示多少条记录</param>
         /// <param name="Conditions">过滤条件</param>
         /// <param name="OrderBys">排序条件</param>
         /// <param name="TotalCount">返回总条数</param>
         /// <returns>数据集合</returns>
-        public List<T> PaginationRetrieve<T>(int PageIndex, int PageCount, List<QSmartQueryFilterCondition> Conditions
+        public List<T> PaginationRetrieve<T>(int PageStart, int PageLength, List<QSmartQueryFilterCondition> Conditions
             ,Dictionary<QSmartQueryColumn, QSmartOrderByEnum> OrderBys,out int TotalCount)
             where T : QSmartEntity
         {
@@ -207,8 +207,8 @@ namespace weixinreportviews.Model
             QueryA.Tables.Add(new QSmartQueryTable());
             QueryA.Tables[0].tableName = typeof(T).Name;
             QueryA.TopSetting.Effective = true;
-            QueryA.TopSetting.Value = PageCount;
-            QueryA.TopSetting.BeginValue = (PageIndex-1) * PageCount;
+            QueryA.TopSetting.Value = PageLength;
+            QueryA.TopSetting.BeginValue = PageStart;
             QueryA.TopSetting.PrimaryKeyName = GetPrimaryKeyName<T>();
             if (Conditions != null && Conditions.Count > 0)
             {
@@ -303,17 +303,29 @@ namespace weixinreportviews.Model
         /// </summary>
         public string[] allDir { get; set; }
 
+        /// <summary>
+        /// 所有需要过滤的列
+        /// </summary>
+        public string[] allFilter { get; set; }
+
         public List<QSmartQueryFilterCondition> GetFilters(List<string> cols)
         {
             if (string.IsNullOrEmpty(sSearch) || cols==null || cols.Count==0) return null;
+            return this.GetFilters(cols.ToArray());
+        }
+
+        public List<QSmartQueryFilterCondition> GetFilters(string[] cols)
+        {
+            if (string.IsNullOrEmpty(sSearch) || cols == null || cols.Length == 0) return null;
             List<QSmartQueryFilterCondition> result = new List<QSmartQueryFilterCondition>();
             foreach (string col in cols)
             {
                 result.Add(new QSmartQueryFilterCondition
                 {
                     Column = new QSmartQueryColumn { columnName = col, dataType = typeof(string) },
-                    Operator= QSmartOperatorEnum.like,
-                    Values=new List<object>{sSearch}
+                    Operator = QSmartOperatorEnum.like,
+                    Connector= QSmartConnectorEnum.or,
+                    Values = new List<object> { "%" + sSearch + "%" }
                 });
             }
             return result;

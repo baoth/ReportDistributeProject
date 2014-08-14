@@ -113,7 +113,7 @@ namespace weixinreportviews.Controllers.Admin
             int totalcount = 0;
             DbSession session = General.CreateDbSession();
             var rows = session.PaginationRetrieve<SS_CompanyAccount>(dtp.iDisplayStart,
-                dtp.iDisplayLength, dtp.GetFilters(new List<string> { "Name", "OrderNumber" }),
+                dtp.iDisplayLength, dtp.GetFilters(dtp.allFilter),
                 dtp.GetOrderBys(), out totalcount);
             return Json(new
             {
