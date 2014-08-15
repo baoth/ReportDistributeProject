@@ -25,7 +25,7 @@ if ( typeof Object.create !== 'function' ) {
 }
 
 (function( $, window, document, undefined ) {
-    var ShowToolBar=null;
+    var selectself=null;
     var ToolBar = {
         init: function( options, elem ) {
             var self = this;
