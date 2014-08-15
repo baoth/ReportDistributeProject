@@ -172,8 +172,6 @@ if ( typeof Object.create !== 'function' ) {
         },
 
         show: function() {
-            debugger
-            if(ShowToolBar)ShowToolBar.hide();
             var self = this;
             var animation = {'opacity': 1};
 
@@ -198,11 +196,9 @@ if ( typeof Object.create !== 'function' ) {
            
             self.toolbar.show().animate(animation, 200 );
             self.$elem.trigger('toolbarShown');
-            ShowToolBar=self.toolbar;
         },
 
         hide: function() {
-            debugger
             var self = this;
             var animation = {'opacity': 0};
 
