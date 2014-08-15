@@ -5,7 +5,13 @@
         return url + char + name + "=" + val;
     };
     function GetSelectedRowId() {
+
         var selectids = [];
+        debugger
+        if (id != undefined && id != "") {
+            selectids.push(id);
+            return selectids;
+        }
         var selectedDom = $('#example tbody tr.selected');
         $.each(selectedDom, function () {
             var id = $(this).find('td div').attr('v');
@@ -15,11 +21,37 @@
     }
     return {
         Delete: function () {
+
             var ids = GetSelectedRowId();
             if (ids.length == 0) {
-                alert('请选择一行删除.');
+                return;
             }
-            alert('删除：' + id);
+            $.layer({
+                shade: [0.5, '#000'],
+                fadeIn: 300,
+                area: ['auto', 'auto'],
+                dialog: {
+                    msg: '您确认需要删除？',
+                    btns: 2,
+                    type: 4,
+                    btn: ['确定', '取消'],
+                    yes: function () {
+                        $.ajax({
+                            type: "post",
+                            url: "account/Delete",
+                            data: { "id": ids },
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.result == 1) {
+                                    layer.msg(data.msg, 1, 13);
+                                }
+                            }
+                        });
+                    }, no: function () {
+
+                    }
+                }
+            });
 
         },
         Edit: function () {
