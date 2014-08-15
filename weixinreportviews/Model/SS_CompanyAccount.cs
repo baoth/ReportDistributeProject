@@ -104,6 +104,19 @@ namespace weixinreportviews.Model
             set { _OrderNumber = value; }
         }
         #endregion
+
+        #region 属性(仅作呈现用)
+        [Ignore]
+        public string CreateDateDisplay
+        {
+            get { return this.CreateDate.ToShortDateString(); }
+        }
+        [Ignore]
+        public string StopedDisplay
+        {
+            get { return this.Stoped ? "是" : "否"; }
+        }
+        #endregion
         public List<QObject> CreateDeleteCommand()
         {
             if (this.Id != Guid.Empty)
