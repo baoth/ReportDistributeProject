@@ -27,11 +27,23 @@
                 var char = url.indexOf('?') >= 0 ? "&" : "?"
                 return url + char + name + "=" + val;
             };
+            function GetSelectedRowId() {
+                var selectids = [];
+                var selectedDom = $('#example tbody tr.selected');
+                $.each(selectedDom, function () {
+                    var id = $(this).find('td div').attr('v');
+                    selectids.push(id);
+                });
+                return selectids;
+            }
             return {
                 Delete: function () {
-
+                    var ids = GetSelectedRowId();
+                    if (ids.length == 0) {
+                        alert('请选择一行删除.');
+                    }
                     alert('删除：' + id);
-                   
+
                 },
                 Edit: function () {
                     alert('编辑：' + id);
@@ -47,9 +59,33 @@
                     alert('授权：' + id);
                     url = AddParams('id', id);
                     window.parent.ControlIFrame(url);
+                },
+                ControlBtn: function () {
+                    var l = GetSelectedRowId().length;
+                    if (l > 1) {
+                        $('#b-edit,#b-auth,#b-del').addClass('disabled');
+                        $('#b-del').removeClass('disabled');
+                    } else if (l == 1) {
+                        $('#b-edit,#b-auth,#b-del').removeClass('disabled');
+                    } else {
+                        $('#b-edit,#b-auth,#b-del').addClass('disabled');
+                    }
                 }
+
             }
         };
+        var onDataGridCheck = function (e) {
+            var checked = $(e).attr("checked") == 'checked'
+            if (checked) {
+                $(e).parent().parent().addClass('selected');
+            } else {
+                $(e).parent().parent().removeClass('selected');
+            }
+            /*控制按钮可用不可用*/
+            PageAction().ControlBtn();
+
+        };
+      
         $(document).ready(function () {
             var table = $('#example').dataTable({
                 "order": [[1, 'asc']],
@@ -94,10 +130,10 @@
                     });
                 },
                 "aoColumns": [
-                        { data: null, defaultContent: '', bSortable: false,
+                        { data: null, defaultContent: '', bSortable: false, sWidth: 5,
                             "mRender": function (val, isShow, row) {
-                                return '<input type="checkbox"/>'
-                             } 
+                                return '<input type="checkbox" id="' + val + '" onClick="onDataGridCheck(this)"/>'
+                            }
                         },
                         { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
                         { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 },
@@ -118,6 +154,14 @@
                 }
                 PageAction(val)[action]();
             });
+            $('#checkall').bind('click', function () {
+                var check = $(this).attr("checked") == undefined ? false : true;
+                $("#example tbody tr input[type='checkbox']").each(function () {
+                    //alert(typeof(this));
+                    $(this).attr("checked", check);
+                    onDataGridCheck(this);
+                });
+            });
             $("body").click(function (e, t) {
                 if (selectself) selectself.hide();
             });
@@ -126,16 +170,16 @@
 </head>
 <body style=" min-height: 100%;margin:10px">
    <div style="width:800px;height:50px;" >
-        <a href="#" id="b-add"  action="Add" class="disabled button button-rounded button-flat-primary">新增</a>
-        <a href="#" id="b-edit" action="Edit"  class="button button-rounded button-flat-action">编辑</a>
-        <a href="#" id="b-del"  action="Delete" class="button button-rounded button-flat-highlight">删除</a>
-        <a href="#" id="b-auth" action="SetAuth" class="button button-rounded button-flat-caution">授权</a>
+        <a href="#" id="b-add"  action="Add" class=" button button-rounded button-flat-primary">新增</a>
+        <a href="#" id="b-edit" action="Edit"  class="disabled button button-rounded button-flat-action">编辑</a>
+        <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
+        <a href="#" id="b-auth" action="SetAuth" class="disabled button button-rounded button-flat-caution">授权</a>
    </div>
   <table id="example" class="cell-border" cellspacing="0"  width="100%">
         <thead>
         <tr>
 
-            <th></th>
+            <th style="width:5%;"> <input  type="checkbox" id="checkall" name="checkall" /></th>
             <th>OrderNumber</th>
             <th>Name</th>
             <th>LoginKey</th>
