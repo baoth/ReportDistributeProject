@@ -96,14 +96,14 @@ if ( typeof Object.create !== 'function' ) {
         },
 
         populateContent: function() {
-            debugger
             var self = this;
             var location = self.toolbar.find('.tool-items');
             var content = $(self.options.content).clone( true ).find('a').addClass('tool-item gradient');
+            var params=self.$elem.attr('v');
             location.html(content);
             location.find('.tool-item').on('click', function(event) {
                 event.preventDefault();
-                self.$elem.trigger('toolbarItemClick', this);
+                self.$elem.trigger('toolbarItemClick',[this,params]);
             });
         },
 

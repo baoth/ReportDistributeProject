@@ -91,7 +91,7 @@
     <Content Include="Content\Css\bootstrap.css" />
     <Content Include="Content\Css\bootstrap.icons.css" />
     <Content Include="Content\Css\button.css" />
-    <Content Include="Content\Css\demo_table.css" />
+    <Content Include="Content\Css\dataTables.editor.min.css" />
     <Content Include="Content\Css\font-awesome.min.css" />
     <Content Include="Content\Css\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Css\jquery.dataTables.css" />
