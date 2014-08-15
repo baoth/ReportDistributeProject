@@ -96,6 +96,7 @@ if ( typeof Object.create !== 'function' ) {
         },
 
         populateContent: function() {
+            debugger
             var self = this;
             var location = self.toolbar.find('.tool-items');
             var content = $(self.options.content).clone( true ).find('a').addClass('tool-item gradient');
