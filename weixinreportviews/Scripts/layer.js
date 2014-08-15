@@ -209,7 +209,7 @@ Class.pt.space = function(html){
 };
 
 //创建骨架
-Class.pt.creat = function(){
+Class.pt.creat = function () {
     var that = this , space = '', config = that.config, dialog = config.dialog, times = that.index;
     var page = config.page, body = $("body"), setSpace = function(html){
         var html = html || '';
