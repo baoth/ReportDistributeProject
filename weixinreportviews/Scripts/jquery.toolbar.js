@@ -125,8 +125,9 @@ if ( typeof Object.create !== 'function' ) {
             if (self.options.adjustment && self.options.adjustment[self.options.position]) {
                 adjustment = self.options.adjustment[self.options.position] + adjustment;
             }
-
+            
             switch(self.options.position) {
+                
                 case 'top':
                     return {
                         left: self.coordinates.left-(self.toolbar.width()/2)+(self.$elem.outerWidth()/2),
@@ -159,6 +160,7 @@ if ( typeof Object.create !== 'function' ) {
             var edgeOffset = 20;
             if(self.options.position == 'top' || self.options.position == 'bottom') {
                 self.arrowCss = {left: '50%', right: '50%'};
+                
                 if( self.toolbarCss.left < edgeOffset ) {
                     self.toolbarCss.left = edgeOffset;
                     self.arrowCss.left = self.$elem.offset().left + self.$elem.width()/2-(edgeOffset);
@@ -167,7 +169,7 @@ if ( typeof Object.create !== 'function' ) {
                     self.toolbarCss.right = edgeOffset;
                     self.toolbarCss.left = 'auto';
                     self.arrowCss.left = 'auto';
-                    self.arrowCss.right = ($(window).width()-self.$elem.offset().left)-(self.$elem.width()/2)-(edgeOffset)-5;
+                    self.arrowCss.right = ($(window).width()-self.$elem.offset().left)-(self.$elem.width()/2)-(edgeOffset)-7;
                 }
             }
         },
@@ -181,16 +183,16 @@ if ( typeof Object.create !== 'function' ) {
 
             switch(self.options.position) {
                 case 'top':
-                    animation.top = '-=20';
+                    animation.top = '-=9';
                     break;
                 case 'left':
-                    animation.left = '-=20';
+                    animation.left = '-=9';
                     break;
                 case 'right':
-                    animation.left = '+=20';
+                    animation.left = '+=9';
                     break;
                 case 'bottom':
-                    animation.top = '+=20';
+                    animation.top = '+=9';
                     break;
             }
 
