@@ -25,7 +25,6 @@ if ( typeof Object.create !== 'function' ) {
 }
 
 (function( $, window, document, undefined ) {
-
     var ToolBar = {
         init: function( options, elem ) {
             var self = this;
@@ -57,6 +56,7 @@ if ( typeof Object.create !== 'function' ) {
             var $triggerele=$(self.$elem).find('img');
             
             $triggerele.on('click', function(event) {
+                event.stopPropagation();
                 event.preventDefault();
                 if (selectself){
                     if (selectself===self){
@@ -195,6 +195,7 @@ if ( typeof Object.create !== 'function' ) {
                     break;
             }
 
+           
             self.toolbar.show().animate(animation, 200 );
             self.$elem.trigger('toolbarShown');
         },

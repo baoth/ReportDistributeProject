@@ -21,9 +21,14 @@
     <script src="../../Scripts/jquery.toolbar.js" type="text/javascript"></script>
     <script>
 
-        var Delete = function () {
-            alert(1);
-            return false;
+        var PageAction = function (id) {
+            var depId = id;
+            return {
+                Delete: function () { },
+                Edit: function () { },
+                Add: function () { },
+                SetAuth: function () { }
+            }
         };
         $(document).ready(function () {
             var table = $('#example').dataTable({
@@ -56,27 +61,32 @@
                     orderData: [0, 1]
 
                 }],
-                "fnDrawCallback": function( oSettings ) {
+                "fnDrawCallback": function (oSettings) {
                     $(".settings-button").each(function () {
                         $(this).toolbar({
                             content: '#user-options',
                             position: 'bottom'
+                        }).on('toolbarItemClick', function (e, item) {
+                            alert(1111);
                         });
                     });
                 },
                 "aoColumns": [
 
-                        {"data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
+                        { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
                         { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 },
-                        {"data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户" },
+                        { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户" },
                         { "data": "Stoped", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false },
                         { "data": "CreateDate", "sName": 'CreateDate', "sTitle": "创建日期" },
-                        { "data": "Id", "sTitle": "操作","bSortable": false,
+                        { "data": "Id", "sTitle": "操作", "bSortable": false,
                             "mRender": function (val, isShow, row) {
                                 return '<div class="settings-button"><img src="../../Content/Img/icon-cog-small.png" /></div>';
                             }
                         }
                     ]
+                    });
+            $("body").click(function (e,t) {debugger
+                if (selectself) selectself.hide();
             });
         });
     </script>
@@ -108,9 +118,9 @@
     </table>
     
 	<div id="user-options" class="toolbar-icons" style="display: none;">
-		<a href="#"><i class="icon-user"></i></a>
-		<a href="#"><i class="icon-edit"></i></a>
-		<a href="#"><i class="icon-trash"></i></a>
+		<a href="#"  title="授权"><i class="icon-user"></i></a>
+		<a href="#" title="编辑"><i class="icon-edit"></i></a>
+		<a href="#"title="删除"><i class="icon-trash"></i></a>
 	</div>
 </body>
 </html>
