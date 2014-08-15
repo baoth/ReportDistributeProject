@@ -22,25 +22,37 @@
     <script>
 
         var PageAction = function (id) {
-            var depId = id;
+            var url = '/Account/Model';
+            function AddParams(name, val) {
+                var char = url.indexOf('?') >= 0 ? "&" : "?"
+                return url + char + name + "=" + val;
+            };
             return {
                 Delete: function () {
+
                     alert('删除：' + id);
+                   
                 },
                 Edit: function () {
                     alert('编辑：' + id);
+
+                    url = AddParams('id', id);
+                    window.parent.ControlIFrame(url);
                 },
                 Add: function () {
                     alert("add");
+                    window.parent.ControlIFrame(url);
                 },
                 SetAuth: function () {
                     alert('授权：' + id);
+                    url = AddParams('id', id);
+                    window.parent.ControlIFrame(url);
                 }
             }
         };
         $(document).ready(function () {
             var table = $('#example').dataTable({
-                "order": [[0, 'asc']],
+                "order": [[1, 'asc']],
                 "processing": true,
                 "bServerSide": true,
                 "scrollCollapse": true,
@@ -66,8 +78,8 @@
 
                 },
                 columnDefs: [{
-                    targets: [0],
-                    orderData: [0, 1]
+                    targets: [1],
+                    orderData: [1, 2]
 
                 }],
                 "fnDrawCallback": function (oSettings) {
@@ -82,7 +94,11 @@
                     });
                 },
                 "aoColumns": [
-                        { data: null, defaultContent: '', orderable: false },
+                        { data: null, defaultContent: '', bSortable: false,
+                            "mRender": function (val, isShow, row) {
+                                return '<input type="checkbox"/>'
+                             } 
+                        },
                         { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
                         { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 },
                         { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户" },
@@ -96,7 +112,7 @@
                     ]
             });
             $('#b-add,#b-edit,#b-del,#b-auth').on('click', function () {
-                var action = $(this).attr('action'),val='';
+                var action = $(this).attr('action'), val = '';
                 if (action != 'add') {
                     val = "";
                 }
@@ -110,7 +126,7 @@
 </head>
 <body style=" min-height: 100%;margin:10px">
    <div style="width:800px;height:50px;" >
-        <a href="#" id="b-add"  action="Add" class="button button-rounded button-flat-primary">新增</a>
+        <a href="#" id="b-add"  action="Add" class="disabled button button-rounded button-flat-primary">新增</a>
         <a href="#" id="b-edit" action="Edit"  class="button button-rounded button-flat-action">编辑</a>
         <a href="#" id="b-del"  action="Delete" class="button button-rounded button-flat-highlight">删除</a>
         <a href="#" id="b-auth" action="SetAuth" class="button button-rounded button-flat-caution">授权</a>
