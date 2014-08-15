@@ -14,6 +14,8 @@
  * <https://raw.github.com/paulkinzett/toolbar/master/LICENSE.txt>
  */
 
+var selectself=undefined;
+
 if ( typeof Object.create !== 'function' ) {
     Object.create = function( obj ) {
         function F() {}
@@ -51,16 +53,26 @@ if ( typeof Object.create !== 'function' ) {
 
         setTrigger: function() {
             var self = this;
-
-            self.$elem.on('click', function(event) {
+            
+            var $triggerele=$(self.$elem).find('img');
+            
+            $triggerele.on('click', function(event) {
                 event.preventDefault();
+                if (selectself){
+                    if (selectself===self){
+                    }else{
+                        selectself.hide();
+                    }
+                }
+
                 if(self.$elem.hasClass('pressed')) {
                     self.hide();
                 } else {
                     self.show();
+                    selectself = self;
                 }
             });
-
+            
             if (self.options.hideOnClick) {
                 $('html').on("click.toolbar", function ( event ) {
                     if (event.target != self.elem &&
@@ -210,10 +222,10 @@ if ( typeof Object.create !== 'function' ) {
                     animation.top = '-=20';
                     break;
             }
-
-            self.toolbar.animate(animation, 200, function() {
-                self.toolbar.hide();
-            });
+            self.toolbar.hide().animate(animation, 200 );
+//            self.toolbar.animate(animation, 200, function() {
+//                self.toolbar.hide();
+//            });
 
             self.$elem.trigger('toolbarHidden');
         },
