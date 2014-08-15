@@ -14,6 +14,8 @@
  * <https://raw.github.com/paulkinzett/toolbar/master/LICENSE.txt>
  */
 
+var selectself=undefined;
+
 if ( typeof Object.create !== 'function' ) {
     Object.create = function( obj ) {
         function F() {}
@@ -23,7 +25,6 @@ if ( typeof Object.create !== 'function' ) {
 }
 
 (function( $, window, document, undefined ) {
-
     var ToolBar = {
         init: function( options, elem ) {
             var self = this;
@@ -51,16 +52,27 @@ if ( typeof Object.create !== 'function' ) {
 
         setTrigger: function() {
             var self = this;
-
-            self.$elem.on('click', function(event) {
+            
+            var $triggerele=$(self.$elem).find('img');
+            
+            $triggerele.on('click', function(event) {
+                event.stopPropagation();
                 event.preventDefault();
+                if (selectself){
+                    if (selectself===self){
+                    }else{
+                        selectself.hide();
+                    }
+                }
+
                 if(self.$elem.hasClass('pressed')) {
                     self.hide();
                 } else {
                     self.show();
+                    selectself = self;
                 }
             });
-
+            
             if (self.options.hideOnClick) {
                 $('html').on("click.toolbar", function ( event ) {
                     if (event.target != self.elem &&
@@ -87,10 +99,11 @@ if ( typeof Object.create !== 'function' ) {
             var self = this;
             var location = self.toolbar.find('.tool-items');
             var content = $(self.options.content).clone( true ).find('a').addClass('tool-item gradient');
+            var params=self.$elem.attr('v');
             location.html(content);
             location.find('.tool-item').on('click', function(event) {
                 event.preventDefault();
-                self.$elem.trigger('toolbarItemClick', this);
+                self.$elem.trigger('toolbarItemClick',[this,params]);
             });
         },
 
@@ -112,8 +125,9 @@ if ( typeof Object.create !== 'function' ) {
             if (self.options.adjustment && self.options.adjustment[self.options.position]) {
                 adjustment = self.options.adjustment[self.options.position] + adjustment;
             }
-
+            
             switch(self.options.position) {
+                
                 case 'top':
                     return {
                         left: self.coordinates.left-(self.toolbar.width()/2)+(self.$elem.outerWidth()/2),
@@ -146,6 +160,7 @@ if ( typeof Object.create !== 'function' ) {
             var edgeOffset = 20;
             if(self.options.position == 'top' || self.options.position == 'bottom') {
                 self.arrowCss = {left: '50%', right: '50%'};
+                
                 if( self.toolbarCss.left < edgeOffset ) {
                     self.toolbarCss.left = edgeOffset;
                     self.arrowCss.left = self.$elem.offset().left + self.$elem.width()/2-(edgeOffset);
@@ -154,7 +169,7 @@ if ( typeof Object.create !== 'function' ) {
                     self.toolbarCss.right = edgeOffset;
                     self.toolbarCss.left = 'auto';
                     self.arrowCss.left = 'auto';
-                    self.arrowCss.right = ($(window).width()-self.$elem.offset().left)-(self.$elem.width()/2)-(edgeOffset)-5;
+                    self.arrowCss.right = ($(window).width()-self.$elem.offset().left)-(self.$elem.width()/2)-(edgeOffset)-7;
                 }
             }
         },
@@ -168,19 +183,20 @@ if ( typeof Object.create !== 'function' ) {
 
             switch(self.options.position) {
                 case 'top':
-                    animation.top = '-=20';
+                    animation.top = '-=9';
                     break;
                 case 'left':
-                    animation.left = '-=20';
+                    animation.left = '-=9';
                     break;
                 case 'right':
-                    animation.left = '+=20';
+                    animation.left = '+=9';
                     break;
                 case 'bottom':
-                    animation.top = '+=20';
+                    animation.top = '+=9';
                     break;
             }
 
+           
             self.toolbar.show().animate(animation, 200 );
             self.$elem.trigger('toolbarShown');
         },
@@ -205,10 +221,10 @@ if ( typeof Object.create !== 'function' ) {
                     animation.top = '-=20';
                     break;
             }
-
-            self.toolbar.animate(animation, 200, function() {
-                self.toolbar.hide();
-            });
+            self.toolbar.hide().animate(animation, 200 );
+//            self.toolbar.animate(animation, 200, function() {
+//                self.toolbar.hide();
+//            });
 
             self.$elem.trigger('toolbarHidden');
         },

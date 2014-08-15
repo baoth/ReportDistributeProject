@@ -359,6 +359,7 @@ namespace weixinreportviews.Model
             Dictionary<QSmartQueryColumn, QSmartOrderByEnum> result = new Dictionary<QSmartQueryColumn, QSmartOrderByEnum>();
             for (int i = 0; i < allSortCol.Length; i++)
             {
+                if (string.IsNullOrEmpty(allSortCol[i])) continue;
                 result.Add(new QSmartQueryColumn { columnName = allSortCol[i] },
                      (QSmartOrderByEnum)Enum.Parse(typeof(QSmartOrderByEnum), allDir[i].ToLower()));
             }

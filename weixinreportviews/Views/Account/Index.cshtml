@@ -15,19 +15,44 @@
     <link href="../../Content/Css/jquery.dataTables.css?r=7" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="../../Scripts/jquery.dataTables.js?r=6" type="text/javascript"></script>
-
+    <link href="../../Content/Css/dataTables.editor.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/jquery.toolbars.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/bootstrap.icons.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery.toolbar.js" type="text/javascript"></script>
     <script>
 
-        var Delete = function () {
-            alert(1);
-            return false;
+        var PageAction = function (id) {
+            var url = '/Account/Model';
+            function AddParams(name, val) {
+                var char = url.indexOf('?') >= 0 ? "&" : "?"
+                return url + char + name + "=" + val;
+            };
+            return {
+                Delete: function () {
+
+                    alert('删除：' + id);
+                   
+                },
+                Edit: function () {
+                    alert('编辑：' + id);
+
+                    url = AddParams('id', id);
+                    window.parent.ControlIFrame(url);
+                },
+                Add: function () {
+                    alert("add");
+                    window.parent.ControlIFrame(url);
+                },
+                SetAuth: function () {
+                    alert('授权：' + id);
+                    url = AddParams('id', id);
+                    window.parent.ControlIFrame(url);
+                }
+            }
         };
         $(document).ready(function () {
             var table = $('#example').dataTable({
-                "order": [[0, 'asc']],
+                "order": [[1, 'asc']],
                 "processing": true,
                 "bServerSide": true,
                 "scrollCollapse": true,
@@ -35,6 +60,7 @@
                 "sAjaxSource": "/Account/GridDatas",
                 "sPaginationType": "full_numbers",
                 "oLanguage": {
+                    "searchDefalutText": "订单号",
                     "allFilter": 'OrderNumber', //过滤那些列
                     "sLengthMenu": "每页显示 _MENU_ 条记录",
                     "sZeroRecords": "抱歉， 没有找到",
@@ -52,52 +78,69 @@
 
                 },
                 columnDefs: [{
-                    targets: [0],
-                    orderData: [0, 1]
+                    targets: [1],
+                    orderData: [1, 2]
 
                 }],
-                "fnDrawCallback": function( oSettings ) {
+                "fnDrawCallback": function (oSettings) {
                     $(".settings-button").each(function () {
                         $(this).toolbar({
                             content: '#user-options',
                             position: 'bottom'
+                        }).on('toolbarItemClick', function (e, item, val) {
+                            var action = $(item).attr('action');
+                            PageAction(val)[action]();
                         });
                     });
                 },
                 "aoColumns": [
-
-                        {"data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
-                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 },
-                        {"data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户" },
-                        { "data": "Stoped", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false },
-                        { "data": "CreateDate", "sName": 'CreateDate', "sTitle": "创建日期" },
-                        { "data": "Id", "sTitle": "操作","bSortable": false,
+                        { data: null, defaultContent: '', bSortable: false,
                             "mRender": function (val, isShow, row) {
-                                return '<div class="settings-button"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                                return '<input type="checkbox"/>'
+                             } 
+                        },
+                        { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
+                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 },
+                        { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户" },
+                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false },
+                        { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期" },
+                        { "data": "Id", "sTitle": "操作", "bSortable": false,
+                            "mRender": function (val, isShow, row) {
+                                return '<div class="settings-button" v="' + val + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
                             }
                         }
                     ]
+            });
+            $('#b-add,#b-edit,#b-del,#b-auth').on('click', function () {
+                var action = $(this).attr('action'), val = '';
+                if (action != 'add') {
+                    val = "";
+                }
+                PageAction(val)[action]();
+            });
+            $("body").click(function (e, t) {
+                if (selectself) selectself.hide();
             });
         });
     </script>
 </head>
 <body style=" min-height: 100%;margin:10px">
    <div style="width:800px;height:50px;" >
-        <a href="#" id="aac" class="button button-rounded button-flat-primary">新增</a>
-        <a href="#" class="button button-rounded button-flat-action">编辑</a>
-        <a href="#" class="button button-rounded button-flat-highlight">删除</a>
-        <a href="#" class="button button-rounded button-flat-caution">授权</a>
+        <a href="#" id="b-add"  action="Add" class="disabled button button-rounded button-flat-primary">新增</a>
+        <a href="#" id="b-edit" action="Edit"  class="button button-rounded button-flat-action">编辑</a>
+        <a href="#" id="b-del"  action="Delete" class="button button-rounded button-flat-highlight">删除</a>
+        <a href="#" id="b-auth" action="SetAuth" class="button button-rounded button-flat-caution">授权</a>
    </div>
   <table id="example" class="cell-border" cellspacing="0"  width="100%">
         <thead>
         <tr>
 
-          @*  <th></th>*@
+            <th></th>
             <th>OrderNumber</th>
             <th>Name</th>
             <th>LoginKey</th>
-            <th>Stoped</th>
-            <th>CreateDate</th>
+            <th>StopedDisplay</th>
+            <th>CreateDateDisplay</th>
             <th>Id</th>
         </tr>
     </thead>
@@ -108,9 +151,9 @@
     </table>
     
 	<div id="user-options" class="toolbar-icons" style="display: none;">
-		<a href="#"><i class="icon-user"></i></a>
-		<a href="#"><i class="icon-edit"></i></a>
-		<a href="#"><i class="icon-trash"></i></a>
+		<a href="#" action="SetAuth" title="授权"><i class="icon-user"></i></a>
+		<a href="#" action="Edit" title="编辑"><i class="icon-edit"></i></a>
+		<a href="#" action="Delete" title="删除"><i class="icon-trash"></i></a>
 	</div>
 </body>
 </html>

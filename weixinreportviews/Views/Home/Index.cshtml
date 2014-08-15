@@ -15,9 +15,12 @@
                 $(".column li").removeClass("column5");
                 var c = $(this).attr('controll');
                 $(this).parent().addClass("column5");
-                $("#childiframe").attr("src", "/Home/ChildIndex?C=" + c);
+                $("#childiframe").attr("src",c);
             })
         });
+        window.ControlIFrame = function (url) {
+            $("#childiframe").attr("src", url);
+        };
     </script>
 
 </head>
@@ -26,17 +29,17 @@
     <div class="manage_l">
         <div class="w_logo">  <img src="../../Content/Img/manage_01.png" /></div>
         <div class="userface"><img src="../../Content/Img/userface.png"></div>
-        <p class="username"><span class="username1">jialianyinshua</span> | <span class="username2">
+        <p class="username"><span class="username1">Baoth</span> | <span class="username2">
         <a href="/login/logout">退出</a></span></p>
         <div class="column">
             <ul>
-                <li class="column1 column5"><a href="#" onclick="return false;" controll="Account">账户管理</a></li>
-                <li class="column2 "><a href="#"  onclick="return false;" controll="Test1">授权管理</a></li>
+                <li class="column1 column5"><a href="#" onclick="return false;" controll="/Account/Grid">账户管理</a></li>
+                <li class="column2 "><a href="#"  onclick="return false;" controll="/Test/Grid">授权管理</a></li>
             </ul>
         </div>
     </div>
  <!--   <div class="manage_r">-->
-    <iframe id="childiframe" src="/Home/ChildIndex?C=Account"  class="manage_r" style="border:0px;"></iframe>
+    <iframe id="childiframe" src="/Account/Grid"  class="manage_r" style="border:0px;"></iframe>
 <!--</div>-->
 </div>
 
