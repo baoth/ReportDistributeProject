@@ -93,7 +93,6 @@
     <Content Include="Content\Css\button.css" />
     <Content Include="Content\Css\dataTables.editor.min.css" />
     <Content Include="Content\Css\flat-ui.css" />
-    <Content Include="Content\Css\fliter.css" />
     <Content Include="Content\Css\font-awesome.min.css" />
     <Content Include="Content\Css\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Css\jquery.dataTables.css" />
@@ -156,7 +155,6 @@
     <None Include="Content\Css\fonts\fontawesome-webfont.woff" />
     <None Include="Content\Css\fonts\FontAwesome.otf" />
     <None Include="Content\Img\Sorting icons.psd" />
-    <Content Include="Views\Lisence\Index.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config" />
@@ -197,7 +195,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>19708</DevelopmentServerPort>
+          <DevelopmentServerPort>4145</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
