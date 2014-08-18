@@ -84,19 +84,31 @@
 
     }
 };
-var onDataGridCheck = function (e) {
-    var checked = $(e).attr("checked") == 'checked'
-    if (checked) {
-        $(e).parent().parent().addClass('selected');
-    } else {
-        $(e).parent().parent().removeClass('selected');
-    }
-    /*控制按钮可用不可用*/
-    PageAction().ControlBtn();
 
-};
 
 $(document).ready(function () {
+    var onDataGridCheck = function (e) {
+        var checked = $(e).attr("checked") == 'checked'
+        if (checked) {
+            $(e).parent().parent().addClass('selected');
+        } else {
+            $(e).parent().parent().removeClass('selected');
+        }
+        /*控制按钮可用不可用*/
+        PageAction().ControlBtn();
+
+    };
+    /*绑定grid的check的方法*/
+    var BindGridChecked = function () {
+        $('#checkall').bind('click', function () {
+            var check = $(this).attr("checked") == undefined ? false : true;
+            $("#example tbody tr input[type='checkbox']").each(function () {
+                //alert(typeof(this));
+                $(this).attr("checked", check);
+                onDataGridCheck(this);
+            });
+        });
+    };
     var table = $('#example').dataTable({
         "order": [[1, 'asc']],
         "processing": true,
@@ -129,6 +141,7 @@ $(document).ready(function () {
 
         }],
         "fnDrawCallback": function (oSettings) {
+            BindGridChecked();
             $(".settings-button").each(function () {
                 $(this).toolbar({
                     content: '#user-options',
@@ -164,15 +177,8 @@ $(document).ready(function () {
         }
         PageAction(val)[action]();
     });
-    $('#checkall').bind('click', function () {
-        var check = $(this).attr("checked") == undefined ? false : true;
-        $("#example tbody tr input[type='checkbox']").each(function () {
-            //alert(typeof(this));
-            $(this).attr("checked", check);
-            onDataGridCheck(this);
-        });
-    });
     $("body").click(function (e, t) {
         if (selectself) selectself.hide();
     });
+    BindGridChecked();
 });
