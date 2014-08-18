@@ -11,11 +11,8 @@
     <link href="../../Content/Css/bootstrap.css" rel="stylesheet" type="text/css" />
      <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
      <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
-
-   
-    <link href="../../Content/Flat-UI-master/css/flat-ui.css" rel="stylesheet" type="text/css" />
-
-
+     @*按钮开关样式*@
+    <link href="../../Content/Css/flat-ui.css" rel="stylesheet" type="text/css" />
     <!--[if IE 7]>
      <link href="../../Content/Font-Awesome-3.2.1/css/font-awesome-ie7.min.css" rel="stylesheet"
         type="text/css" />
@@ -31,17 +28,17 @@
     <script src="../../Scripts/JSFlatUI/application.js" type="text/javascript"></script>
   @*  开关按钮 end*@
 
-    <script language="javascript" type="text/javascript"> 
+    <script language="javascript" type="text/javascript">
         $(document).ready(function () {
             var Id = $("#GUID").val(); //""表示新增  有值 表示修改
-           
+
             if (Id == "" || Id == undefined) {
-              
+
                 $("#btn_signIn").show(); //
                 $("#btn_save").hide();
             }
-            else {                
-              
+            else {
+
                 $("#btn_signIn").hide(); //
                 $("#btn_save").show();
             }
@@ -58,7 +55,7 @@
         function CheckLoginKey(e) {
 
             var LoginKey = $("#LoginKey").val();
-            
+
             if (CheckLoginKeyData(LoginKey) == false) return;
             $.ajax({
                 url: "/Account/Validation",
@@ -140,7 +137,7 @@
             });
         }
 
-        function Save() {        
+        function Save() {
             //检查
             if (Check() == false) return;
             var Id = $("#GUID").val(); //""表示新增  有值 表示修改  
@@ -158,13 +155,13 @@
                     return
                 }
             }
-            
-            var Name = $("#Name").val();            
+
+            var Name = $("#Name").val();
             var LoginKey = $("#LoginKey").val();
             var Address = $("#Address").val();
             var Phone = $("#Phone").val();
-            var isStop=$("#Stoped").attr("checked");
-            var Stoped = (isStop == "checked" || isStop=="true") ? true : false;
+            var isStop = $("#Stoped").attr("checked");
+            var Stoped = (isStop == "checked" || isStop == "true") ? true : false;
             // data["CreateDate"] = $("#CreateDate").val();
             // data["ModifyDate"] = $("#ModifiedDate").val();
             var Password = $("#Password").val();
@@ -194,10 +191,10 @@
             });
         }
         function SetDefault(id) {
-            if (id!= "") {
+            if (id != "") {
                 $("#CompanyName").attr("disabled", "disabled");
                 $("#ComPanyKey").attr("disabled", "disabled");
-            }           
+            }
         }
         function Close() {
             if (confirm('确定要关闭吗?')) {
@@ -208,13 +205,15 @@
         }
 
         function CheckNameData(Name) {
-            if (Name == "" || Name==undefined) {               
+            if (Name == "" || Name == undefined) {               
+                ClearMsgImage("imgNameMsg");
                 $("#SpanNameMsg").html("<font color='red'>公司名称不能为空！</font>");
                 return false;
             }
             else {
                 var nameLen = Name.length;
-                if (nameLen > 50) {
+                if (nameLen > 50) {                   
+                    ClearMsgImage("imgNameMsg");
                     $("#SpanNameMsg").html("<font color='red'>公司名称字符长度不能大于50！</font>");
                     return false;
                 }
@@ -225,14 +224,17 @@
             return true;
         }
 
-        function CheckLoginKeyData(LoginKey) {           
-            if (LoginKey == "" || LoginKey == undefined) {
+        function CheckLoginKeyData(LoginKey) {
+            if (LoginKey == "" || LoginKey == undefined) {  
+            debugger              
+                ClearMsgImage("imgLoginKeyMsg");
                 $("#spanLoginKeyMsg").html("<font color='red'>账号名称不能为空！</font>");
                 return false;
             }
             else {
                 var LoginKeyLen = LoginKey.length;
-                if (LoginKeyLen > 50) {
+                if (LoginKeyLen > 50) {                    
+                    ClearMsgImage("imgLoginKeyMsg");
                     $("#spanLoginKeyMsg").html("<font color='red'>账号最长不能超过50！</font>");
                     return false;
                 }
@@ -242,19 +244,25 @@
             }
             return true
         }
+        //清除消息图片
+        function ClearMsgImage(id) {
+            var imageName = $("#" + id)[0];
+            imageName.style.display = "none";
+            imageName.src = "";
+       }
         function Check() {
 
             var Name = $("#Name").val();
-            if (CheckNameData(Name) == false) { 
+            if (CheckNameData(Name) == false) {
                 return false
             }
             var LoginKey = $("#LoginKey").val();
-            
+
             if (CheckLoginKeyData(LoginKey) == false) {
                 return false;
             }
             var Password = $("#Password").val();
-            if (Password == "") {               
+            if (Password == "") {
                 $("#SpanPasswordMsg").html("<font color='red'>密码不能为空!</font>");
                 return false;
             }
@@ -269,61 +277,60 @@
                 }
             }
             var Address = $("#Address").val();
-            if (Address == "") {                
+            if (Address == "") {
                 $("#SpanAddressMsg").html("<font color='red'>地址不能为空！</font>");
                 return false;
             }
             else {
                 var AddressLen = Address.length;
-                if (AddressLen > 150) {                    
+                if (AddressLen > 150) {
                     $("#SpanAddressMsg").html("<font color='red'>地址最长不能超过150！</font>");
-                   return false;
-               }
-               else {
-                   $("#SpanAddressMsg").html("");
-               }
+                    return false;
+                }
+                else {
+                    $("#SpanAddressMsg").html("");
+                }
             }
             var Phone = $("#Phone").val();
-            if (Phone == "") {              
+            if (Phone == "") {
                 $("#SpanPhoneMsg").html("<font color='red'>电话不能为空！</font>");
                 return false;
             }
             else {
-               
-                if (istell(Phone) == false) {                   
+
+                if (istell(Phone) == false) {
                     $("#SpanPhoneMsg").html("<font color='red'>电话格式不正确！<br> 格式：固定电话 0511-4405222 或 021-87888822 <br> 或者手机号码</font>");
                     return false;
                 }
                 var PhoneLen = Phone.length;
-                if (PhoneLen > 20) {                 
+                if (PhoneLen > 20) {
                     $("#SpanPhoneMsg").html("<font color='red'>电话最长不能超过20字节！</font>");
                     return false;
                 }
                 else {
                     $("#SpanPhoneMsg").html("");
-                }               
+                }
             }
             //var Stoped = $("#Stoped").val() == "1" ? true : false;
             // var Id = $("#GUID").val();
             return true;
         }
-    
-    //匹配国内电话号码(0511-4405222 或 021-87888822)
-        function istell(str) {   
-//        var result = str.match(/\d{3}-\d{8}|\d{4}-\d{7}/);
-//        var phone = str.match(/^1[35]\d{9}$/);
-//        if (result == null && phone == null) return false;
 
-        var reg1 = /\d{3}-\d{8}|\d{4}-\d{7}/;
-        var reg2 = /^1[35]\d{9}$/;
-        var result=reg1.test(str);
-        var phone=reg2.test(str);
-        if(result==false && phone==false)
-        {
-            return false;
+        //匹配国内电话号码(0511-4405222 或 021-87888822)
+        function istell(str) {
+            //        var result = str.match(/\d{3}-\d{8}|\d{4}-\d{7}/);
+            //        var phone = str.match(/^1[35]\d{9}$/);
+            //        if (result == null && phone == null) return false;
+
+            var reg1 = /\d{3}-\d{8}|\d{4}-\d{7}/;
+            var reg2 = /^1[35]\d{9}$/;
+            var result = reg1.test(str);
+            var phone = reg2.test(str);
+            if (result == false && phone == false) {
+                return false;
+            }
+            return true;
         }
-       return true;
-    }
     </script>
     <style type="text/css">
         table
@@ -370,7 +377,8 @@
         }
         input
         {
-             width:400px;    
+             width:400px; 
+              height:40px;   
         }
         span
         {
@@ -386,18 +394,38 @@
     <div style="text-align:center;margin: 0px auto; " class="accountinfo">
     <form  id="from" class="form-horizontal">
     <fieldset style="text-align:center">
-     
-       <div style="text-align:left; margin:20px 0px 0px 160px;">
+        
+       <div style="text-align:left; margin:20px 0px 0px 220px;">
          <a class="button button-rounded button-flat-primary" id="btn_signIn" href="#"><i class="icon-save"></i>注册</a> 
         <a class="button button-rounded button-flat-primary" id="btn_save" href="#"><i class="icon-save" style="display:none"></i>确定</a>  &nbsp &nbsp&nbsp&nbsp&nbsp
         <a class="button button-rounded button-flat-primary" id="btn_close" onclick="Close()" href="#"><i class="con-off"></i>关闭</a>
 
        </div> 
-       <hr>
-       <div style="margin: 0px auto; padding: 0px; width: 1100px;  height: auto; " >
+       <hr />
+       <div style="margin: 0px auto; padding: 0px; width: 915px; height: 8px; background: url(../../Content/Img/topborder.jpg)">
+          
+       </div>
+       <div style="margin: 0px auto; padding: 0px; width: 915px; height: auto; background: url(../../Content/Img/border.jpg)">
+           
         <table>
-        <tr>
+
+         <tr>
+            <td height="65"  style="width:900px" colspan="2" align="center">
+                <img src="../../Content/Img/titleMsg.jpg" />
+            </td>
+          </tr>
+         <tr>
+         <td class="tdText" >
+            <p>
+            <label>订单号  &nbsp </label>
+            <input disabled="disabled" id="OrderNumber" value="@ViewData["OrderNumber"]" name="OrderNumber" class="input-xlarge" type="text" />
+            </p>
             
+            </td>
+             <td class="tdtitle" ></td>
+        </tr>
+
+        <tr>            
             <td class="tdText"> 
              <p>
              <label><font color="red">*</font>公司名 &nbsp </label>                     
@@ -408,21 +436,11 @@
              <td class="tdtitle" >
              <span><img  id="imgNameMsg"src="" style="display:none"/></span>
               <span id="SpanNameMsg"></span> 
-            </td>
-
-            
-            <td class="tdText" >
-            <p>
-            <label>订单号  &nbsp </label>
-            <input disabled="disabled" id="OrderNumber" value="@ViewData["OrderNumber"]" name="OrderNumber" class="input-xlarge" type="text" />
-            </p>
-            
-            </td>
-             <td class="tdtitle" ></td>
-        </tr>
-
-         <tr>            
+            </td>        
            
+        </tr>      
+
+         <tr> 
             
             <td class="tdText" >
             <p>
@@ -435,9 +453,10 @@
              <span><img  id="imgLoginKeyMsg"src="" style="display:none"/></span>
              <span id="spanLoginKeyMsg"></span>
              </td>
+        </tr>
 
-            
-            <td class="tdText"> 
+         <tr>
+         <td class="tdText"> 
             <p>
             <label ><font color="red">*</font>密码 &nbsp </label>
             <span><input placeholder="请输入密码" id="Password" name="Password" value="@ViewData["Password"]" class="input-xlarge" type="text" />
@@ -449,11 +468,9 @@
              <span id="SpanPasswordMsg"></span>
             </td>
 
-        </tr>
-         
+         </tr>
         
-         <tr>
-            
+         <tr>           
            
             <td class="tdText" >
             <p>
@@ -467,8 +484,12 @@
             <td class="tdtitle">
                 <span id="SpanPhoneMsg"></span>
             </td>
+                      
 
-            <td class="tdText"> 
+        </tr>
+
+        <tr>
+         <td class="tdText"> 
             <p>
             <label >创建人&nbsp </label>
             <span><input class="input-xlarge" disabled="disabled" id="CreateorId" name="CreateorId" value="@ViewData["CreateorName"]" type="text" />
@@ -476,8 +497,8 @@
             </p>
             </td>
              <td class="tdtitle"></td>
-
         </tr>
+
          <tr>
            
             <td class="tdText"> 
@@ -488,7 +509,11 @@
             </p>
             </td>
             <td class="tdtitle"></td>
-            <td class="tdText" >
+            
+        </tr>
+
+        <tr>
+        <td class="tdText" >
             <p>
             <label >修改时间  &nbsp </label>
            <span> <input  class="input-xlarge" disabled="disabled" id="ModifiedDate" name="ModifiedDate" value="@ViewData["ModifiedDate"]" type="text" />
@@ -497,13 +522,14 @@
             </td>
              <td class="tdtitle"></td>
         </tr>
+
         <tr>
            
-            <td class="tdText" colspan="3">
+            <td class="tdText">
             <p> 
             <label ><font color="red">*</font>地址  &nbsp </label>
             <span>
-            <input placeholder="请输入地址" style=" width:955px" class="input-xlarge" id="Address" name="Address" value="@ViewData["Address"]"  type="text" />
+            <input placeholder="请输入地址" style=" width:650px" class="input-xlarge" id="Address" name="Address" value="@ViewData["Address"]"  type="text" />
             </span>
             
             </p>
@@ -527,12 +553,12 @@
             <td class="tdtitle"></td>
             <td></td>
             <td></td>
-
         </tr>
         
       </table>
        </div>
-       <div style="margin: 0px auto; padding: 0px; width: 1100px; height: 24px; ">
+       <div style="margin: 0px auto;  padding: 0px; width: 915px; height: 24px; background: url(../../Content/Img/bottom.jpg)">
+           
        </div>
       <hr>
       <div>       

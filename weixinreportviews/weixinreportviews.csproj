@@ -91,7 +91,8 @@
     <Content Include="Content\Css\bootstrap.css" />
     <Content Include="Content\Css\bootstrap.icons.css" />
     <Content Include="Content\Css\button.css" />
-    <Content Include="Content\Css\dataTables.editor.min.css" />
+    <Content Include="Content\Css\demo_table.css" />
+    <Content Include="Content\Css\flat-ui.css" />
     <Content Include="Content\Css\font-awesome.min.css" />
     <Content Include="Content\Css\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\Css\jquery.dataTables.css" />
@@ -102,6 +103,8 @@
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
     <Content Include="Content\Img\back_enabled_hover.png" />
+    <Content Include="Content\Img\border.jpg" />
+    <Content Include="Content\Img\bottom.jpg" />
     <Content Include="Content\Img\favicon.ico" />
     <Content Include="Content\Img\forward_disabled.png" />
     <Content Include="Content\Img\forward_enabled.png" />
@@ -111,6 +114,8 @@
     <Content Include="Content\Img\icon-cog-shadow.png" />
     <Content Include="Content\Img\icon-cog-small.png" />
     <Content Include="Content\Img\icon-cog.png" />
+    <Content Include="Content\Img\imageError.jpg" />
+    <Content Include="Content\Img\imageSuccess.jpg" />
     <Content Include="Content\Img\manage_01.png" />
     <Content Include="Content\Img\search.png" />
     <Content Include="Content\Img\sort_asc.png" />
@@ -118,6 +123,8 @@
     <Content Include="Content\Img\sort_both.png" />
     <Content Include="Content\Img\sort_desc.png" />
     <Content Include="Content\Img\sort_desc_disabled.png" />
+    <Content Include="Content\Img\titleMsg.jpg" />
+    <Content Include="Content\Img\topborder.jpg" />
     <Content Include="Content\Img\userface.png" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
@@ -125,6 +132,12 @@
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.toolbar.js" />
     <Content Include="Scripts\jquery.toolbar.min.js" />
+    <Content Include="Scripts\JSFlatUI\application.js" />
+    <Content Include="Scripts\JSFlatUI\bootstrap-select.js" />
+    <Content Include="Scripts\JSFlatUI\bootstrap-switch.js" />
+    <Content Include="Scripts\JSFlatUI\bootstrap.min.js" />
+    <Content Include="Scripts\JSFlatUI\jquery.placeholder.js" />
+    <Content Include="Scripts\JSFlatUI\jquery.tagsinput.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
