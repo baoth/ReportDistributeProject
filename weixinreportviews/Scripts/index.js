@@ -36,10 +36,11 @@
                     type: 4,
                     btn: ['确定', '取消'],
                     yes: function () {
+                        debugger
                         $.ajax({
                             type: "post",
-                            url: "account/Delete",
-                            data: { "id": ids },
+                            url: "/Account/Delete",
+                            data: { "id": ids.join(',') },
                             dataType: "json",
                             success: function (data) {
                                 if (data.result == 1) {
