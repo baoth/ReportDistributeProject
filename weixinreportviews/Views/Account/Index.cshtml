@@ -19,123 +19,21 @@
     <link href="../../Content/Css/jquery.toolbars.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/bootstrap.icons.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery.toolbar.js" type="text/javascript"></script>
-    <script>
-
-        var PageAction = function (id) {
-            var url = '/Account/Model';
-            function AddParams(name, val) {
-                var char = url.indexOf('?') >= 0 ? "&" : "?"
-                return url + char + name + "=" + val;
-            };
-            return {
-                Delete: function () {
-
-                    alert('删除：' + id);
-                   
-                },
-                Edit: function () {
-                    alert('编辑：' + id);
-
-                    url = AddParams('id', id);
-                    window.parent.ControlIFrame(url);
-                },
-                Add: function () {
-                    alert("add");
-                    window.parent.ControlIFrame(url);
-                },
-                SetAuth: function () {
-                    alert('授权：' + id);
-                    url = AddParams('id', id);
-                    window.parent.ControlIFrame(url);
-                }
-            }
-        };
-        $(document).ready(function () {
-            var table = $('#example').dataTable({
-                "order": [[1, 'asc']],
-                "processing": true,
-                "bServerSide": true,
-                "scrollCollapse": true,
-
-                "sAjaxSource": "/Account/GridDatas",
-                "sPaginationType": "full_numbers",
-                "oLanguage": {
-                    "searchDefalutText": "订单号",
-                    "allFilter": 'OrderNumber', //过滤那些列
-                    "sLengthMenu": "每页显示 _MENU_ 条记录",
-                    "sZeroRecords": "抱歉， 没有找到",
-                    "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
-                    "sInfoEmpty": "没有数据",
-                    "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
-                    "sZeroRecords": "没有检索到数据",
-                    "sSearch": "",
-                    "oPaginate": {
-                        "sFirst": "首页",
-                        "sPrevious": "前一页",
-                        "sNext": "后一页",
-                        "sLast": "尾页"
-                    }
-
-                },
-                columnDefs: [{
-                    targets: [1],
-                    orderData: [1, 2]
-
-                }],
-                "fnDrawCallback": function (oSettings) {
-                    $(".settings-button").each(function () {
-                        $(this).toolbar({
-                            content: '#user-options',
-                            position: 'bottom'
-                        }).on('toolbarItemClick', function (e, item, val) {
-                            var action = $(item).attr('action');
-                            PageAction(val)[action]();
-                        });
-                    });
-                },
-                "aoColumns": [
-                        { data: null, defaultContent: '', bSortable: false,
-                            "mRender": function (val, isShow, row) {
-                                return '<input type="checkbox"/>'
-                             } 
-                        },
-                        { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
-                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 },
-                        { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户" },
-                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false },
-                        { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期" },
-                        { "data": "Id", "sTitle": "操作", "bSortable": false,
-                            "mRender": function (val, isShow, row) {
-                                return '<div class="settings-button" v="' + val + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
-                            }
-                        }
-                    ]
-            });
-            $('#b-add,#b-edit,#b-del,#b-auth').on('click', function () {
-                var action = $(this).attr('action'), val = '';
-                if (action != 'add') {
-                    val = "";
-                }
-                PageAction(val)[action]();
-            });
-            $("body").click(function (e, t) {
-                if (selectself) selectself.hide();
-            });
-        });
-    </script>
+    <script src="../../Scripts/layer.js" type="text/javascript"></script>
+    <script src="../../Scripts/index.js" type="text/javascript"></script>
 </head>
-<body style=" min-height: 100%;margin:10px">
+<body style=" min-height: 100%;margin:10px;">
    <div style="width:800px;height:50px;" >
-        <a href="#" id="b-add"  action="Add" class="disabled button button-rounded button-flat-primary">新增</a>
-        <a href="#" id="b-edit" action="Edit"  class="button button-rounded button-flat-action">编辑</a>
-        <a href="#" id="b-del"  action="Delete" class="button button-rounded button-flat-highlight">删除</a>
-        <a href="#" id="b-auth" action="SetAuth" class="button button-rounded button-flat-caution">授权</a>
+        <a href="#" id="b-add"  action="Add" class=" button button-rounded button-flat-primary">新增</a>
+        <a href="#" id="b-edit" action="Edit"  class="disabled button button-rounded button-flat-action">编辑</a>
+        <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
+        <a href="#" id="b-auth" action="SetAuth" class="disabled button button-rounded button-flat-caution">授权</a>
    </div>
   <table id="example" class="cell-border" cellspacing="0"  width="100%">
         <thead>
         <tr>
 
-            <th></th>
+            <th style="width:5%;"> <input  type="checkbox" id="checkall" name="checkall" /></th>
             <th>OrderNumber</th>
             <th>Name</th>
             <th>LoginKey</th>

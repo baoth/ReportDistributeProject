@@ -73,20 +73,28 @@ namespace weixinreportviews.Controllers.Admin
         [HttpPost]
         public JsonResult Delete(string id)
         {
+            
             if (!string.IsNullOrEmpty(id))
             {
+                List<string> ids = id.Split(',').ToList();
+                DbSession session = General.CreateDbSession();
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    if (!string.IsNullOrEmpty(ids[i]))
+                    {
+                        SS_CompanyAccount entity = new SS_CompanyAccount { Id = Guid.Parse(ids[i]) };
+                        session.Context.DeleteEntity(entity.CreateDeleteCommand());
+                    }
+                }
+
                 try
                 {
-                    DbSession session = General.CreateDbSession();
-                    SS_CompanyAccount entity = new SS_CompanyAccount { Id = Guid.Parse(id) };
-
-                    session.Context.DeleteEntity(entity.CreateDeleteCommand());
                     session.Context.SaveChange();
                     return Json(new { result = 0 });
                 }
                 catch (Exception ex)
                 {
-                    return Json(new { result = 1,msg=ex.Message });
+                    return Json(new { result = 1, msg = ex.Message });
                 }
             }
             return Json(new { result = 0 });
