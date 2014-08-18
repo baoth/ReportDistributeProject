@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using QSmart.Core.Object;
+using QSmart.Core.DataBase;
 
 namespace weixinreportviews.Model
 {
+
+    public enum ProductKindEnum
+    {
+        微信第一表=0,
+    }
+
     public class SS_Lisence:QSmartEntity
     {
         private int _Id = 0;
@@ -27,15 +34,14 @@ namespace weixinreportviews.Model
             set { _AccountId = value; }
         }
 
-        private string _ProductKey = string.Empty;
+        private ProductKindEnum _ProductKind = ProductKindEnum.微信第一表;
         /// <summary>
-        /// 产品模块Key
+        /// 产品类型
         /// </summary>
-        [StringMaxLength(16)]
-        public string ProductKey
+        public ProductKindEnum ProductKind
         {
-            get { return _ProductKey; }
-            set { _ProductKey = value; }
+            get { return _ProductKind; }
+            set { _ProductKind = value; }
         }
 
         private short _LisencePoint = 0;
@@ -101,6 +107,64 @@ namespace weixinreportviews.Model
         {
             get { return _OrderNumber; }
             set { _OrderNumber = value; }
+        }
+
+        private bool _Stoped = false;
+        /// <summary>
+        /// 是否停用
+        /// </summary>
+        public bool Stoped
+        {
+            get { return _Stoped; }
+            set { _Stoped = value; }
+        }
+
+        #region 属性(仅作呈现用)
+        [Ignore]
+        public string CreateDateDisplay
+        {
+            get { return this.CreateDate.ToShortDateString(); }
+        }
+        [Ignore]
+        public string EffectiveDateDisplay
+        {
+            get { return this.EffectiveDate.ToShortDateString(); }
+        }
+        [Ignore]
+        public string ExpiryDateDisplay
+        {
+            get { return this.ExpiryDate.ToShortDateString(); }
+        }
+        [Ignore]
+        public string ProductKindDisplay
+        {
+            get { return this.ProductKind.ToString(); }
+        }
+        [Ignore]
+        public string StopedDisplay
+        {
+            get { return this.Stoped ? "是" : "否"; }
+        }
+        #endregion
+
+        public List<QObject> CreateDeleteCommand()
+        {
+            if (this.Id != 0)
+            {
+                QSmartQuery Query = new QSmartQuery();
+
+                Query.Tables.Add(new QSmartQueryTable { tableName = typeof(SS_Lisence).Name });
+
+                Query.FilterConditions.Add(new QSmartQueryFilterCondition
+                {
+                    Column = new QSmartQueryColumn { columnName = "Id", dataType = typeof(int) },
+                    Operator = QSmartOperatorEnum.equal,
+                    Values = new List<object> { this.Id }
+                });
+
+                return new List<QObject> { Query };
+            }
+            return null;
         }
     }
 }
