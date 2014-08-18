@@ -154,6 +154,7 @@
     <None Include="Content\Css\fonts\fontawesome-webfont.woff" />
     <None Include="Content\Css\fonts\FontAwesome.otf" />
     <None Include="Content\Img\Sorting icons.psd" />
+    <Content Include="Views\Lisence\Index.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config" />
