@@ -276,17 +276,7 @@
 
             return true;
         }
-        function Check() {
-
-            var Name = $("#Name").val();
-            if (CheckNameData(Name) == false) {
-                return false
-            }
-            var LoginKey = $("#LoginKey").val();
-
-            if (CheckLoginKeyData(LoginKey) == false) {
-                return false;
-            }
+        function CheckPassword() {
             var Password = $("#Password").val();
             if (Password == "") {
                 $("#SpanPasswordMsg").html("<font color='red'>密码不能为空!</font>");
@@ -302,6 +292,9 @@
                     $("#SpanPasswordMsg").html("");
                 }
             }
+            return true;
+        }
+        function CheckAddress() {
             var Address = $("#Address").val();
             if (Address == "") {
                 $("#SpanAddressMsg").html("<font color='red'>地址不能为空！</font>");
@@ -317,6 +310,22 @@
                     $("#SpanAddressMsg").html("");
                 }
             }
+        }
+        function Check() {
+
+            var Name = $("#Name").val();
+            if (CheckNameData(Name) == false) {
+                return false
+            }
+            var LoginKey = $("#LoginKey").val();
+
+            if (CheckLoginKeyData(LoginKey) == false) {
+                return false;
+            }
+            if (CheckPassword() == false) { return false }
+
+            if (CheckAddress() == false) { return false }
+            
             if (CheckPhone() == false) {return false; }
             //var Stoped = $("#Stoped").val() == "1" ? true : false;
             // var Id = $("#GUID").val();
@@ -361,14 +370,15 @@
         .tdtitle
         {
             text-align:left; 
-            width:50px;
+            width:80px;
               
         }
         .tdText
         {
-             text-align:left;  
+             text-align:left;
              width:450px; 
-         
+             vertical-align:top;
+            
              
         }
         
@@ -391,8 +401,8 @@
         }
         input
         {
-             width:400px; 
-              height:40px;   
+             width:445px; 
+             height:40px;   
         }
         span
         {
@@ -407,15 +417,14 @@
 <body style="background: #f6f6f6; border:0px"> @*background: #f6f6f6;*@
     <div style="text-align:center;margin: 0px auto; " class="accountinfo">
     <form  id="from" class="form-horizontal">
-    <fieldset style="text-align:center">
-        
+    
        <div style="text-align:left; margin:0px auto; padding:10px 0px 0px 100px" >
         <a class="button button-rounded button-flat-primary" id="btn_signIn" href="#"><i class="icon-save"></i>注册</a> 
         <a class="button button-rounded button-flat-primary" id="btn_save" href="#"><i class="icon-save" style="display:none"></i>确定</a>  &nbsp &nbsp&nbsp&nbsp&nbsp
         <a class="button button-rounded button-flat-primary" id="btn_close" onclick="Close()" href="#"><i class="con-off"></i>关闭</a>
 
        </div> 
-       <hr />
+     
       @* <div style="margin: 0px auto; padding: 0px; width: 915px; height: 8px; background: url(../../Content/Img/topborder.jpg)">*@
           
        </div>
@@ -442,7 +451,7 @@
             </td>
 
              <td class="tdtitle" >
-             <span><img  id="imgNameMsg"src="" style="display:none"/></span>             
+             <span style="padding:35px 0px 0px 0px"><img  id="imgNameMsg"src="" style="display:none"/></span>             
              </td>    
 
          <td class="tdText" >
@@ -467,7 +476,7 @@
              </div>        
             </td>
              <td class="tdtitle" >
-             <span><img  id="imgLoginKeyMsg"src="" style="display:none"/></span>
+             <span style="padding:35px 0px 0px 0px"><img  id="imgLoginKeyMsg"src="" style="display:none"/></span>
            
              </td>
 
@@ -475,7 +484,7 @@
             
             <label ><font color="red">*</font>密码 &nbsp </label>
             <div> 
-            <input placeholder="请输入密码" id="Password" name="Password" value="@ViewData["Password"]" class="input-xlarge" type="text" />
+            <input placeholder="请输入密码" id="Password" name="Password" onblur="CheckPassword()" value="@ViewData["Password"]" class="input-xlarge" type="text" />
             </div>
             <div>
             <span id="SpanPasswordMsg"></span>
@@ -545,7 +554,7 @@
             
             <label ><font color="red">*</font>地址  &nbsp </label>
             <div>
-            <input placeholder="请输入地址" style=" width:850px" class="input-xlarge" id="Address" name="Address" value="@ViewData["Address"]"  type="text" />
+            <input placeholder="请输入地址" style=" width:930px" class="input-xlarge" id="Address" onblur="CheckAddress()" name="Address" value="@ViewData["Address"]"  type="text" />
             </div>
             <div><span id="SpanAddressMsg"></span></div>
                        
@@ -580,7 +589,7 @@
       </div>
       
       
-    </fieldset>     
+      
   </form>
     </div>
 </body>
