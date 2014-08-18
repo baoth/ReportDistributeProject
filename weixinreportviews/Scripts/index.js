@@ -21,7 +21,7 @@
     }
     return {
         Delete: function () {
-
+        
             var ids = GetSelectedRowId();
             if (ids.length == 0) {
                 return;
@@ -85,19 +85,22 @@
     }
 };
 
+var onDataGridCheck = function (e) {
+    var checked = $(e).attr("checked") == 'checked'
+    if (checked) {
+        $(e).parent().parent().addClass('selected');
+    } else {
+        $(e).parent().parent().removeClass('selected');
+    }
+    /*控制按钮可用不可用*/
+    PageAction().ControlBtn();
 
+};
 $(document).ready(function () {
-    var onDataGridCheck = function (e) {
-        var checked = $(e).attr("checked") == 'checked'
-        if (checked) {
-            $(e).parent().parent().addClass('selected');
-        } else {
-            $(e).parent().parent().removeClass('selected');
-        }
-        /*控制按钮可用不可用*/
-        PageAction().ControlBtn();
-
-    };
+    /*
+    重绘列表
+    $('#example').dataTable().fnDraw();
+    */
     /*绑定grid的check的方法*/
     var BindGridChecked = function () {
         $('#checkall').bind('click', function () {
@@ -159,11 +162,11 @@ $(document).ready(function () {
                             }
                         },
                         { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
-                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 },
-                        { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户" },
-                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false },
-                        { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期" },
-                        { "data": "Id", "sTitle": "操作", "bSortable": false,
+                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 250 },
+                        { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户","sWidth": 120 },
+                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false, "sWidth": 70 },
+                        { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
+                        { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70 ,
                             "mRender": function (val, isShow, row) {
                                 return '<div class="settings-button" v="' + val + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
                             }
