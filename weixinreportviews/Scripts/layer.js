@@ -26,7 +26,8 @@ window.layer = {
     path: ready.getPath(),
     
     //载入模块
-    use: function(module, callback){
+    use: function (module, callback) {
+        debugger
         var i = 0, head = $('head')[0];
         var module = module.replace(/\s/g, '');
         var iscss = /\.css$/.test(module);
