@@ -10,7 +10,7 @@
    @*  <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />   *@
     <link href="../../Content/Css/bootstrap.css" rel="stylesheet" type="text/css" />
      <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
-     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
      @*按钮开关样式*@
     <link href="../../Content/Css/flat-ui.css" rel="stylesheet" type="text/css" />
     <!--[if IE 7]>
@@ -28,6 +28,7 @@
     <script src="../../Scripts/JSFlatUI/application.js" type="text/javascript"></script>
   @*  开关按钮 end*@
 
+    
     <script language="javascript" type="text/javascript">
         $(document).ready(function () {
             var Id = $("#GUID").val(); //""表示新增  有值 表示修改
@@ -249,7 +250,32 @@
             var imageName = $("#" + id)[0];
             imageName.style.display = "none";
             imageName.src = "";
-       }
+        }
+        //校验Phone
+        function CheckPhone() {
+            var Phone = $("#Phone").val();
+            if (Phone == "") {
+                $("#SpanPhoneMsg").html("<font color='red'>电话不能为空！</font>");
+                return false;
+            }
+            else {
+
+                if (istell(Phone) == false) {
+                    $("#SpanPhoneMsg").html("<font color='red'>电话格式不正确！<br> 格式：固定电话 0511-4405222 或 021-87888822 <br> 或者手机号码</font>");
+                    return false;
+                }
+                var PhoneLen = Phone.length;
+                if (PhoneLen > 20) {
+                    $("#SpanPhoneMsg").html("<font color='red'>电话最长不能超过20字节！</font>");
+                    return false;
+                }
+                else {
+                    $("#SpanPhoneMsg").html("");
+                }
+            }
+
+            return true;
+        }
         function Check() {
 
             var Name = $("#Name").val();
@@ -291,26 +317,7 @@
                     $("#SpanAddressMsg").html("");
                 }
             }
-            var Phone = $("#Phone").val();
-            if (Phone == "") {
-                $("#SpanPhoneMsg").html("<font color='red'>电话不能为空！</font>");
-                return false;
-            }
-            else {
-
-                if (istell(Phone) == false) {
-                    $("#SpanPhoneMsg").html("<font color='red'>电话格式不正确！<br> 格式：固定电话 0511-4405222 或 021-87888822 <br> 或者手机号码</font>");
-                    return false;
-                }
-                var PhoneLen = Phone.length;
-                if (PhoneLen > 20) {
-                    $("#SpanPhoneMsg").html("<font color='red'>电话最长不能超过20字节！</font>");
-                    return false;
-                }
-                else {
-                    $("#SpanPhoneMsg").html("");
-                }
-            }
+            if (CheckPhone() == false) {return false; }
             //var Stoped = $("#Stoped").val() == "1" ? true : false;
             // var Id = $("#GUID").val();
             return true;
@@ -485,7 +492,7 @@
             
             <label><font color="red">*</font>电话  &nbsp </label>
             <div> 
-            <input placeholder="请输入电话" class="input-xlarge" id="Phone" name="Phone" value="@ViewData["Phone"]" type="text" />
+            <input placeholder="请输入电话" class="input-xlarge" id="Phone" onblur="CheckPhone()" name="Phone" value="@ViewData["Phone"]" type="text" />
             </div>
              <div>
              <span id="SpanPhoneMsg"></span>
