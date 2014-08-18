@@ -42,7 +42,7 @@
                 $("#btn_signIn").hide(); //
                 $("#btn_save").show();
             }
-
+            debugger
             SetDefault(Id);
             $("#btn_save").bind("click", Save);
             $("#btn_signIn").bind("click", Save);
@@ -192,8 +192,8 @@
         }
         function SetDefault(id) {
             if (id != "") {
-                $("#CompanyName").attr("disabled", "disabled");
-                $("#ComPanyKey").attr("disabled", "disabled");
+                $("#Name").attr("disabled", "disabled");
+                $("#LoginKey").attr("disabled", "disabled");
             }
         }
         function Close() {
@@ -338,23 +338,30 @@
             width:100%;
             height:300px;
             text-align:center;
+           
             
         }
         tr 
         {
+           
              height:30px;    
+        }
+        td 
+        {
+            width:450px;
+            
         }
         .tdtitle
         {
             text-align:left; 
-            width:200px;
-               
+            width:50px;
+              
         }
         .tdText
         {
              text-align:left;  
              width:450px; 
-             padding:10px 0px 0px 30px;
+         
              
         }
         
@@ -395,149 +402,146 @@
     <form  id="from" class="form-horizontal">
     <fieldset style="text-align:center">
         
-       <div style="text-align:left; margin:20px 0px 0px 220px;">
-         <a class="button button-rounded button-flat-primary" id="btn_signIn" href="#"><i class="icon-save"></i>注册</a> 
+       <div style="text-align:left; margin:0px auto; padding:10px 0px 0px 100px" >
+        <a class="button button-rounded button-flat-primary" id="btn_signIn" href="#"><i class="icon-save"></i>注册</a> 
         <a class="button button-rounded button-flat-primary" id="btn_save" href="#"><i class="icon-save" style="display:none"></i>确定</a>  &nbsp &nbsp&nbsp&nbsp&nbsp
         <a class="button button-rounded button-flat-primary" id="btn_close" onclick="Close()" href="#"><i class="con-off"></i>关闭</a>
 
        </div> 
        <hr />
-       <div style="margin: 0px auto; padding: 0px; width: 915px; height: 8px; background: url(../../Content/Img/topborder.jpg)">
+      @* <div style="margin: 0px auto; padding: 0px; width: 915px; height: 8px; background: url(../../Content/Img/topborder.jpg)">*@
           
        </div>
-       <div style="margin: 0px auto; padding: 0px; width: 915px; height: auto; background: url(../../Content/Img/border.jpg)">
+       <div style="margin: 0px auto; padding:0px 0px 0px 100px; width: 100%; height: auto; "> @*background: url(../../Content/Img/border.jpg)*@
            
         <table>
 
-         <tr>
+         @*<tr>
             <td height="65"  style="width:900px" colspan="2" align="center">
                 <img src="../../Content/Img/titleMsg.jpg" />
             </td>
-          </tr>
+          </tr>*@
+
          <tr>
+            <td class="tdText"> 
+            
+             <label><font color="red">*</font>公司名 &nbsp </label>  
+             <div>                             
+             <input placeholder="请输入公司名称" id="Name" name="Name" onblur="CheckName(this)" value="@ViewData["Name"]" class="input-xlarge" type="text" />
+             </div>          
+              <div>
+               <span id="SpanNameMsg"></span> 
+              </div>         
+            </td>
+
+             <td class="tdtitle" >
+             <span><img  id="imgNameMsg"src="" style="display:none"/></span>             
+             </td>    
+
          <td class="tdText" >
-            <p>
+            <div> 
             <label>订单号  &nbsp </label>
             <input disabled="disabled" id="OrderNumber" value="@ViewData["OrderNumber"]" name="OrderNumber" class="input-xlarge" type="text" />
-            </p>
+            </div>
             
             </td>
              <td class="tdtitle" ></td>
-        </tr>
-
-        <tr>            
-            <td class="tdText"> 
-             <p>
-             <label><font color="red">*</font>公司名 &nbsp </label>                     
-             <span><input placeholder="请输入公司名称" id="Name" name="Name" onblur="CheckName(this)" value="@ViewData["Name"]" class="input-xlarge" type="text" /></span>
-                        
-             </p>            
-            </td>
-             <td class="tdtitle" >
-             <span><img  id="imgNameMsg"src="" style="display:none"/></span>
-              <span id="SpanNameMsg"></span> 
-            </td>        
-           
-        </tr>      
-
+        </tr>       
          <tr> 
             
             <td class="tdText" >
-            <p>
+            
             <label><font color="red">*</font>账号  &nbsp </label>
-             <span><input placeholder="请输入用户名称" id="LoginKey" value="@ViewData["LoginKey"]" onblur="CheckLoginKey()" name="LoginKey" class="input-xlarge" type="text" /></span>
-             
-            </p>           
+            <div> 
+            <input placeholder="请输入用户名称" id="LoginKey" value="@ViewData["LoginKey"]" onblur="CheckLoginKey()" name="LoginKey" class="input-xlarge" type="text" />            
+            </div>  
+             <div>
+               <span id="spanLoginKeyMsg"></span>
+             </div>        
             </td>
              <td class="tdtitle" >
              <span><img  id="imgLoginKeyMsg"src="" style="display:none"/></span>
-             <span id="spanLoginKeyMsg"></span>
-             </td>
-        </tr>
-
-         <tr>
-         <td class="tdText"> 
-            <p>
-            <label ><font color="red">*</font>密码 &nbsp </label>
-            <span><input placeholder="请输入密码" id="Password" name="Password" value="@ViewData["Password"]" class="input-xlarge" type="text" />
-            </span>
            
-            </p>
-            </td>
-            <td class="tdtitle">
-             <span id="SpanPasswordMsg"></span>
-            </td>
+             </td>
 
-         </tr>
+            <td class="tdText"> 
+            
+            <label ><font color="red">*</font>密码 &nbsp </label>
+            <div> 
+            <input placeholder="请输入密码" id="Password" name="Password" value="@ViewData["Password"]" class="input-xlarge" type="text" />
+            </div>
+            <div>
+            <span id="SpanPasswordMsg"></span>
+            </div>
+            </td>
+            <td class="tdtitle">             
+           </td>
+
+        </tr>        
         
          <tr>           
            
             <td class="tdText" >
-            <p>
+            
             <label><font color="red">*</font>电话  &nbsp </label>
-             <span><input placeholder="请输入电话" class="input-xlarge" id="Phone" name="Phone" value="@ViewData["Phone"]" type="text" />
-             </span>
-             
-            </p>
+            <div> 
+            <input placeholder="请输入电话" class="input-xlarge" id="Phone" name="Phone" value="@ViewData["Phone"]" type="text" />
+            </div>
+             <div>
+             <span id="SpanPhoneMsg"></span>
+             </div>
+           
             </td>
-
             <td class="tdtitle">
-                <span id="SpanPhoneMsg"></span>
+                
             </td>
-                      
-
-        </tr>
-
-        <tr>
-         <td class="tdText"> 
-            <p>
+            
+            <td class="tdText"> 
+            <div> 
             <label >创建人&nbsp </label>
             <span><input class="input-xlarge" disabled="disabled" id="CreateorId" name="CreateorId" value="@ViewData["CreateorName"]" type="text" />
-            </span>
-            </p>
+            </div>
+           
             </td>
-             <td class="tdtitle"></td>
+          <td class="tdtitle"></td> 
+         
         </tr>
 
          <tr>
            
             <td class="tdText"> 
-            <p>
+           
             <label >创建时间  &nbsp </label>
-             <span><input class="input-xlarge" id="CreateDate" disabled="disabled" name="CreateDate" value="@ViewData["CreateDate"]"  type="text" />
-             </span>
-            </p>
+
+             <div><input class="input-xlarge" id="CreateDate" disabled="disabled" name="CreateDate" value="@ViewData["CreateDate"]"  type="text" />
+             </div>
+           
             </td>
             <td class="tdtitle"></td>
             
-        </tr>
-
-        <tr>
-        <td class="tdText" >
-            <p>
+            <td class="tdText" >
+          
             <label >修改时间  &nbsp </label>
-           <span> <input  class="input-xlarge" disabled="disabled" id="ModifiedDate" name="ModifiedDate" value="@ViewData["ModifiedDate"]" type="text" />
-           </span>
-            </p>
+            <div>
+           <input  class="input-xlarge" disabled="disabled" id="ModifiedDate" name="ModifiedDate" value="@ViewData["ModifiedDate"]" type="text" />
+           </div>
+         
             </td>
-             <td class="tdtitle"></td>
+         <td class="tdtitle"></td>
+
         </tr>
+               
 
         <tr>
            
-            <td class="tdText">
-            <p> 
-            <label ><font color="red">*</font>地址  &nbsp </label>
-            <span>
-            <input placeholder="请输入地址" style=" width:650px" class="input-xlarge" id="Address" name="Address" value="@ViewData["Address"]"  type="text" />
-            </span>
+            <td class="tdText" colspan="4">
             
-            </p>
-            </td>
-             <td class="tdtitle">
-             <span id="SpanAddressMsg"></span>
-             </td>
-           
+            <label ><font color="red">*</font>地址  &nbsp </label>
+            <div>
+            <input placeholder="请输入地址" style=" width:850px" class="input-xlarge" id="Address" name="Address" value="@ViewData["Address"]"  type="text" />
+            </div>
+            <div><span id="SpanAddressMsg"></span></div>
+                       
         </tr>
         <tr>
             
@@ -557,9 +561,11 @@
         
       </table>
        </div>
-       <div style="margin: 0px auto;  padding: 0px; width: 915px; height: 24px; background: url(../../Content/Img/bottom.jpg)">
+
+       @*<div style="margin: 0px auto;  padding: 0px; width: 915px; height: 24px; background: url(../../Content/Img/bottom.jpg)">
            
-       </div>
+       </div>*@
+
       <hr>
       <div>       
        <input  id="Creator"  type="hidden" value="@ViewData["Creator"]" />
