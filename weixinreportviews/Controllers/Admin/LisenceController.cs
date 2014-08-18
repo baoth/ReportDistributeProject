@@ -8,6 +8,10 @@ namespace weixinreportviews.Controllers.Admin
 {
     public class LisenceController : Controller
     {
+        public ActionResult Grid()
+        {
+            return View("Index");
+        }
         //
         // GET: /Lisence/
 

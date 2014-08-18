@@ -7,7 +7,7 @@
     function GetSelectedRowId() {
 
         var selectids = [];
-        debugger
+
         if (id != undefined && id != "") {
             selectids.push(id);
             return selectids;
@@ -26,33 +26,25 @@
             if (ids.length == 0) {
                 return;
             }
-            $.layer({
-                shade: [0.5, '#000'],
-                fadeIn: 300,
-                area: ['auto', 'auto'],
-                dialog: {
-                    msg: '您确认需要删除？',
-                    btns: 2,
-                    type: 4,
-                    btn: ['确定', '取消'],
-                    yes: function () {
-                        debugger
-                        $.ajax({
-                            type: "post",
-                            url: "/Account/Delete",
-                            data: { "id": ids.join(',') },
-                            dataType: "json",
-                            success: function (data) {
-                                if (data.result == 1) {
-                                    layer.msg(data.msg, 1, 13);
-                                }
-                            }
-                        });
-                    }, no: function () {
-
+            layer.confirm('确定删除吗？', function () {
+                layer.load('删除中..', 0);
+                $.ajax({
+                    type: "post",
+                    url: "/Account/Delete",
+                    data: { "id": ids.join(',') },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.result == 1) {
+                            layer.alert(data.msg, 3);
+                        }
+                        else {
+                            layer.closeAll();
+                            $("#example").dataTable().fnDraw();
+                        }
                     }
-                }
+                });
             });
+
 
         },
         Edit: function () {
@@ -73,7 +65,7 @@
         ControlBtn: function () {
             var l = GetSelectedRowId().length;
             if (l > 1) {
-                $('#b-edit,#b-auth,#b-del').addClass('disabled');
+                $('#b-edit,#b-auth').addClass('disabled');
                 $('#b-del').removeClass('disabled');
             } else if (l == 1) {
                 $('#b-edit,#b-auth,#b-del').removeClass('disabled');
@@ -84,7 +76,8 @@
 
     }
 };
-var onDataGridCheck = function (e) {
+
+window.onDataGridCheck = function (e) {
     var checked = $(e).attr("checked") == 'checked'
     if (checked) {
         $(e).parent().parent().addClass('selected');
@@ -95,8 +88,23 @@ var onDataGridCheck = function (e) {
     PageAction().ControlBtn();
 
 };
-
 $(document).ready(function () {
+    /*
+    重绘列表
+    $('#example').dataTable().fnDraw();
+    */
+    /*绑定grid的check的方法*/
+    var BindGridChecked = function () {
+        $('#b-edit,#b-auth,#b-del').addClass('disabled');
+        $('#checkall').bind('click', function () {
+            var check = $(this).attr("checked") == undefined ? false : true;
+            $("#example tbody tr input[type='checkbox']").each(function () {
+                //alert(typeof(this));
+                $(this).attr("checked", check);
+                onDataGridCheck(this);
+            });
+        });
+    };
     var table = $('#example').dataTable({
         "order": [[1, 'asc']],
         "processing": true,
@@ -129,6 +137,7 @@ $(document).ready(function () {
 
         }],
         "fnDrawCallback": function (oSettings) {
+            BindGridChecked();
             $(".settings-button").each(function () {
                 $(this).toolbar({
                     content: '#user-options',
@@ -146,11 +155,11 @@ $(document).ready(function () {
                             }
                         },
                         { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
-                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 150 },
-                        { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户" },
-                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false },
-                        { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期" },
-                        { "data": "Id", "sTitle": "操作", "bSortable": false,
+                        { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 250 },
+                        { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户", "sWidth": 120 },
+                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false, "sWidth": 70 },
+                        { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
+                        { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
                             "mRender": function (val, isShow, row) {
                                 return '<div class="settings-button" v="' + val + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
                             }
@@ -158,21 +167,16 @@ $(document).ready(function () {
                     ]
     });
     $('#b-add,#b-edit,#b-del,#b-auth').on('click', function () {
+        if ($(this).hasClass('disabled')) return;
         var action = $(this).attr('action'), val = '';
         if (action != 'add') {
+           
             val = "";
         }
         PageAction(val)[action]();
     });
-    $('#checkall').bind('click', function () {
-        var check = $(this).attr("checked") == undefined ? false : true;
-        $("#example tbody tr input[type='checkbox']").each(function () {
-            //alert(typeof(this));
-            $(this).attr("checked", check);
-            onDataGridCheck(this);
-        });
-    });
     $("body").click(function (e, t) {
         if (selectself) selectself.hide();
     });
+    BindGridChecked();
 });
