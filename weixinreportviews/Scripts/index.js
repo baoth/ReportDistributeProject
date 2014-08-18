@@ -7,7 +7,7 @@
     function GetSelectedRowId() {
 
         var selectids = [];
-        debugger
+
         if (id != undefined && id != "") {
             selectids.push(id);
             return selectids;
@@ -26,33 +26,25 @@
             if (ids.length == 0) {
                 return;
             }
-            $.layer({
-                shade: [0.5, '#000'],
-                fadeIn: 300,
-                area: ['auto', 'auto'],
-                dialog: {
-                    msg: '您确认需要删除？',
-                    btns: 2,
-                    type: 4,
-                    btn: ['确定', '取消'],
-                    yes: function () {
-                        debugger
-                        $.ajax({
-                            type: "post",
-                            url: "/Account/Delete",
-                            data: { "id": ids.join(',') },
-                            dataType: "json",
-                            success: function (data) {
-                                if (data.result == 1) {
-                                    layer.msg(data.msg, 1, 13);
-                                }
-                            }
-                        });
-                    }, no: function () {
-
+            layer.confirm('确定删除吗？', function () {
+                layer.load('删除中..', 0);
+                $.ajax({
+                    type: "post",
+                    url: "/Account/Delete",
+                    data: { "id": ids.join(',') },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.result == 1) {
+                            layer.alert(data.msg, 3);
+                        }
+                        else {
+                            layer.closeAll();
+                            $("#example").dataTable().fnDraw();
+                        }
                     }
-                }
+                });
             });
+
 
         },
         Edit: function () {
