@@ -136,6 +136,12 @@
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.toolbar.js" />
     <Content Include="Scripts\jquery.toolbar.min.js" />
+    <Content Include="Scripts\JSFlatUI\application.js" />
+    <Content Include="Scripts\JSFlatUI\bootstrap-select.js" />
+    <Content Include="Scripts\JSFlatUI\bootstrap-switch.js" />
+    <Content Include="Scripts\JSFlatUI\bootstrap.min.js" />
+    <Content Include="Scripts\JSFlatUI\jquery.placeholder.js" />
+    <Content Include="Scripts\JSFlatUI\jquery.tagsinput.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\layer.ext.js" />
     <Content Include="Scripts\layer.js" />
