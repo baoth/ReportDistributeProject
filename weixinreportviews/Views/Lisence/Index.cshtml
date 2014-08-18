@@ -13,73 +13,204 @@
     <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/jquery.dataTables.css?r=7" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/fliter.css?r=2" rel="stylesheet" type="text/css" />
+
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="../../Scripts/jquery.dataTables.js?r=6" type="text/javascript"></script>
+
     <script>
-        var table = $('#example').dataTable({
-            "order": [[1, 'asc']],
-            "processing": true,
-            "bServerSide": true,
-            "scrollCollapse": true,
+        $(document).ready(function () {
+            var table = $('#example').dataTable({
+                "order": [[1, 'asc']],
+                "processing": true,
+                "bServerSide": true,
+                "scrollCollapse": true,
 
-            "sAjaxSource": "/Account/GridDatas",
-            "sPaginationType": "full_numbers",
-            "oLanguage": {
-                "searchDefalutText": "订单号",
-                "allFilter": 'OrderNumber', //过滤那些列
-                "sLengthMenu": "每页显示 _MENU_ 条记录",
-                "sZeroRecords": "抱歉， 没有找到",
-                "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
-                "sInfoEmpty": "没有数据",
-                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
-                "sZeroRecords": "没有检索到数据",
-                "sSearch": "",
-                "oPaginate": {
-                    "sFirst": "首页",
-                    "sPrevious": "前一页",
-                    "sNext": "后一页",
-                    "sLast": "尾页"
-                }
+                "sAjaxSource": "/Account/GridDatas",
+                "sPaginationType": "full_numbers",
+                "oLanguage": {
+                    "searchDefalutText": "订单号",
+                    "allFilter": 'OrderNumber', //过滤那些列
+                    "sLengthMenu": "每页显示 _MENU_ 条记录",
+                    "sZeroRecords": "抱歉， 没有找到",
+                    "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                    "sInfoEmpty": "没有数据",
+                    "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                    "sZeroRecords": "没有检索到数据",
+                    "sSearch": "",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "前一页",
+                        "sNext": "后一页",
+                        "sLast": "尾页"
+                    }
 
-            },
-            columnDefs: [{
-                targets: [1],
-                orderData: [1, 2]
+                },
+                columnDefs: [{
+                    targets: [1],
+                    orderData: [1, 2]
 
-            }],
-            "fnDrawCallback": function (oSettings) {
-                BindGridChecked();
-                $(".settings-button").each(function () {
-                    $(this).toolbar({
-                        content: '#user-options',
-                        position: 'bottom'
-                    }).on('toolbarItemClick', function (e, item, val) {
-                        var action = $(item).attr('action');
-                        PageAction(val)[action]();
-                    });
-                });
-            },
-            "aoColumns": [
-                        { data: null, defaultContent: '', bSortable: false, sWidth: 5,
-                            "mRender": function (val, isShow, row) {
-                                return '<input style="margin-left: 7px;" type="checkbox" id="' + val + '" onClick="onDataGridCheck(this)"/>'
-                            }
+                }],
+                "fnDrawCallback": function (oSettings) {
+
+                },
+                "aoColumns": [
+                        { data: null, defaultContent: '', bSortable: false, sWidth: 5
                         },
                         { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
                         { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 250 },
                         { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户", "sWidth": 120 },
                         { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false, "sWidth": 70 },
                         { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
-                        { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
-                            "mRender": function (val, isShow, row) {
-                                return '<div class="settings-button" v="' + val + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
-                            }
-                        }
+
                     ]
+            });
+//            $('.zdcss').bind('click', function () {
+//                debugger
+//                var context$ = $('#zdcontext');
+//                var style = context$.attr("style") || "";
+//                if (style.indexOf("none")>-1) {
+//                    $('#zdcontext').show();
+//                } else {
+//                    $('#zdcontext').hide();
+//                }
+//            });
         });
+
+
+
     </script>
+    <style>
+    .option{position:relative;margin:0 0 30px;}
+		.option .mod-tit{line-height:28px;}
+		.option .mod-tit h2{width:82px;float:left;margin-right:10px;background:#eaeaea;text-align:center;font-size:14px;color:#3a3a3a;}
+		.mod-tit p {float:left;}
+		.mod-tit .r {float:right;}
+
+    </style>
 </head>
 <body style=" min-height: 100%;margin:10px;">
+<div style="width:100%">
+      <div class="option cfix">
+		<div class="mod-tit cfix">
+			<div class="r"><a href="st_p1100_p2_p3_p4_p5_p6_p7_p8_p9.html" class="ico-reset">重置筛选</a></div>
+			<h2>电  影</h2>
+			<p>筛选条件：
+
+			<span class="c-red">正片</span>
+		+
+			<span class="c-red">文艺</span>
+		+
+			<span class="c-red">日本</span>
+				
+			共有<span class="c-red">0</span> 个符合条件的视频</p>
+		</div>
+		
+		</div>
+      <div id="zdcontext" class="mod_sear_menu mt20 mb30">
+        <div class="mod_sear_list" data-widget-expcol="expcol" data-expcol-cls="mod_sear_list_open">
+    <h3>频道：</h3>
+    <ul class="mod_category_item">
+                    <li>
+                                    <a href="/www/2/------------------.html">电视剧</a>
+                            </li>
+                    <li>
+                                    <a href="/www/1/------------------.html">电影</a>
+                            </li>
+                    <li>
+                                    <a href="/www/6/------------------.html">综艺</a>
+                            </li>
+                    <li class="selected">
+                                    <a href="/www/4/------------------.html">动漫</a>
+                            </li>
+                    <li>
+                                    <a href="/www/3/------------------.html">纪录片</a>
+                            </li>
+                    <li>
+                                    <a href="/www/25/------------------.html">资讯</a>
+                            </li>
+                    <li>
+                                    <a href="/www/7/------------------.html">娱乐</a>
+                            </li>
+                    <li>
+                                    <a href="/www/24/------------------.html">财经</a>
+                            </li>
+                    <li>
+                                    <a href="/www/16/------------------.html">微电影</a>
+                            </li>
+                 
+                  
+              
+    </ul>
+  
+</div>                                                                                                
+        <div class="mod_sear_list      ">
+        <h3>地区：</h3>
+        <ul class="mod_category_item">
+                                                                                <li>
+                        <a href="/www/4/-53------------10-1-1-iqiyi--.html">全部</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/37-53------------10-1-1-iqiyi--.html">大陆</a>
+                    </li>
+                                                                                                <li class="selected">
+                        <a href="#">日本</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/39-53------------10-1-1-iqiyi--.html">美国</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/40-53------------10-1-1-iqiyi--.html">其它</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/1105-53------------10-1-1-iqiyi--.html">法国</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/1106-53------------10-1-1-iqiyi--.html">韩国</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/1107-53------------10-1-1-iqiyi--.html">英国</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/1145-53------------10-1-1-iqiyi--.html">新西兰</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/1194-53------------10-1-1-iqiyi--.html">俄罗斯</a>
+                    </li>
+                                                </ul>
+            </div>
+        <div class="mod_sear_list      " data-widget-expcol="expcol" data-expcol-cls="mod_sear_list_open">
+        <h3>类型：</h3>
+        <ul class="mod_category_item">
+                                                                                <li>
+                        <a href="/www/4/38-------------10-1-1-iqiyi--.html">全部</a>
+                    </li>
+                                                                                                <li class="selected">
+                        <a href="/www/4/38-41------------10-1-1-iqiyi--.html">动作</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/38-42------------10-1-1-iqiyi--.html">热血</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/38-43------------10-1-1-iqiyi--.html">机战</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/38-44------------10-1-1-iqiyi--.html">战争</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/38-45------------10-1-1-iqiyi--.html">古代</a>
+                    </li>
+                                                                                                <li>
+                        <a href="/www/4/38-46------------10-1-1-iqiyi--.html">未来</a>
+                   
+                   </li>
+                    </ul>
+                
+            </div>
+      
+                </div>
+    
+ </div>
       <table id="example" class="cell-border" cellspacing="0"  width="100%">
         <thead>
         <tr>
@@ -90,7 +221,6 @@
             <th>LoginKey</th>
             <th>StopedDisplay</th>
             <th>CreateDateDisplay</th>
-            <th>Id</th>
         </tr>
     </thead>
       <tbody style="height:800px"></tbody>
