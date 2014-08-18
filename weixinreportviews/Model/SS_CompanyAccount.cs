@@ -117,6 +117,7 @@ namespace weixinreportviews.Model
             get { return this.Stoped ? "是" : "否"; }
         }
         #endregion
+
         public List<QObject> CreateDeleteCommand()
         {
             if (this.Id != Guid.Empty)

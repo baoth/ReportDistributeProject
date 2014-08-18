@@ -232,6 +232,7 @@ namespace weixinreportviews.Model
             QueryA.TopSetting.Value = PageLength;
             QueryA.TopSetting.BeginValue = PageStart;
             QueryA.TopSetting.PrimaryKeyName = GetPrimaryKeyName<T>();
+           
             if (Conditions != null && Conditions.Count > 0)
             {
                 foreach (QSmartQueryFilterCondition fc in Conditions) QueryA.FilterConditions.Add(fc);
@@ -247,6 +248,10 @@ namespace weixinreportviews.Model
             QueryB.Tables[0].tableName = typeof(T).Name;
             QueryB.CountSetting.Effective = true;
             QueryB.CountSetting.AliasName = "TotalCount";
+            if (Conditions != null && Conditions.Count > 0)
+            {
+                foreach (QSmartQueryFilterCondition fc in Conditions) QueryB.FilterConditions.Add(fc);
+            }
 
             QSmartQuery Query = new QSmartQuery();
             Query.Tables.Add(new QSmartQueryTable
@@ -301,7 +306,7 @@ namespace weixinreportviews.Model
         public string sEcho { get; set; }
 
         /// <summary>
-        /// 过滤文本
+        /// 模糊过滤文本
         /// </summary>
         public string sSearch { get; set; }
 
@@ -326,33 +331,111 @@ namespace weixinreportviews.Model
         public string[] allDir { get; set; }
 
         /// <summary>
-        /// 所有需要过滤的列
+        /// 所有需要模糊过滤的列
         /// </summary>
         public string[] allFilter { get; set; }
 
-        public List<QSmartQueryFilterCondition> GetFilters(List<string> cols)
+        /// <summary>
+        /// 所有需要精确多虑的列
+        /// </summary>
+        public string[] exactFilter { get; set; }
+
+        /// <summary>
+        /// 所有需要精确多虑的列值（与exactFilter值一一对应）
+        /// </summary>
+        public string[] exactSearch { get; set; }
+
+        public List<QSmartQueryFilterCondition> GetFilters<T>() where T : new()
         {
-            if (string.IsNullOrEmpty(sSearch) || cols==null || cols.Count==0) return null;
-            return this.GetFilters(cols.ToArray());
+            Type mType = typeof(T);
+            PropertyInfo[] pis = mType.GetProperties();
+            List<QSmartQueryFilterCondition> exacts = this.ExactSearch(pis);
+            List<QSmartQueryFilterCondition> fuzzys = this.FuzzySearch(pis);
+            if (exacts == null || exacts.Count == 0) return fuzzys;
+            if (fuzzys == null || fuzzys.Count ==0) return exacts;
+            foreach (var item in fuzzys)
+            {
+                exacts[exacts.Count - 1].Combins.Add(item);
+            }
+            return exacts;
         }
 
-        public List<QSmartQueryFilterCondition> GetFilters(string[] cols)
+        /// <summary>
+        /// 模糊过滤条件
+        /// </summary>
+        /// <typeparam name="T">数据模型</typeparam>
+        /// <returns>过滤条件</returns>
+        private List<QSmartQueryFilterCondition> FuzzySearch<T>() where T : new()
         {
-            if (string.IsNullOrEmpty(sSearch) || cols == null || cols.Length == 0) return null;
+            return FuzzySearch(typeof(T).GetProperties());
+        }
+
+        /// <summary>
+        /// 模糊过滤条件
+        /// </summary>
+        /// <param name="pis">模型属性集合</param>
+        /// <returns>过滤条件</returns>
+        private List<QSmartQueryFilterCondition> FuzzySearch(PropertyInfo[] pis)
+        {
+            if (string.IsNullOrEmpty(sSearch) || this.allFilter == null || this.allFilter.Length == 0) return null;
             List<QSmartQueryFilterCondition> result = new List<QSmartQueryFilterCondition>();
-            foreach (string col in cols)
+            for (int i = 0; i < this.allFilter.Length; i++)
             {
+                string col = this.allFilter[i];
+                PropertyInfo pi = pis.First(e => e.Name.ToLower() == col.ToLower());
+                if (pi == null) continue;
                 result.Add(new QSmartQueryFilterCondition
                 {
-                    Column = new QSmartQueryColumn { columnName = col, dataType = typeof(string) },
+                    Column = new QSmartQueryColumn { columnName = pi.Name, dataType = pi.PropertyType },
                     Operator = QSmartOperatorEnum.like,
-                    Connector= QSmartConnectorEnum.or,
+                    Connector = QSmartConnectorEnum.or,
                     Values = new List<object> { "%" + sSearch + "%" }
                 });
             }
             return result;
         }
 
+        /// <summary>
+        /// 精确过滤条件
+        /// </summary>
+        /// <typeparam name="T">数据模型</typeparam>
+        /// <returns>过滤条件</returns>
+        private List<QSmartQueryFilterCondition> ExactSearch<T>() where T : new()
+        {
+            return ExactSearch(typeof(T).GetProperties());
+        }
+
+        /// <summary>
+        /// 精确过滤条件
+        /// </summary>
+        /// <param name="pis">模型属性集合</param>
+        /// <returns>过滤条件</returns>
+        private List<QSmartQueryFilterCondition> ExactSearch(PropertyInfo[] pis)
+        {
+            if (this.exactFilter == null || this.exactSearch == null || this.exactFilter.Length == 0
+                || this.exactSearch.Length == 0 || this.exactSearch.Length!= this.exactFilter.Length ) return null;
+
+            List<QSmartQueryFilterCondition> result = new List<QSmartQueryFilterCondition>();
+            for (int i = 0; i < this.exactFilter.Length; i++)
+            {
+                string col = this.exactFilter[i];
+                PropertyInfo pi = pis.First(e => e.Name.ToLower() == col.ToLower());
+                if (pi == null) continue;
+                result.Add(new QSmartQueryFilterCondition
+                {
+                    Column = new QSmartQueryColumn { columnName = pi.Name, dataType = pi.PropertyType },
+                    Operator = QSmartOperatorEnum.equal,
+                    Connector = QSmartConnectorEnum.and,
+                    Values = new List<object> { this.exactSearch[i] }
+                });
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 排序条件
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<QSmartQueryColumn, QSmartOrderByEnum> GetOrderBys()
         {
             if (allSortCol == null || allSortCol.Length == 0) return null;
