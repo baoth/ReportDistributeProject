@@ -85,7 +85,7 @@
     }
 };
 
-var onDataGridCheck = function (e) {
+window.onDataGridCheck = function (e) {
     var checked = $(e).attr("checked") == 'checked'
     if (checked) {
         $(e).parent().parent().addClass('selected');
