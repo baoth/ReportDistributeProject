@@ -1,27 +1,20 @@
-.mod_sear_menu {
+.mod_sear_menu ,.mod_sear_bar{
 border: 1px solid #e0e0e0;
 padding: 0 20px;
 }
 .mb30 {
  margin-bottom: 30px;
 }
-.mt20 {
-margin-top: 20px;
+.mod_sear_menu 
+{
+    border-top:0;
+
+-moz-box-shadow:0px 1px 2px #909090;/*firefox*/
+-webkit-box-shadow: 0px 1px 2px #909090;/*safari»òchrome*/
+box-shadow:0px 1px 2px #909090;/*opera»òie9*/
 }
-div, ul, dl {
-zoom: 1;
-}
-body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ul, ol, li, form, th, td, table, label, article, aside, dialog, footer, header, section, footer, nav, figure, hgroup {
-margin: 0;
-padding: 0;
-border: 0;
-outline: 0;
-font-size: 100%;
-vertical-align: baseline;
-}
-div {
-display: block;
-}
+
+
 div:after, ul:after, dl:after {
 content: "";
 display: block;
@@ -29,42 +22,7 @@ clear: both;
 height: 0;
 visibility: hidden;
 }
-body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ul, ol, li, form, th, td, table, label, article, aside, dialog, footer, header, section, footer, nav, figure, hgroup {
-margin: 0;
-padding: 0;
-border: 0;
-outline: 0;
-vertical-align: baseline;
-}
-body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ul, ol, li, form, th, td, table, label, article, aside, dialog, footer, header, section, footer, nav, figure, hgroup {
-margin: 0;
-padding: 0;
-border: 0;
-outline: 0;
-vertical-align: baseline;
-}
-body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ul, ol, li, form, th, td, table, label, article, aside, dialog, footer, header, section, footer, nav, figure, hgroup {
-margin: 0;
-padding: 0;
-border: 0;
-outline: 0;
-vertical-align: baseline;
-}
-body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ul, ol, li, form, th, td, table, label, article, aside, dialog, footer, header, section, footer, nav, figure, hgroup {
-margin: 0;
-padding: 0;
-border: 0;
-outline: 0;
-vertical-align: baseline;
-}
-body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ul, ol, li, form, th, td, table, label, article, aside, dialog, footer, header, section, footer, nav, figure, hgroup {
-margin: 0;
-padding: 0;
-border: 0;
-outline: 0;
-font-size: 100%;
-vertical-align: baseline;
-}
+
 
 
 
@@ -74,6 +32,10 @@ position: relative;
 padding: 5px 48px 5px 57px;
 height: 25px;
 overflow: hidden;
+}
+.lastItem
+{
+    border-bottom:0px;
 }
 .mod_sear_list h3 {
 color: #999;
@@ -87,6 +49,7 @@ font-weight: normal;
 word-wrap: break-word;
 width: 100%;
 }
+
 .mod_category_item li {
 white-space: nowrap;
 float: left;
@@ -103,7 +66,72 @@ border-radius: 1px;
 .mod_category_item a {
 display: inline-block;
 padding: 1px 7px 2px;
+text-decoration: none;
+outline: 0;
 }
 .zdcontext a {
 text-decoration: none;
+}
+
+
+.openBtn-txt {
+width: 45px;
+display: block;
+}
+.openBtn-txt em, .close-mod_btn em {
+cursor: pointer;
+_vertical-align: 10px;
+}
+.vm-inline {
+display: inline-block;
+vertical-align: middle;
+}
+em, strong {
+font-style: normal;
+font-weight: normal;
+}
+.ico-explain-b {
+background-position: -19px 0px;
+}
+.ico-explain-b, .ico-explain-t {
+background: url(http://www.qiyipic.com/common/fix/list_images/list-tb-icon.png) no-repeat;
+display: inline-block;
+height: 6px;
+width: 11px;
+overflow: hidden;
+vertical-align: middle;
+margin: 2px 0 0 6px;
+}
+.option{position:relative;margin:0;}
+.option .mod-tit{line-height:28px;}
+.option .mod-tit h2{width:82px;float:left;margin-right:10px;background:#eaeaea;text-align:center;font-size:14px;color:#3a3a3a;}
+.mod-tit p {float:left;}
+.mod-tit .r {float:right;}
+
+.mod_sear_result {
+border: 1px solid #e5e5e5;
+padding: 2px 3px 2px 5px;
+display: inline-block;
+vertical-align: middle;
+background: #fbfbfb;
+color: #699f00;
+margin-right: 6px;
+font-size: 12px;
+}
+.mod_sear_result em, .sear_delBtn {
+display: inline-block;
+vertical-align: middle;
+_vertical-align: -2px;
+}
+em, strong {
+font-style: normal;
+font-weight: normal;
+}
+.sear_delBtn {
+font-family: Helvetica,Arial,sans-serif;
+color: #aaa;
+margin-left: 3px;
+font-size: 20px;
+_font-size: 14px;
+line-height: 20px;
 }
