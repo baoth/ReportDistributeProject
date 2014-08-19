@@ -30,7 +30,8 @@ namespace weixinreportviews.Controllers.Admin
                 
                 for (int i = 0; i < pis.Length; i++)
                 {
-                    var value = pis[i].GetValue(account, null) == null ? "" : pis[i].GetValue(account, null).ToString();
+                    var objvalue = pis[i].GetValue(account, null);
+                    var value = objvalue == null ? "" : objvalue.ToString();
                     ViewData.Add(pis[i].Name, value);
                 }
             }

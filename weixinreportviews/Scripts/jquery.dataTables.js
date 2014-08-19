@@ -2387,8 +2387,10 @@
             param('allDir', allDir.join(','));
             param('iSortingCols', sort.length);
         }
-        
+
         param('allFilter', settings.oLanguage.allFilter);
+        param('exactFilter', settings.oLanguage.exactFilter);
+        param('exactSearch', settings.oLanguage.exactSearch);
         // If the legacy.ajax parameter is null, then we automatically decide which
         // form to use, based on sAjaxSource
         var legacy = DataTable.ext.legacy.ajax;
@@ -2491,7 +2493,16 @@
         var language = settings.oLanguage;
         var previousSearch = settings.oPreviousSearch;
         var features = settings.aanFeatures;
-        var input = '<table><tr><td><input type="search" value="' + language.searchDefalutText + '" class="' + classes.sFilterInput + '"/></td><td id="cbtn-search1"><a href="#"  title="搜索"  id="cbtn-search" class="searchIcon"></a></td></tr></table>';
+        //var input = '<table><tr><td><input type="search" value="' + language.searchDefalutText + '" class="' + classes.sFilterInput + '"/></td><td id="cbtn-search1"><a href="#"  title="搜索"  id="cbtn-search" class="searchIcon"></a></td></tr></table>';
+
+
+        var input = '<div class="searchcontain" style="display:bloack;">' +
+                      '<input value="' + language.searchDefalutText + '" class="search-text' + classes.sFilterInput + '"/>' +
+                      //'<input type="submit" value=" " id="cbtn-search" class="searchIcon">' +
+                      '<a href="#"  title="搜索"  id="cbtn-search" class="searchIcon"></a>' +
+                      '</div>'
+
+
 
         var str = language.sSearch;
         str = str.match(/_INPUT_/) ?
@@ -5831,6 +5842,7 @@
 			]);
             _fnMap(oSettings.oScroll, oInit, [
 				["sScrollX", "sX"],
+
 				["sScrollXInner", "sXInner"],
 				["sScrollY", "sY"],
 				["bScrollCollapse", "bCollapse"]

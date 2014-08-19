@@ -124,6 +124,7 @@
     <Content Include="Content\Img\layerskin\xubox_title0.png" />
     <Content Include="Content\Img\manage_01.png" />
     <Content Include="Content\Img\search.png" />
+    <Content Include="Content\Img\search3.png" />
     <Content Include="Content\Img\sort_asc.png" />
     <Content Include="Content\Img\sort_asc_disabled.png" />
     <Content Include="Content\Img\sort_both.png" />
