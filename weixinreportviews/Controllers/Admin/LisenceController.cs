@@ -122,8 +122,8 @@ using QSmart.Core.DataBase;
             LisenceDataTablesParameter dtp = General.CreateInstance<LisenceDataTablesParameter>(Request);
             int totalcount = 0;
             DbSession session = General.CreateDbSession();
-            var rows = session.PaginationRetrieve<SS_Lisence>(dtp.iDisplayStart,
-                dtp.iDisplayLength, dtp.GetFilters<SS_Lisence>(),
+            var rows = session.PaginationRetrieve<SS_LisenceView>(dtp.iDisplayStart,
+                dtp.iDisplayLength, dtp.GetFilters<SS_LisenceView>(),
                 dtp.GetOrderBys(), out totalcount);
             return Json(new
             {
