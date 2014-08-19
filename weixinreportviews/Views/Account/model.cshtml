@@ -370,7 +370,7 @@
         .tdtitle
         {
             text-align:left; 
-            width:80px;
+            width:50px;
               
         }
         .tdText
@@ -408,7 +408,7 @@
         {
             float:left;    
         }
-       
+        .showMsg{ height:15px}
        
     </style>
     
@@ -417,13 +417,13 @@
 <body style="background: #f6f6f6; border:0px"> @*background: #f6f6f6;*@
     <div style="text-align:center;margin: 0px auto; " class="accountinfo">
     <form  id="from" class="form-horizontal">
-    
        <div style="text-align:left; margin:0px auto; padding:10px 0px 0px 100px" >
-        <a class="button button-rounded button-flat-primary" id="btn_signIn" href="#"><i class="icon-save"></i>注册</a> 
-        <a class="button button-rounded button-flat-primary" id="btn_save" href="#"><i class="icon-save" style="display:none"></i>确定</a>  &nbsp &nbsp&nbsp&nbsp&nbsp
-        <a class="button button-rounded button-flat-primary" id="btn_close" onclick="Close()" href="#"><i class="con-off"></i>关闭</a>
+        <a class="button button-rounded button-flat-primary" id="btn_signIn" href="#">注册</a> 
+        <a class="button button-rounded button-flat-action" id="btn_save" href="#">确定</a>
+        <a class="button button-rounded button-flat-highlight" id="btn_close" onclick="Close()" href="#">关闭</a>
 
        </div> 
+      
      
       @* <div style="margin: 0px auto; padding: 0px; width: 915px; height: 8px; background: url(../../Content/Img/topborder.jpg)">*@
           
@@ -445,24 +445,38 @@
              <div>                             
              <input placeholder="请输入公司名称" id="Name" name="Name" onblur="CheckName(this)" value="@ViewData["Name"]" class="input-xlarge" type="text" />
              </div>          
-              <div>
-               <span id="SpanNameMsg"></span> 
-              </div>         
+                   
             </td>
 
              <td class="tdtitle" >
              <span style="padding:35px 0px 0px 0px"><img  id="imgNameMsg"src="" style="display:none"/></span>             
              </td>    
 
-         <td class="tdText" >
+           <td class="tdText" >
             <div> 
             <label>订单号  &nbsp </label>
             <input disabled="disabled" id="OrderNumber" value="@ViewData["OrderNumber"]" name="OrderNumber" class="input-xlarge" type="text" />
             </div>
             
             </td>
-             <td class="tdtitle" ></td>
-        </tr>       
+             <td class="tdtitle" >             
+             </td>
+        </tr>
+        <tr class="showMsg">
+            <td>
+             <div>
+               <span id="SpanNameMsg"></span> 
+              </div>   
+            </td>
+
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </tr>
+               
          <tr> 
             
             <td class="tdText" >
@@ -471,9 +485,7 @@
             <div> 
             <input placeholder="请输入用户名称" id="LoginKey" value="@ViewData["LoginKey"]" onblur="CheckLoginKey()" name="LoginKey" class="input-xlarge" type="text" />            
             </div>  
-             <div>
-               <span id="spanLoginKeyMsg"></span>
-             </div>        
+                
             </td>
              <td class="tdtitle" >
              <span style="padding:35px 0px 0px 0px"><img  id="imgLoginKeyMsg"src="" style="display:none"/></span>
@@ -486,15 +498,31 @@
             <div> 
             <input placeholder="请输入密码" id="Password" name="Password" onblur="CheckPassword()" value="@ViewData["Password"]" class="input-xlarge" type="text" />
             </div>
-            <div>
-            <span id="SpanPasswordMsg"></span>
-            </div>
+            
             </td>
             <td class="tdtitle">             
            </td>
 
-        </tr>        
-        
+        </tr>   
+             
+        <tr class="showMsg">
+            <td>
+             <div>
+               <span id="spanLoginKeyMsg"></span>
+             </div>     
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            <div>
+            <span id="SpanPasswordMsg"></span>
+            </div>
+            </td>
+            <td>
+            </td>
+        </tr>
          <tr>           
            
             <td class="tdText" >
@@ -503,10 +531,7 @@
             <div> 
             <input placeholder="请输入电话" class="input-xlarge" id="Phone" onblur="CheckPhone()" name="Phone" value="@ViewData["Phone"]" type="text" />
             </div>
-             <div>
-             <span id="SpanPhoneMsg"></span>
-             </div>
-           
+            
             </td>
             <td class="tdtitle">
                 
@@ -521,6 +546,22 @@
             </td>
           <td class="tdtitle"></td> 
          
+        </tr>
+
+         <tr class="showMsg">
+            <td>
+              <div>
+             <span id="SpanPhoneMsg"></span>
+              </div>
+           
+            </td>
+
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
         </tr>
 
          <tr>
@@ -554,7 +595,7 @@
             
             <label ><font color="red">*</font>地址  &nbsp </label>
             <div>
-            <input placeholder="请输入地址" style=" width:930px" class="input-xlarge" id="Address" onblur="CheckAddress()" name="Address" value="@ViewData["Address"]"  type="text" />
+            <input placeholder="请输入地址" style=" width:975px" class="input-xlarge" id="Address" onblur="CheckAddress()" name="Address" value="@ViewData["Address"]"  type="text" />
             </div>
             <div><span id="SpanAddressMsg"></span></div>
                        
