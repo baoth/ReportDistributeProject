@@ -159,6 +159,7 @@
     <Content Include="Views\Lisence\Index.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\Lisence\model.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config" />

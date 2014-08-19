@@ -48,6 +48,7 @@ namespace weixinreportviews.Controllers.Admin
                 DbSession session = General.CreateDbSession();
                 if (account.Id != Guid.Empty)
                 {
+                    account.ModifyDate = DateTime.Now;
                     session.Context.ModifyEntity(account.CreateQSmartObject());
                 }
                 else
