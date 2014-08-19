@@ -25,6 +25,85 @@
             }
             return false;
         }
+        var PageAction = function (id) {
+            var urlaccount = '/Account/Model';
+            var urllisence = '/Lisence/Model';
+            function AddParams(name, val, url) {
+                var char = url.indexOf('?') >= 0 ? "&" : "?"
+                return url + char + name + "=" + val;
+            };
+            function GetSelectedRowId() {
+
+                var selectids = [];
+
+                if (id != undefined && id != "") {
+                    selectids.push(id);
+                    return selectids;
+                }
+                var selectedDom = $('#example tbody tr.selected');
+                $.each(selectedDom, function () {
+                    var id = $(this).find('td div').attr('v');
+                    selectids.push(id);
+                });
+                return selectids;
+            }
+            return {
+                Delete: function () {
+
+                    var ids = GetSelectedRowId();
+                    if (ids.length == 0) {
+                        return;
+                    }
+                    layer.confirm('确定删除吗？', function () {
+                        layer.load('删除中..', 0);
+//                        $.ajax({
+//                            type: "post",
+//                            url: "/Account/Delete",
+//                            data: { "id": ids.join(',') },
+//                            dataType: "json",
+//                            success: function (data) {
+//                                if (data.result == 1) {
+//                                    layer.alert(data.msg, 3);
+//                                }
+//                                else {
+//                                    layer.closeAll();
+//                                    $("#example").dataTable().fnDraw();
+//                                }
+//                            }
+//                        });
+                    });
+
+
+                },
+                Add: function () {
+                    window.parent.ControlIFrame(urlaccount);
+                },
+              
+                ControlBtn: function () {
+                    var l = GetSelectedRowId().length;
+                    if (l > 1) {
+                        $('#b-edit,#b-auth').addClass('disabled');
+                        $('#b-del').removeClass('disabled');
+                    } else if (l == 1) {
+                        $('#b-edit,#b-auth,#b-del').removeClass('disabled');
+                    } else {
+                        $('#b-edit,#b-auth,#b-del').addClass('disabled');
+                    }
+                }
+
+            }
+        };
+        window.onDataGridCheck = function (e) {
+            var checked = $(e).attr("checked") == 'checked'
+            if (checked) {
+                $(e).parent().parent().addClass('selected');
+            } else {
+                $(e).parent().parent().removeClass('selected');
+            }
+            /*控制按钮可用不可用*/
+            PageAction().ControlBtn();
+
+        };
         $(document).ready(function () {
             var table = $('#example').dataTable({
                 "order": [[1, 'asc']],
@@ -63,12 +142,15 @@
 
                 },
                 "aoColumns": [
-                        { data: null, defaultContent: '', bSortable: false, sWidth: 5
+                              { data: null, defaultContent: '', bSortable: false, sWidth: 5,
+                            "mRender": function (val, isShow, row) {
+                                return '<input style="margin-left: 7px;" type="checkbox" id="' + val + '" onClick="onDataGridCheck(this)"/>'
+                            }
                         },
                         { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
                         { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 250 },
                         { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户", "sWidth": 120 },
-                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false, "sWidth": 70 },
+                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
                         { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
 
                     ]
@@ -144,6 +226,10 @@
 
 </head>
 <body style=" min-height: 100%;margin:10px;">
+     <div style="width:800px;height:50px;" >
+            <a href="#" id="b-add"  action="Add" class=" button button-rounded button-flat-primary">新增</a>
+            <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
+       </div>
       <div class="option cfix">
 		<div class="mod-tit cfix mod_sear_bar">
 			<div class="r"><a class="openBtn-txt" href="#"><em class="vm-inline">过滤</em><i class="site-icons ico-explain-b"></i></a></div>
@@ -173,7 +259,7 @@
         </div>
         <div class="mod_sear_list">
             <h3>年份：</h3>
-            <ul class="mod_category_item" actionField="EffectiveYear">
+            <ul class="mod_category_item" actionField="EffectiveDate">
                 <li class="selected">  <a href="#"  keyCode="-1">全部</a> </li>
                 <li>  <a href="#"  keyCode="2014">2014</a> </li>
                 <li>  <a href="#"  keyCode="2013">2013</a> </li>

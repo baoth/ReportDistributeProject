@@ -163,7 +163,7 @@ $(document).ready(function () {
                         { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
                         { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 250 },
                         { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户", "sWidth": 120 },
-                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "是否停用", "bSortable": false, "sWidth": 70 },
+                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
                         { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
                         { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
                             "mRender": function (val, isShow, row) {
