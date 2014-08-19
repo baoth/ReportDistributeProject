@@ -6,6 +6,7 @@ using QSmart.Core.Object;
 using System.Reflection;
 using System;
 using System.Collections.Generic;
+using QSmart.Core.DataBase;
  
  namespace weixinreportviews.Controllers.Admin
  {
@@ -118,7 +119,7 @@ using System.Collections.Generic;
         //[HttpPost]
         public JsonResult GridDatas()
         {
-            DataTablesParameter dtp = General.CreateInstance<DataTablesParameter>(Request);
+            LisenceDataTablesParameter dtp = General.CreateInstance<LisenceDataTablesParameter>(Request);
             int totalcount = 0;
             DbSession session = General.CreateDbSession();
             var rows = session.PaginationRetrieve<SS_Lisence>(dtp.iDisplayStart,
@@ -148,5 +149,110 @@ using System.Collections.Generic;
                 result = session.Exists<SS_Lisence>(col, value) == true ? 0 : 1
             });
         }
+ 
     }
+
+     public class LisenceDataTablesParameter : DataTablesParameter
+     {
+         protected override List<QSmartQueryFilterCondition> ExactSearch(PropertyInfo[] pis)
+         {
+             if (this.exactFilter == null || this.exactSearch == null || this.exactFilter.Length == 0
+                || this.exactSearch.Length == 0 || this.exactSearch.Length != this.exactFilter.Length) return null;
+
+             List<QSmartQueryFilterCondition> result = new List<QSmartQueryFilterCondition>();
+             List<QSmartQueryFilterCondition> subs = null;
+             for (int i = 0; i < this.exactFilter.Length; i++)
+             {
+                 var colName = this.exactFilter[i].ToLower();
+                 if (colName == "ProductKind".ToLower())
+                 {
+                     result.Add(new QSmartQueryFilterCondition
+                     {
+                         Column = new QSmartQueryColumn { columnName = colName, dataType = typeof(int) },
+                         Operator = QSmartOperatorEnum.equal,
+                         Connector = QSmartConnectorEnum.and,
+                         Values = new List<object> { this.exactSearch[i] }
+                     });
+                 }
+                 else if (colName == "Stoped".ToLower())
+                 {
+                     result.Add(new QSmartQueryFilterCondition
+                     {
+                         Column = new QSmartQueryColumn { columnName = colName, dataType = typeof(int) },
+                         Operator = QSmartOperatorEnum.equal,
+                         Connector = QSmartConnectorEnum.and,
+                         Values = new List<object> { this.exactSearch[i] }
+                     });
+                 }
+                 else if (colName == "EffectiveDate".ToLower())
+                 {
+                     result.Add(new QSmartQueryFilterCondition
+                     {
+                         Column = new QSmartQueryColumn { columnName = "year(" + colName + ")", dataType = typeof(int) },
+                         Operator = QSmartOperatorEnum.equal,
+                         Connector = QSmartConnectorEnum.and,
+                         Values = new List<object> { this.exactSearch[i] }
+                     });
+                 }
+                 else if (colName == "StateCode".ToLower())
+                 {
+                     
+                     int val = int.Parse(this.exactSearch[i]);
+                     DateTime nowval = DateTime.Now;
+                     switch (val)
+                     {
+                         case 0: //生效
+                             subs = new List<QSmartQueryFilterCondition>();
+                             subs.Add(new QSmartQueryFilterCondition
+                             {
+                                 Column = new QSmartQueryColumn { columnName = "EffectiveDate", dataType = typeof(DateTime) },
+                                 Operator = QSmartOperatorEnum.lessequal,
+                                 Connector = QSmartConnectorEnum.and,
+                                 Values = new List<object> { nowval }
+                             });
+                             subs.Add(new QSmartQueryFilterCondition
+                             {
+                                 Column = new QSmartQueryColumn { columnName = "ExpiryDate", dataType = typeof(DateTime) },
+                                 Operator = QSmartOperatorEnum.greatequal,
+                                 Connector = QSmartConnectorEnum.and,
+                                 Values = new List<object> { nowval }
+                             });
+                             break;
+                         case 1: //失效
+                             result.Add(new QSmartQueryFilterCondition
+                             {
+                                 Column = new QSmartQueryColumn { columnName = "ExpiryDate", dataType = typeof(DateTime) },
+                                 Operator = QSmartOperatorEnum.less,
+                                 Connector = QSmartConnectorEnum.and,
+                                 Values = new List<object> { nowval }
+                             });
+                             break;
+                         case 2: //未生效
+                             result.Add(new QSmartQueryFilterCondition
+                             {
+                                 Column = new QSmartQueryColumn { columnName = "EffectiveDate", dataType = typeof(DateTime) },
+                                 Operator = QSmartOperatorEnum.great,
+                                 Connector = QSmartConnectorEnum.and,
+                                 Values = new List<object> { nowval }
+                             });
+                             break;
+                     }
+                     
+                 }
+             }
+             if (subs != null)
+             {
+                 if (result.Count == 0) result = subs;
+                 else
+                 {
+                     foreach (QSmartQueryFilterCondition fc in subs)
+                     {
+                         result[result.Count - 1].Combins.Add(fc);
+                     }
+                 }
+             }
+
+             return result;
+         }
+     }
 }

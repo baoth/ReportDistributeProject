@@ -365,7 +365,7 @@ namespace weixinreportviews.Model
         /// </summary>
         /// <typeparam name="T">数据模型</typeparam>
         /// <returns>过滤条件</returns>
-        private List<QSmartQueryFilterCondition> FuzzySearch<T>() where T : new()
+        protected List<QSmartQueryFilterCondition> FuzzySearch<T>() where T : new()
         {
             return FuzzySearch(typeof(T).GetProperties());
         }
@@ -375,7 +375,7 @@ namespace weixinreportviews.Model
         /// </summary>
         /// <param name="pis">模型属性集合</param>
         /// <returns>过滤条件</returns>
-        private List<QSmartQueryFilterCondition> FuzzySearch(PropertyInfo[] pis)
+        protected List<QSmartQueryFilterCondition> FuzzySearch(PropertyInfo[] pis)
         {
             if (string.IsNullOrEmpty(sSearch) || this.allFilter == null || this.allFilter.Length == 0) return null;
             List<QSmartQueryFilterCondition> result = new List<QSmartQueryFilterCondition>();
@@ -400,7 +400,7 @@ namespace weixinreportviews.Model
         /// </summary>
         /// <typeparam name="T">数据模型</typeparam>
         /// <returns>过滤条件</returns>
-        private List<QSmartQueryFilterCondition> ExactSearch<T>() where T : new()
+        protected virtual List<QSmartQueryFilterCondition> ExactSearch<T>() where T : new()
         {
             return ExactSearch(typeof(T).GetProperties());
         }
@@ -410,7 +410,7 @@ namespace weixinreportviews.Model
         /// </summary>
         /// <param name="pis">模型属性集合</param>
         /// <returns>过滤条件</returns>
-        private List<QSmartQueryFilterCondition> ExactSearch(PropertyInfo[] pis)
+        protected virtual List<QSmartQueryFilterCondition> ExactSearch(PropertyInfo[] pis)
         {
             if (this.exactFilter == null || this.exactSearch == null || this.exactFilter.Length == 0
                 || this.exactSearch.Length == 0 || this.exactSearch.Length!= this.exactFilter.Length ) return null;
