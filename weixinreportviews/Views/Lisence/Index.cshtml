@@ -12,13 +12,19 @@
    </style> 
     <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
-    
-    <link href="../../Content/Css/fliter.css?r=2" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/jquery.dataTables.css?r=7" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/fliter.css?r=3" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="../../Scripts/jquery.dataTables.js?r=6" type="text/javascript"></script>
-
     <script>
+        Array.prototype.isExist = function (obj) {
+            var i = this.length;
+            while (i--) {
+                if (this[i] == obj)
+                    return true;
+            }
+            return false;
+        }
         $(document).ready(function () {
             var table = $('#example').dataTable({
                 "order": [[1, 'asc']],
@@ -65,152 +71,106 @@
 
                     ]
             });
-//            $('.zdcss').bind('click', function () {
-//                debugger
-//                var context$ = $('#zdcontext');
-//                var style = context$.attr("style") || "";
-//                if (style.indexOf("none")>-1) {
-//                    $('#zdcontext').show();
-//                } else {
-//                    $('#zdcontext').hide();
-//                }
-//            });
+            $('.openBtn-txt').bind('click', function () {
+                var context$ = $('#zdcontext');
+                var style = context$.attr("style") || "";
+                if (style.indexOf("none") > -1) {
+                    $('#zdcontext').show();
+                } else {
+                    $('#zdcontext').hide();
+                }
+            });
+            window.filterFiled = [];
+            $('.mod_category_item li a').bind('click', function () {
+                var text = this.innerText;
+                if (window.filterFiled.isExist(text)) return;
+                window.filterFiled.push(text);
+                $(this).parent().addClass("selected");
+                $("<span class=\"c-red\"> + " + text + "</span>").appendTo($(".mod-tit.cfix.mod_sear_bar p"));
+            })
         });
-
-
-
     </script>
-    <style>
-    .option{position:relative;margin:0 0 30px;}
-		.option .mod-tit{line-height:28px;}
-		.option .mod-tit h2{width:82px;float:left;margin-right:10px;background:#eaeaea;text-align:center;font-size:14px;color:#3a3a3a;}
-		.mod-tit p {float:left;}
-		.mod-tit .r {float:right;}
 
-    </style>
 </head>
 <body style=" min-height: 100%;margin:10px;">
-<div style="width:100%">
       <div class="option cfix">
-		<div class="mod-tit cfix">
-			<div class="r"><a href="st_p1100_p2_p3_p4_p5_p6_p7_p8_p9.html" class="ico-reset">重置筛选</a></div>
-			<h2>电  影</h2>
-			<p>筛选条件：
-
-			<span class="c-red">正片</span>
-		+
-			<span class="c-red">文艺</span>
-		+
-			<span class="c-red">日本</span>
-				
-			共有<span class="c-red">0</span> 个符合条件的视频</p>
-		</div>
+		<div class="mod-tit cfix mod_sear_bar">
+			<div class="r"><a class="openBtn-txt" href="#"><em class="vm-inline">过滤</em><i class="site-icons ico-explain-b"></i></a></div>
+			<p>
+            <span>筛选条件：</span>
+			<span class="c-red">正片 +</span>
 		
+			<span class="c-red">文艺 +</span>
+		
+			<span class="c-red">日本</span>
+		    </p>
+			
 		</div>
-      <div id="zdcontext" class="mod_sear_menu mt20 mb30">
-        <div class="mod_sear_list" data-widget-expcol="expcol" data-expcol-cls="mod_sear_list_open">
-    <h3>频道：</h3>
-    <ul class="mod_category_item">
-                    <li>
-                                    <a href="/www/2/------------------.html">电视剧</a>
-                            </li>
-                    <li>
-                                    <a href="/www/1/------------------.html">电影</a>
-                            </li>
-                    <li>
-                                    <a href="/www/6/------------------.html">综艺</a>
-                            </li>
-                    <li class="selected">
-                                    <a href="/www/4/------------------.html">动漫</a>
-                            </li>
-                    <li>
-                                    <a href="/www/3/------------------.html">纪录片</a>
-                            </li>
-                    <li>
-                                    <a href="/www/25/------------------.html">资讯</a>
-                            </li>
-                    <li>
-                                    <a href="/www/7/------------------.html">娱乐</a>
-                            </li>
-                    <li>
-                                    <a href="/www/24/------------------.html">财经</a>
-                            </li>
-                    <li>
-                                    <a href="/www/16/------------------.html">微电影</a>
-                            </li>
-                 
-                  
-              
-    </ul>
-  
-</div>                                                                                                
-        <div class="mod_sear_list      ">
-        <h3>地区：</h3>
-        <ul class="mod_category_item">
-                                                                                <li>
-                        <a href="/www/4/-53------------10-1-1-iqiyi--.html">全部</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/37-53------------10-1-1-iqiyi--.html">大陆</a>
-                    </li>
-                                                                                                <li class="selected">
-                        <a href="#">日本</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/39-53------------10-1-1-iqiyi--.html">美国</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/40-53------------10-1-1-iqiyi--.html">其它</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/1105-53------------10-1-1-iqiyi--.html">法国</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/1106-53------------10-1-1-iqiyi--.html">韩国</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/1107-53------------10-1-1-iqiyi--.html">英国</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/1145-53------------10-1-1-iqiyi--.html">新西兰</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/1194-53------------10-1-1-iqiyi--.html">俄罗斯</a>
-                    </li>
-                                                </ul>
-            </div>
-        <div class="mod_sear_list      " data-widget-expcol="expcol" data-expcol-cls="mod_sear_list_open">
-        <h3>类型：</h3>
-        <ul class="mod_category_item">
-                                                                                <li>
-                        <a href="/www/4/38-------------10-1-1-iqiyi--.html">全部</a>
-                    </li>
-                                                                                                <li class="selected">
-                        <a href="/www/4/38-41------------10-1-1-iqiyi--.html">动作</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/38-42------------10-1-1-iqiyi--.html">热血</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/38-43------------10-1-1-iqiyi--.html">机战</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/38-44------------10-1-1-iqiyi--.html">战争</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/38-45------------10-1-1-iqiyi--.html">古代</a>
-                    </li>
-                                                                                                <li>
-                        <a href="/www/4/38-46------------10-1-1-iqiyi--.html">未来</a>
-                   
-                   </li>
-                    </ul>
-                
-            </div>
-      
-                </div>
-    
- </div>
+	  </div>
+      <div id="zdcontext" class="mod_sear_menu mb30">
+        <div class="mod_sear_list">
+            <h3>产品：</h3>
+            <ul class="mod_category_item" actionField="">
+                   <li>
+                    <a href="#">全部</a>
+                    </li>        
+                    <li>                    
+                         <a href="#">微信第一表</a>
+                    </li>            
+            </ul>
+        </div>                                                                                                
+        <div class="mod_sear_list">
+            <h3>状态：</h3>
+            <ul class="mod_category_item">
+                <li>
+                    <a href="#">全部</a>
+                </li>
+                <li>
+                    <a href="#">生效</a>
+                </li>
+                 <li>
+                    <a href="#">失效</a>
+                </li>
+                 <li>
+                    <a href="#">未生效</a>
+                </li>    
+            </ul>
+        </div>
+        <div class="mod_sear_list">
+            <h3>年份：</h3>
+            <ul class="mod_category_item">
+                <li class="selected">
+                    <a href="#">全部</a>
+                </li>
+                <li>
+                    <a href="#">2014</a>
+                </li>
+                 <li>
+                    <a href="#">2013</a>
+                </li>
+                 <li>
+                    <a href="#">2012</a>
+                </li>
+                 <li>
+                    <a href="#">2011</a>
+                </li>     
+            </ul>
+        </div>
+         <div class="mod_sear_list">
+            <h3>可用：</h3>
+            <ul class="mod_category_item">
+                <li class="selected">
+                    <a href="#">全部</a>
+                </li>
+                <li>
+                    <a href="#">停用</a>
+                </li>
+                 <li>
+                    <a href="#">启用</a>
+                </li>
+            </ul>
+        </div>
+     </div>
       <table id="example" class="cell-border" cellspacing="0"  width="100%">
         <thead>
         <tr>
