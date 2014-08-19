@@ -105,6 +105,7 @@
     <Content Include="Content\Css\jquery.toolbars.css" />
     <Content Include="Content\Css\layer.css" />
     <Content Include="Content\Css\public.css" />
+    <Content Include="Content\favicon.ico" />
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
     <Content Include="Content\Img\back_enabled_hover.png" />
