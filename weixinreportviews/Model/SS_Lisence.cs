@@ -167,4 +167,15 @@ namespace weixinreportviews.Model
             return null;
         }
     }
+
+    public class SS_LisenceView : SS_Lisence
+    {
+        private string _AccountName = string.Empty;
+
+        public string AccountName
+        {
+            get { return _AccountName; }
+            set { _AccountName = value; }
+        }
+    }
 }
