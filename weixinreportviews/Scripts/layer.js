@@ -278,10 +278,10 @@ Class.pt.creat = function () {
                 layerBtn.html('').hide();
             break;
             case 1:
-                layerBtn.html('<a href="javascript:;" class="xubox_yes xubox_botton1">'+ confbtn.btn[0] +'</a>');
+                layerBtn.html('<a href="javascript:;" class="xubox_yes xubox_botton1 button button-flat-primary">' + confbtn.btn[0] + '</a>');
             break;
             case 2:
-                layerBtn.html('<a href="javascript:;" class="xubox_yes xubox_botton2">'+ confbtn.btn[0] +'</a>' + '<a href="javascript:;" class="xubox_no xubox_botton3">'+ confbtn.btn[1] + '</a>');
+                layerBtn.html('<a href="javascript:;" class="xubox_yes xubox_botton2 button button-flat-primary">' + confbtn.btn[0] + '</a>' + '<a href="javascript:;" class="xubox_no xubox_botton3 button button-flat-highlight">' + confbtn.btn[1] + '</a>');
             break;                
         }
     }

@@ -27,9 +27,12 @@ namespace weixinreportviews.Controllers.Admin
                 SS_CompanyAccount account = session.Retrieve<SS_CompanyAccount>(
                     "Id", Guid.Parse(id));
                 PropertyInfo[] pis = account.GetType().GetProperties();
+                
                 for (int i = 0; i < pis.Length; i++)
                 {
-                    ViewData.Add(pis[i].Name, pis[i].GetValue(account, null).ToString());
+                    var objvalue = pis[i].GetValue(account, null);
+                    var value = objvalue == null ? "" : objvalue.ToString();
+                    ViewData.Add(pis[i].Name, value);
                 }
             }
             return View("Model");
@@ -48,6 +51,7 @@ namespace weixinreportviews.Controllers.Admin
                 DbSession session = General.CreateDbSession();
                 if (account.Id != Guid.Empty)
                 {
+                    account.ModifyDate = DateTime.Now;
                     session.Context.ModifyEntity(account.CreateQSmartObject());
                 }
                 else
