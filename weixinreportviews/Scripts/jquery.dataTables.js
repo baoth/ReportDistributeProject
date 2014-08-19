@@ -2387,8 +2387,10 @@
             param('allDir', allDir.join(','));
             param('iSortingCols', sort.length);
         }
-        
+
         param('allFilter', settings.oLanguage.allFilter);
+        param('exactFilter', settings.oLanguage.exactFilter);
+        param('exactSearch', settings.oLanguage.exactSearch);
         // If the legacy.ajax parameter is null, then we automatically decide which
         // form to use, based on sAjaxSource
         var legacy = DataTable.ext.legacy.ajax;
@@ -5831,6 +5833,7 @@
 			]);
             _fnMap(oSettings.oScroll, oInit, [
 				["sScrollX", "sX"],
+
 				["sScrollXInner", "sXInner"],
 				["sScrollY", "sY"],
 				["bScrollCollapse", "bCollapse"]

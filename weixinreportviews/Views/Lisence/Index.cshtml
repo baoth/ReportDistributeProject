@@ -35,6 +35,8 @@
                 "sAjaxSource": "/Account/GridDatas",
                 "sPaginationType": "full_numbers",
                 "oLanguage": {
+                    "exactFilter": "",
+                    "exactSearch": "",
                     "searchDefalutText": "订单号",
                     "allFilter": 'OrderNumber', //过滤那些列
                     "sLengthMenu": "每页显示 _MENU_ 条记录",
@@ -80,14 +82,63 @@
                     $('#zdcontext').hide();
                 }
             });
-            window.filterFiled = [];
+            window.filterFiled = {};
+            window.keyToText = {};
             $('.mod_category_item li a').bind('click', function () {
-                var text = this.innerText;
-                if (window.filterFiled.isExist(text)) return;
-                window.filterFiled.push(text);
+                var item = $(this), text = this.innerText;
+                var key = item.attr('keyCode');
+                var type = item.parent().parent().attr('actionField');
+                var code = type + "$" + key;
+                window.keyToText[code] = text;
+                $.allChangeItem(item.parent().parent().children());
+
+                var arrItem = window.filterFiled[type];
+
                 $(this).parent().addClass("selected");
-                $("<span class=\"c-red\"> + " + text + "</span>").appendTo($(".mod-tit.cfix.mod_sear_bar p"));
-            })
+                if (key != '-1') {
+                    if (arrItem != undefined) return;
+                    window.filterFiled[type] = key;
+                } else {
+                    window.filterFiled[type] = -1;
+                }
+                $.refreshFilter();
+                $.reDrawTable();
+            });
+            $.refreshFilter = function () {
+                $('.mod-tit.cfix.mod_sear_bar p span').remove();
+                var filter = window.filterFiled;
+                var filterStrArr = ['<span>筛选条件：</span>']
+                for (var i in filter) {
+                    var val = filter[i];
+                    if (val != -1) {
+                        var text = window.keyToText[i + '$' + val];
+                        text = filterStrArr.length > 1 ? "+" + text : text;
+                        filterStrArr.push("<span codeVal='" + i + "' ctype='" + val + "' > " + text + "</span>");
+                    }
+                }
+                $(filterStrArr.join(' ')).appendTo($(".mod-tit.cfix.mod_sear_bar p"));
+            };
+            /*全部和其他各项互斥*/
+            $.allChangeItem = function (items) {
+                $.each(items, function () {
+                    $(this).removeClass("selected");
+                });
+            };
+            $.reDrawTable = function () {
+                var settings = $('#example').dataTable().fnSettings();
+                var f = [], s = [];
+                var filter = window.filterFiled;
+                for (var i in filter) {
+                    var val = filter[i];
+                    if (val != -1) {
+                        f.push(i);
+                        s.push(val);
+                    };
+                }
+                settings.oLanguage.exactFilter = f.join(',');
+                settings.oLanguage.exactSearch = s.join(',');
+                $('#example').dataTable().fnDraw();
+            }
         });
     </script>
 
@@ -98,11 +149,7 @@
 			<div class="r"><a class="openBtn-txt" href="#"><em class="vm-inline">过滤</em><i class="site-icons ico-explain-b"></i></a></div>
 			<p>
             <span>筛选条件：</span>
-			<span class="c-red">正片 +</span>
-		
-			<span class="c-red">文艺 +</span>
-		
-			<span class="c-red">日本</span>
+			
 		    </p>
 			
 		</div>
@@ -110,64 +157,36 @@
       <div id="zdcontext" class="mod_sear_menu mb30">
         <div class="mod_sear_list">
             <h3>产品：</h3>
-            <ul class="mod_category_item" actionField="">
-                   <li>
-                    <a href="#">全部</a>
-                    </li>        
-                    <li>                    
-                         <a href="#">微信第一表</a>
-                    </li>            
+            <ul class="mod_category_item" actionField="ProductKind">
+                 <li class="selected"> <a href="#" keyCode="-1">全部</a></li>   
+                 <li> <a href="#" keyCode="0">微信第一表</a> </li>                    
             </ul>
         </div>                                                                                                
-        <div class="mod_sear_list">
+        <div class="mod_sear_list" >
             <h3>状态：</h3>
-            <ul class="mod_category_item">
-                <li>
-                    <a href="#">全部</a>
-                </li>
-                <li>
-                    <a href="#">生效</a>
-                </li>
-                 <li>
-                    <a href="#">失效</a>
-                </li>
-                 <li>
-                    <a href="#">未生效</a>
-                </li>    
+            <ul class="mod_category_item" actionField="StateCode">
+                <li class="selected"> <a href="#" keyCode="-1">全部</a> </li>
+                <li> <a href="#" keyCode="0">生效</a> </li>
+                <li> <a href="#" keyCode="1">失效</a> </li>
+                <li> <a href="#" keyCode="2">未生效</a> </li>   
             </ul>
         </div>
         <div class="mod_sear_list">
             <h3>年份：</h3>
-            <ul class="mod_category_item">
-                <li class="selected">
-                    <a href="#">全部</a>
-                </li>
-                <li>
-                    <a href="#">2014</a>
-                </li>
-                 <li>
-                    <a href="#">2013</a>
-                </li>
-                 <li>
-                    <a href="#">2012</a>
-                </li>
-                 <li>
-                    <a href="#">2011</a>
-                </li>     
+            <ul class="mod_category_item" actionField="EffectiveYear">
+                <li class="selected">  <a href="#"  keyCode="-1">全部</a> </li>
+                <li>  <a href="#"  keyCode="2014">2014</a> </li>
+                <li>  <a href="#"  keyCode="2013">2013</a> </li>
+                <li>  <a href="#"  keyCode="2012">2012</a> </li>
+                <li>  <a href="#"  keyCode="2011">2011</a> </li>
             </ul>
         </div>
-         <div class="mod_sear_list">
+         <div class="mod_sear_list lastItem">
             <h3>可用：</h3>
-            <ul class="mod_category_item">
-                <li class="selected">
-                    <a href="#">全部</a>
-                </li>
-                <li>
-                    <a href="#">停用</a>
-                </li>
-                 <li>
-                    <a href="#">启用</a>
-                </li>
+            <ul class="mod_category_item"  actionField="Stoped">
+                <li class="selected"> <a href="#"  keyCode="-1">全部</a></li>
+                <li> <a href="#" keyCode="1">停用</a> </li>
+                <li> <a href="#" keyCode="0">启用</a> </li>
             </ul>
         </div>
      </div>
