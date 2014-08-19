@@ -1,11 +1,4 @@
-﻿/** 
- 
- @Name: layer's style
- @Date: 2012.09.15
- @Author: 贤心
- @blog： sentsin.com
- 
-**/
+﻿
 
 *html{background-image:url(about:blank); background-attachment:fixed;}
 
@@ -14,7 +7,7 @@
 .xubox_shade{top:0; left:0; width:100%; height:100%; _height:expression(document.body.offsetHeight+"px");}
 .xubox_layer{top:150px; left:50%; height:auto; width:310px; margin-left:-155px;}
 .xubox_border, .xubox_title, .xubox_title i, .xubox_page, .xubox_iframe, .xubox_title em, .xubox_close, .xubox_msgico, .xubox_moves{position:absolute;}
-.xubox_border{border-radius: 5px;}
+/*.xubox_border{border-radius: 5px;}*/
 .xubox_title{left:0; top:0;}
 .xubox_main{position:relative; height:100%; _float:left;}
 .xubox_page{top:0; left:0;}

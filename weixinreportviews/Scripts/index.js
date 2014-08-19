@@ -1,6 +1,7 @@
 ﻿var PageAction = function (id) {
-    var url = '/Account/Model';
-    function AddParams(name, val) {
+    var urlaccount = '/Account/Model';
+    var urllisence = '/Lisence/Model';
+    function AddParams(name, val, url) {
         var char = url.indexOf('?') >= 0 ? "&" : "?"
         return url + char + name + "=" + val;
     };
@@ -48,18 +49,23 @@
 
         },
         Edit: function () {
-            alert('编辑：' + id);
 
-            url = AddParams('id', id);
+            var ids = GetSelectedRowId();
+            if (ids.length != 1) {
+                return;
+            }
+            url = AddParams('id', ids[0], urlaccount);
             window.parent.ControlIFrame(url);
         },
         Add: function () {
-            alert("add");
-            window.parent.ControlIFrame(url);
+            window.parent.ControlIFrame(urlaccount);
         },
         SetAuth: function () {
-            alert('授权：' + id);
-            url = AddParams('id', id);
+            var ids = GetSelectedRowId();
+            if (ids.length != 1) {
+                return;
+            }
+            url = AddParams('id', ids[0], urllisence);
             window.parent.ControlIFrame(url);
         },
         ControlBtn: function () {
