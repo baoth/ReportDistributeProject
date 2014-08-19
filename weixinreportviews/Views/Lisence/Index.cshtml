@@ -10,12 +10,18 @@
     <style>
       *{padding: 0px;margin: 0px; font-size: 13px;font-family:"微软雅黑","SimSun","Arial Narrow";color: #444;}
    </style> 
-    <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+   <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/jquery.dataTables.css?r=7" rel="stylesheet" type="text/css" />
-    <link href="../../Content/Css/fliter.css?r=3" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="../../Scripts/jquery.dataTables.js?r=6" type="text/javascript"></script>
+    <link href="../../Content/Css/dataTables.editor.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/jquery.toolbars.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/bootstrap.icons.css" rel="stylesheet" type="text/css" />
+        <link href="../../Content/Css/fliter.css?r=3" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery.toolbar.js" type="text/javascript"></script>
+    <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
+
     <script>
         Array.prototype.isExist = function (obj) {
             var i = this.length;
@@ -26,7 +32,6 @@
             return false;
         }
         var PageAction = function (id) {
-            var urlaccount = '/Account/Model';
             var urllisence = '/Lisence/Model';
             function AddParams(name, val, url) {
                 var char = url.indexOf('?') >= 0 ? "&" : "?"
@@ -56,38 +61,43 @@
                     }
                     layer.confirm('确定删除吗？', function () {
                         layer.load('删除中..', 0);
-//                        $.ajax({
-//                            type: "post",
-//                            url: "/Account/Delete",
-//                            data: { "id": ids.join(',') },
-//                            dataType: "json",
-//                            success: function (data) {
-//                                if (data.result == 1) {
-//                                    layer.alert(data.msg, 3);
-//                                }
-//                                else {
-//                                    layer.closeAll();
-//                                    $("#example").dataTable().fnDraw();
-//                                }
-//                            }
-//                        });
+                        $.ajax({
+                            type: "post",
+                            url: "/Lisence/Delete",
+                            data: { "id": ids.join(',') },
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.result == 1) {
+                                    layer.alert(data.msg, 3);
+                                }
+                                else {
+                                    layer.closeAll();
+                                    $("#example").dataTable().fnDraw();
+                                }
+                            }
+                        });
                     });
 
 
                 },
-                Add: function () {
-                    window.parent.ControlIFrame(urlaccount);
+                Edit: function () {
+                    var ids = GetSelectedRowId();
+                    if (ids.length != 1) {
+                        return;
+                    }
+                    var url = AddParams('id', ids[0], urllisence);
+                    window.parent.ControlIFrame(url);
                 },
               
                 ControlBtn: function () {
                     var l = GetSelectedRowId().length;
                     if (l > 1) {
-                        $('#b-edit,#b-auth').addClass('disabled');
+                        $('#b-edit').addClass('disabled');
                         $('#b-del').removeClass('disabled');
                     } else if (l == 1) {
-                        $('#b-edit,#b-auth,#b-del').removeClass('disabled');
+                        $('#b-edit,#b-del').removeClass('disabled');
                     } else {
-                        $('#b-edit,#b-auth,#b-del').addClass('disabled');
+                        $('#b-edit,#b-del').addClass('disabled');
                     }
                 }
 
@@ -111,7 +121,7 @@
                 "bServerSide": true,
                 "scrollCollapse": true,
 
-                "sAjaxSource": "/Account/GridDatas",
+                "sAjaxSource": "/Lisence/GridDatas",
                 "sPaginationType": "full_numbers",
                 "oLanguage": {
                     "exactFilter": "",
@@ -149,10 +159,16 @@
                         },
                         { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
                         { "data": "Name", "sName": 'Name', "sTitle": "公司名称", "sWidth": 250 },
-                        { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "管理账户", "sWidth": 120 },
-                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
-                        { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
-
+                        { "data": "ProductKindDisplay", "sName": 'ProductKind', "sTitle": "产品类型", "sWidth": 120 },
+                           { "data": "LisencePoint", "sName": 'LisencePoint', "bSortable": false, "sTitle": "授权点数", "sWidth": 60 },
+                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 30 },
+                        { "data": "EffectiveDateDisplay", "sName": 'EffectiveDate', "sTitle": "生效日期", "sWidth": 70 },
+                         { "data": "ExpiryDateDisplay", "sName": 'EffectiveDate', "sTitle": "失效日期", "sWidth": 70 },
+                          { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
+                              "mRender": function (val, isShow, row) {
+                                  return '<div class="settings-button" v="' + val + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                              }
+                          }
                     ]
             });
             $('.openBtn-txt').bind('click', function () {
@@ -227,7 +243,7 @@
 </head>
 <body style=" min-height: 100%;margin:10px;">
      <div style="width:800px;height:50px;" >
-            <a href="#" id="b-add"  action="Add" class=" button button-rounded button-flat-primary">新增</a>
+            <a href="#" id="b-edit" action="Edit"  class="disabled button button-rounded button-flat-action">编辑</a>
             <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
        </div>
       <div class="option cfix">
@@ -286,6 +302,8 @@
             <th>LoginKey</th>
             <th>StopedDisplay</th>
             <th>CreateDateDisplay</th>
+            <th>StopedDisplay</th>
+            <th>CreateDateDisplay</th>
         </tr>
     </thead>
       <tbody style="height:800px"></tbody>
@@ -293,5 +311,10 @@
  
        
     </table>
+        
+	<div id="user-options" class="toolbar-icons" style="display: none;">
+		<a href="#" action="Edit" title="编辑"><i class="icon-edit"></i></a>
+		<a href="#" action="Delete" title="删除"><i class="icon-trash"></i></a>
+	</div>
 </body>
 </html>
