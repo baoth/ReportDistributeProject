@@ -1,6 +1,6 @@
 ﻿var PageAction = function (id) {
     var urlaccount = '/Account/Model';
-    var urllisence = '/Lisence/Model';
+    var urllisence = '/Lisence/AccountLisence';
     function AddParams(name, val, url) {
         var char = url.indexOf('?') >= 0 ? "&" : "?"
         return url + char + name + "=" + val;

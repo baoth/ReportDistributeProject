@@ -94,7 +94,9 @@
     <Content Include="Content\Css\bootstrap.css" />
     <Content Include="Content\Css\bootstrap.icons.css" />
     <Content Include="Content\Css\button.css" />
+    <Content Include="Content\Css\Copy of flat-ui.css" />
     <Content Include="Content\Css\dataTables.editor.min.css" />
+    <Content Include="Content\Css\DateTime\bootstrap-datetimepicker.css" />
     <Content Include="Content\Css\flat-ui.css" />
     <Content Include="Content\Css\fliter.css" />
     <Content Include="Content\Css\font-awesome.min.css" />
@@ -137,12 +139,14 @@
     <Content Include="Content\Img\userface.png" />
     <Content Include="Content\Css\layer.ext.css" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\index.js" />
+    <Content Include="Scripts\accountindex.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.toolbar.js" />
     <Content Include="Scripts\jquery.toolbar.min.js" />
+    <Content Include="Scripts\JSDatetime\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\JSDatetime\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="Scripts\JSFlatUI\application.js" />
     <Content Include="Scripts\JSFlatUI\bootstrap-select.js" />
     <Content Include="Scripts\JSFlatUI\bootstrap-switch.js" />
@@ -165,6 +169,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Views\Lisence\model.cshtml" />
+    <Content Include="Views\Lisence\AccountLisence.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config" />

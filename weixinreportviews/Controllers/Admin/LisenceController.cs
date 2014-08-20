@@ -24,15 +24,25 @@ using QSmart.Core.DataBase;
             if (!string.IsNullOrEmpty(id))
             {
                 DbSession session = General.CreateDbSession();
-                SS_Lisence lisence = session.Retrieve<SS_Lisence>(
+                SS_LisenceView lisence = session.Retrieve<SS_LisenceView>(
                     "Id", int.Parse(id));
-                PropertyInfo[] pis = lisence.GetType().GetProperties();
-                for (int i = 0; i < pis.Length; i++)
+                if (lisence != null)
                 {
-                    ViewData.Add(pis[i].Name, pis[i].GetValue(lisence, null).ToString());
+                    PropertyInfo[] pis = lisence.GetType().GetProperties();
+                    for (int i = 0; i < pis.Length; i++)
+                    {
+                        ViewData.Add(pis[i].Name, pis[i].GetValue(lisence, null).ToString());
+                    }
                 }
             }
             return View("Model");
+        }
+
+        [HttpGet]
+        public ActionResult AccountLisence(string id)
+        {
+            ViewData.Add("AccountId", id);
+            return View("AccountLisence");
         }
 
         /// <summary>
@@ -43,7 +53,7 @@ using QSmart.Core.DataBase;
         public ActionResult Save()
         {
             try
-            {
+            {              
                 SS_Lisence lisence = General.CreateInstance<SS_Lisence>(Request);
                 lisence.ExpiryDate = lisence.EffectiveDate.AddYears(lisence.EffectiveYear);
                 DbSession session = General.CreateDbSession();
@@ -194,6 +204,16 @@ using QSmart.Core.DataBase;
                          Values = new List<object> { this.exactSearch[i] }
                      });
                  }
+                 else if (colName == "AccountId".ToLower())
+                 {
+                     result.Add(new QSmartQueryFilterCondition
+                     {
+                         Column = new QSmartQueryColumn { columnName = colName, dataType = typeof(Guid) },
+                         Operator = QSmartOperatorEnum.equal,
+                         Connector = QSmartConnectorEnum.and,
+                         Values = new List<object> { this.exactSearch[i] }
+                     });
+                 }
                  else if (colName == "StateCode".ToLower())
                  {
                      
@@ -245,10 +265,13 @@ using QSmart.Core.DataBase;
                  if (result.Count == 0) result = subs;
                  else
                  {
+                     QSmartQueryFilterCondition combinitem = new QSmartQueryFilterCondition();
                      foreach (QSmartQueryFilterCondition fc in subs)
                      {
-                         result[result.Count - 1].Combins.Add(fc);
+                         combinitem.Combins.Add(fc);
                      }
+                     combinitem.Connector = QSmartConnectorEnum.and;
+                     result.Add(combinitem);
                  }
              }
 
