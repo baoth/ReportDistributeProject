@@ -33,8 +33,17 @@ namespace weixinreportviews.Controllers.Admin
                     for (int i = 0; i < pis.Length; i++)
                     {
                         var objvalue = pis[i].GetValue(account, null);
-                        var value = objvalue == null ? "" : objvalue.ToString();
-                        ViewData.Add(pis[i].Name, value);
+                        if (pis[i].PropertyType == typeof(DateTime) || pis[i].PropertyType == typeof(Nullable<DateTime>))
+                        {
+                            var objvalue1 = (DateTime)objvalue;
+                            var value1 = objvalue == null ? "" : objvalue1.ToShortDateString();
+                            ViewData.Add(pis[i].Name, value1);
+                        }
+                        else
+                        {
+                            var value = objvalue == null ? "" : objvalue.ToString();
+                            ViewData.Add(pis[i].Name, value);
+                        }
                     }
                 }
             }
