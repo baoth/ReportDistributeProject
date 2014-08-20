@@ -245,10 +245,13 @@ using QSmart.Core.DataBase;
                  if (result.Count == 0) result = subs;
                  else
                  {
+                     QSmartQueryFilterCondition combinitem = new QSmartQueryFilterCondition();
                      foreach (QSmartQueryFilterCondition fc in subs)
                      {
-                         result[result.Count - 1].Combins.Add(fc);
+                         combinitem.Combins.Add(fc);
                      }
+                     combinitem.Connector = QSmartConnectorEnum.and;
+                     result.Add(combinitem);
                  }
              }
 

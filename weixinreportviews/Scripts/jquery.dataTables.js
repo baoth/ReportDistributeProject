@@ -2545,7 +2545,20 @@
 			.bind('keypress.DT', function (e) {
 			    /* Prevent form submission */
 			    if (e.keyCode == 13) {
-			        searchFn
+			        var val = jqFilter.val();
+			        _fnFilterComplete(settings, {
+			            "sSearch": val,
+			            "bRegex": previousSearch.bRegex,
+			            "bSmart": previousSearch.bSmart,
+			            "bCaseInsensitive": previousSearch.bCaseInsensitive
+			        });
+
+			        // Need to redraw, without resorting
+			        settings._iDisplayStart = 0;
+			        _fnDraw(settings);
+			        
+                    
+                    //searchFn
 			        return false;
 			    }
 			})
