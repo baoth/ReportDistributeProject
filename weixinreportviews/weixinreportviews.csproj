@@ -94,7 +94,9 @@
     <Content Include="Content\Css\bootstrap.css" />
     <Content Include="Content\Css\bootstrap.icons.css" />
     <Content Include="Content\Css\button.css" />
+    <Content Include="Content\Css\Copy of flat-ui.css" />
     <Content Include="Content\Css\dataTables.editor.min.css" />
+    <Content Include="Content\Css\DateTime\bootstrap-datetimepicker.css" />
     <Content Include="Content\Css\flat-ui.css" />
     <Content Include="Content\Css\fliter.css" />
     <Content Include="Content\Css\font-awesome.min.css" />
@@ -143,6 +145,8 @@
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.toolbar.js" />
     <Content Include="Scripts\jquery.toolbar.min.js" />
+    <Content Include="Scripts\JSDatetime\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\JSDatetime\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="Scripts\JSFlatUI\application.js" />
     <Content Include="Scripts\JSFlatUI\bootstrap-select.js" />
     <Content Include="Scripts\JSFlatUI\bootstrap-switch.js" />
