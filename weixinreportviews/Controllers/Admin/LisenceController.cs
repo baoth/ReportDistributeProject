@@ -24,12 +24,15 @@ using QSmart.Core.DataBase;
             if (!string.IsNullOrEmpty(id))
             {
                 DbSession session = General.CreateDbSession();
-                SS_Lisence lisence = session.Retrieve<SS_Lisence>(
+                SS_LisenceView lisence = session.Retrieve<SS_LisenceView>(
                     "Id", int.Parse(id));
-                PropertyInfo[] pis = lisence.GetType().GetProperties();
-                for (int i = 0; i < pis.Length; i++)
+                if (lisence != null)
                 {
-                    ViewData.Add(pis[i].Name, pis[i].GetValue(lisence, null).ToString());
+                    PropertyInfo[] pis = lisence.GetType().GetProperties();
+                    for (int i = 0; i < pis.Length; i++)
+                    {
+                        ViewData.Add(pis[i].Name, pis[i].GetValue(lisence, null).ToString());
+                    }
                 }
             }
             return View("Model");
