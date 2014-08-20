@@ -43,7 +43,7 @@ using QSmart.Core.DataBase;
         public ActionResult Save()
         {
             try
-            {
+            {              
                 SS_Lisence lisence = General.CreateInstance<SS_Lisence>(Request);
                 lisence.ExpiryDate = lisence.EffectiveDate.AddYears(lisence.EffectiveYear);
                 DbSession session = General.CreateDbSession();

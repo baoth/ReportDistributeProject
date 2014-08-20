@@ -7,18 +7,19 @@
 <html>
 <head>
     <title></title>
-   @*  <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />   *@
+   
     <link href="../../Content/Css/bootstrap.css" rel="stylesheet" type="text/css" />
-     <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
+
      @*按钮开关样式*@
-    <link href="../../Content/Css/flat-ui.css" rel="stylesheet" type="text/css" />
-    <!--[if IE 7]>
-     <link href="../../Content/Font-Awesome-3.2.1/css/font-awesome-ie7.min.css" rel="stylesheet"
+   @* <link href="../../Content/Css/flat-ui.css" rel="stylesheet" type="text/css" />*@
+
+    @*日期样式*@
+    <link href="../../Content/Css/DateTime/bootstrap-datetimepicker.css" rel="stylesheet"
         type="text/css" />
-    <![endif]-->
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/json2.js" type="text/javascript"></script>
+    
      @*开关按钮引用start *@
     <script src="../../Scripts/JSFlatUI/bootstrap.min.js" type="text/javascript"></script>
     <script src="../../Scripts/JSFlatUI/bootstrap-select.js" type="text/javascript"></script>
@@ -29,162 +30,44 @@
   @*  开关按钮 end*@
    <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
     
+   
+    <script src="../../Scripts/JSDatetime/bootstrap-datetimepicker.js" type="text/javascript"></script>
+      <script src="../../Scripts/JSDatetime/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>  
+          
     <script language="javascript" type="text/javascript">
         $(document).ready(function () {
-            var Id = $("#GUID").val(); //""表示新增  有值 表示修改
-
-            if (Id == "" || Id == undefined) {
-
-                $("#btn_signIn").show(); //
-                $("#btn_save").hide();
-            }
-            else {
-
-                $("#btn_signIn").hide(); //
-                $("#btn_save").show();
-            }
-            debugger
-            SetDefault(Id);
-            $("#btn_save").bind("click", Save);
-            $("#btn_signIn").bind("click", Save);
-
+            Init();           
+            SetDefault();
+            BindEvent();           
 
         });
-        var nameValid = false;
-        var loginKeyValid = false;
-        ///spanLoginKeyMsg
-        function CheckLoginKey(e) {
-
-            var LoginKey = $("#LoginKey").val();
-
-            if (CheckLoginKeyData(LoginKey) == false) return false;
-            $.ajax({
-                url: "/Account/Validation",
-                data: { col: "LoginKey", value: LoginKey },
-                dataType: "JSON",
-                type: "POST",
-
-                success: function (data) {
-                    var imageName = $("#imgLoginKeyMsg")[0];
-                    imageName.style.display = "block";
-
-                    if (data != null) {
-                        if (data.result == 1) {
-                            imageName.src = "../../Content/Img/imageSuccess.jpg";
-                            loginKeyValid = true;
-                            return true;
-                        }
-                        else {
-                            imageName.src = "../../Content/Img/imageError.jpg";
-                            $("#spanLoginKeyMsg").html("<font color='red'>此账号已经注册！</font>");
-
-
-                        }
-                    }
-                    else {
-                        imageName.src = "../../Content/Img/imageError.jpg";
-                        $("#spanLoginKeyMsg").html("<font color='red'>校验失败！</font>");
-
-                    }
-                },
-                error: function () {
-                    var imageName = $("#imgLoginKeyMsg");
-                    imageName.style.display = "block";
-                    imageName.src = "../../Content/Img/imageError.jpg";
-                    $("#spanLoginKeyMsg").html("<font color='red'>网络原因，校验失败！</font>");
-                }
-
-            });
-            return false;
+        function BindEvent() {
+            $("#btn_save").bind("click", Save);
+            $("#btn_signIn").bind("click", Save);
         }
-        function CheckName(e) {
-            //focus()
-            var oName = $("#Name");
-            var Name = oName.val();
-            if (CheckNameData(Name) == false) return false
-            $.ajax({
-                url: "/Account/Validation",
-                data: { col: "Name", value: Name },
-                dataType: "JSON",
-                type: "POST",
-                // async:false,
-                success: function (data) {
-                    var imageName = $("#imgNameMsg")[0];
-                    imageName.style.display = "block";
-
-                    if (data != null) {
-                        if (data.result == 1) {
-                            imageName.src = "../../Content/Img/imageSuccess.jpg";
-                            nameValid = true;
-                            return true;
-                        }
-                        else {
-                            imageName.src = "../../Content/Img/imageError.jpg";
-                            $("#SpanNameMsg").html("<font color='red'>此用户已经注册！</font>");
-
-                        }
-                    }
-                    else {
-                        imageName.src = "../../Content/Img/imageError.jpg";
-                        $("#SpanNameMsg").html("<font color='red'>校验失败！</font>");
-                    }
-                },
-                error: function () {
-                    var imageName = $("#imgNameMsg");
-                    imageName.style.display = "block";
-                    imageName.src = "../../Content/Img/imageError.jpg";
-                    $("#SpanNameMsg").html("<font color='red'>网络原因，校验失败！</font>");
-                }
-
-            });
-            return false;
-        }
-
         function Save() {
             debugger
             //检查
-            if (Check() == false) return;
-            var Id = $("#GUID").val(); //""表示新增  有值 表示修改  
-            if (Id == "" || Id == undefined) { //添加
-
-                if (nameValid == false) {
-
-                    var imageName = $("#imgNameMsg")[0];
-                    imageName.src = "../../Content/Img/imageError.jpg";
-                    $("#SpanNameMsg").html("<font color='red'>此用户已经注册！</font>");
-                    return;
-                }
-                if (loginKeyValid == false) {
-                    var imageName = $("#imgLoginKeyMsg")[0];
-                    imageName.src = "../../Content/Img/imageError.jpg";
-                    $("#spanLoginKeyMsg").html("<font color='red'>此账号已经注册！</font>");
-                    return
-                }
-            }
-
-            var Name = $("#Name").val();
+            //if (Check() == false) return; 
+            var Id = $("#Id").val();
+            var ProductKind =$("#ProductKind").val();
             var OrderNumber = $("#OrderNumber").val();
-            var LoginKey = $("#LoginKey").val();
-            var Password = $("#Password").val();
-            var Phone = $("#Phone").val();
-            var Creator = $("#Creator").val();
             var CreateDate = $("#CreateDate").val();
-
-            var Address = $("#Address").val();
+            var Creator = $("#Creator").val();
+            var EffectiveDate = $("#EffectiveDate").val();
+            //var EffectiveYear = $("#EffectiveYear").val();
+            var ExpiryDate = $("#ExpiryDate").val();          
             var isStop = $("#Stoped").attr("checked");
             var Stoped = (isStop == "checked" || isStop == "true") ? true : false;
-
-            var Id = $("#GUID").val();
-            var data = { Name: Name, OrderNumber: OrderNumber, LoginKey: LoginKey, Address: Address, Phone: Phone, Stoped: Stoped, Password: Password, Id: Id, Creator: Creator, CreateDate: CreateDate };
+            var data = { Id: Id, ProductKind: ProductKind, OrderNumber: OrderNumber, CreateDate: CreateDate, Creator: Creator, EffectiveDate: EffectiveDate,ExpiryDate: ExpiryDate, Stoped: Stoped };
             $.ajax({
-                url: "/Account/Save",
+                url: "/Lisence/Save",
                 data: data,
-                dataType: "JSON",
+                //dataType: "JSON",
                 type: "POST",
                 success: function (data) {
                     if (data != null) {
-                        if (data.result == 0) {
-                            //layer.alert("保存成功！");
+                        if (data.result == 0) {                           
                             layer.alert("操作成功！");
                         }
                         else {
@@ -198,14 +81,36 @@
 
             });
         }
-        function SetDefault(id) {
-            if (id != "") {
-                $("#Name").attr("disabled", "disabled");
-                $("#LoginKey").attr("disabled", "disabled");
-            }
+        function SetDefault() {
+
+        }
+        function Init() {
+            $('#EffectiveDate').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
+
+            $('#ExpiryDate').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
         }
         function CloseBack() {
-            var urlaccount = '/Account/Grid';
+            var urlaccount = '/Lisence/Grid';
             window.parent.ControlIFrame(urlaccount);
 
         }
@@ -230,128 +135,7 @@
             return true;
         }
 
-        function CheckLoginKeyData(LoginKey) {
-            if (LoginKey == "" || LoginKey == undefined) {
-                debugger
-                ClearMsgImage("imgLoginKeyMsg");
-                $("#spanLoginKeyMsg").html("<font color='red'>账号名称不能为空！</font>");
-                return false;
-            }
-            else {
-                var LoginKeyLen = LoginKey.length;
-                if (LoginKeyLen > 50) {
-                    ClearMsgImage("imgLoginKeyMsg");
-                    $("#spanLoginKeyMsg").html("<font color='red'>账号最长不能超过50！</font>");
-                    return false;
-                }
-                else {
-                    $("#spanLoginKeyMsg").html("");
-                }
-            }
-            return true
-        }
-        //清除消息图片
-        function ClearMsgImage(id) {
-            var imageName = $("#" + id)[0];
-            imageName.style.display = "none";
-            imageName.src = "";
-        }
-        //校验Phone
-        function CheckPhone() {
-            var Phone = $("#Phone").val();
-            if (Phone == "") {
-                $("#SpanPhoneMsg").html("<font color='red'>电话不能为空！</font>");
-                return false;
-            }
-            else {
-
-                if (istell(Phone) == false) {
-                    $("#SpanPhoneMsg").html("<font color='red'>电话格式不正确！<br> 格式：固定电话 0511-4405222 或 021-87888822 <br> 或者手机号码</font>");
-                    return false;
-                }
-                var PhoneLen = Phone.length;
-                if (PhoneLen > 20) {
-                    $("#SpanPhoneMsg").html("<font color='red'>电话最长不能超过20字节！</font>");
-                    return false;
-                }
-                else {
-                    $("#SpanPhoneMsg").html("");
-                }
-            }
-
-            return true;
-        }
-        function CheckPassword() {
-            var Password = $("#Password").val();
-            if (Password == "") {
-                $("#SpanPasswordMsg").html("<font color='red'>密码不能为空!</font>");
-                return false;
-            }
-            else {
-                var PasswordLen = Password.length;
-                if (PasswordLen > 50) {
-                    $("#SpanPasswordMsg").html("<font color='red'>密码最长不能超过50字节！</font>");
-                    return false;
-                }
-                else {
-                    $("#SpanPasswordMsg").html("");
-                }
-            }
-            return true;
-        }
-        function CheckAddress() {
-            var Address = $("#Address").val();
-            if (Address == "") {
-                $("#SpanAddressMsg").html("<font color='red'>地址不能为空！</font>");
-                return false;
-            }
-            else {
-                var AddressLen = Address.length;
-                if (AddressLen > 150) {
-                    $("#SpanAddressMsg").html("<font color='red'>地址最长不能超过150！</font>");
-                    return false;
-                }
-                else {
-                    $("#SpanAddressMsg").html("");
-                }
-            }
-        }
-        function Check() {
-
-            var Name = $("#Name").val();
-            if (CheckNameData(Name) == false) {
-                return false
-            }
-            var LoginKey = $("#LoginKey").val();
-
-            if (CheckLoginKeyData(LoginKey) == false) {
-                return false;
-            }
-            if (CheckPassword() == false) { return false }
-
-            if (CheckAddress() == false) { return false }
-
-            if (CheckPhone() == false) { return false; }
-            //var Stoped = $("#Stoped").val() == "1" ? true : false;
-            // var Id = $("#GUID").val();
-            return true;
-        }
-
-        //匹配国内电话号码(0511-4405222 或 021-87888822)
-        function istell(str) {
-            //        var result = str.match(/\d{3}-\d{8}|\d{4}-\d{7}/);
-            //        var phone = str.match(/^1[35]\d{9}$/);
-            //        if (result == null && phone == null) return false;
-
-            var reg1 = /\d{3}-\d{8}|\d{4}-\d{7}/;
-            var reg2 = /^1[35]\d{9}$/;
-            var result = reg1.test(str);
-            var phone = reg2.test(str);
-            if (result == false && phone == false) {
-                return false;
-            }
-            return true;
-        }
+      
     </script>
     <style type="text/css">
         table
@@ -415,6 +199,8 @@
         }
         .showMsg{ height:15px;}
        
+       @*开关按钮*@
+     
     </style>
     
      
@@ -423,8 +209,7 @@
     <div style="text-align:center;margin: 0px auto; " class="accountinfo">
     <form  id="from" class="form-horizontal">
        <div style="text-align:left; margin:0px auto;" >
-        <a class="button button-rounded button-flat-highlight" id="btn_close" onclick="CloseBack()" href="#">返回</a>
-        <a class="button button-rounded button-flat-primary" id="btn_signIn" href="#">注册</a> 
+        <a class="button button-rounded button-flat-highlight" id="btn_close" onclick="CloseBack()" href="#">返回</a>       
         <a class="button button-rounded button-flat-action" id="btn_save" href="#">确定</a>
        
        </div> 
@@ -435,25 +220,19 @@
            
         <table>
 
-         @*<tr>
-            <td height="65"  style="width:900px" colspan="2" align="center">
-                <img src="../../Content/Img/titleMsg.jpg" />
-            </td>
-          </tr>*@
-
          <tr>
             <td class="tdText"> 
             
-             <label><font color="red">*</font>公司名 &nbsp </label>  
+             <label>账号 &nbsp </label>  
              <div>                             
-             <input placeholder="请输入公司名称" maxlength="50" id="Name" name="Name" onblur="CheckName(this)" value="@ViewData["Name"]" class="input-xlarge" type="text" />
+             <input  maxlength="50" id="LoginKey" disabled="disabled" name="LoginKey" value="@ViewData["LoginKey"]" class="input-xlarge" type="text" />
                                   
              </div>          
                    
             </td>
 
              <td class="tdtitle" >
-               <span style="padding:35px 0px 0px 0px"><img  id="imgNameMsg"src="" style="display:none"/></span>             
+                           
              </td>    
 
              <td class="tdText" >
@@ -466,10 +245,10 @@
              <td class="tdtitle" >             
              </td>
         </tr>
-        <tr class="showMsg">
+         <tr class="showMsg">
             <td>
              <div>
-               <span id="SpanNameMsg"></span> 
+               
               </div>   
             </td>
 
@@ -485,34 +264,36 @@
             
             <td class="tdText" >
             
-            <label><font color="red">*</font>账号  &nbsp </label>
+            <label><font color="red">*</font>产品类型  &nbsp </label>
             <div> 
-            <input placeholder="请输入用户名称" maxlength="15" id="LoginKey" value="@ViewData["LoginKey"]" onblur="CheckLoginKey()" name="LoginKey" class="input-xlarge" type="text" />            
+                @*<select>
+                 <option value="0"> 微信第一表</option>                 
+                </select>*@
+              <input placeholder="请输入产品类型" maxlength="15" id="ProductKind" value="@ViewData["ProductKind"]" onblur="CheckProductKind()" name="LoginKey" class="input-xlarge" type="text" />            
             </div>  
                 
             </td>
              <td class="tdtitle" >
-             <span style="padding:35px 0px 0px 0px"><img  id="imgLoginKeyMsg"src="" style="display:none"/></span>
-           
+             
              </td>
 
             <td class="tdText"> 
             
-            <label ><font color="red">*</font>密码 &nbsp </label>
+            <label ><font color="red">*</font>授权点数 &nbsp </label>
             <div> 
-            <input placeholder="请输入密码" maxlength="15" id="Password" name="Password" onblur="CheckPassword()" value="@ViewData["Password"]" class="input-xlarge" type="text" />
+            <input placeholder="请输入授权点数" id="LisencePoint" name="LisencePoint"  value="@ViewData["LisencePoint"]" class="input-xlarge" type="text" />
             </div>
             
             </td>
             <td class="tdtitle">             
            </td>
 
-        </tr>   
+        </tr>  
              
-        <tr class="showMsg">
+         <tr class="showMsg">
             <td>
              <div>
-               <span id="spanLoginKeyMsg"></span>
+               <span id="spanProductKindMsg"></span>
              </div>     
             </td>
 
@@ -521,19 +302,69 @@
 
             <td>
             <div>
-            <span id="SpanPasswordMsg"></span>
+            <span id="SpanLisencePointMsg"></span>
             </div>
             </td>
             <td>
             </td>
         </tr>
+        
+         <tr>
+           
+            <td class="tdText"> 
+           
+            <label >有效开始日期</label>
+
+            @* <div><input id="EffectiveDate"  name="EffectiveDate" readonly value="@ViewData["EffectiveDate"]"  type="text" />
+             </div>*@
+           
+            <div class="controls input-append date form_date" >
+                <input id="EffectiveDate"  name="EffectiveDate" readonly value="@ViewData["EffectiveDate"]"  type="text" />
+                <span class="add-on"><i class="icon-remove"></i></span>
+			    <span class="add-on"><i class="icon-th"></i></span>
+           </div>
+
+            </td>
+            <td class="tdtitle"></td>
+            
+            <td class="tdText" >
+          
+            <label >失效结束日期</label>
+            <div>
+           <input  class="input-xlarge" id="ExpiryDate" readonly name="ExpiryDate" value="@ViewData["ExpiryDate"]" type="text" /> 
+           </div>
+         
+            </td>
+            <td class="tdtitle"></td>
+
+        </tr>
+        
+         <tr class="showMsg">
+            <td>
+             <div>
+              
+             </div>     
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+            <div>
+            
+            </div>
+            </td>
+            <td>
+            </td>
+         </tr>
+
          <tr>           
            
             <td class="tdText" >
             
-            <label><font color="red">*</font>电话  &nbsp </label>
+            <label>创建时间  &nbsp </label>
             <div> 
-            <input placeholder="请输入电话" maxlength="15" class="input-xlarge" id="Phone" onblur="CheckPhone()" name="Phone" value="@ViewData["Phone"]" type="text" />
+              <input  class="input-xlarge" disabled="disabled" id="CreateDate"  name="CreateDate" value="@ViewData["CreateDate"]" type="text" />
             </div>
             
             </td>
@@ -557,7 +388,7 @@
          <tr class="showMsg">
             <td>
               <div>
-             <span id="SpanPhoneMsg"></span>
+               
               </div>
            
             </td>
@@ -571,42 +402,6 @@
         </tr>
 
          <tr>
-           
-            <td class="tdText"> 
-           
-            <label >创建时间  &nbsp </label>
-
-             <div><input class="input-xlarge" id="CreateDate" disabled="disabled" name="CreateDate" value="@ViewData["CreateDate"]"  type="text" />
-             </div>
-           
-            </td>
-            <td class="tdtitle"></td>
-            
-            <td class="tdText" >
-          
-            <label >修改时间  &nbsp </label>
-            <div>
-           <input  class="input-xlarge" disabled="disabled" id="ModifyDate" name="ModifyDate" value="@ViewData["ModifyDate"]" type="text" /> 
-           </div>
-         
-            </td>
-         <td class="tdtitle"></td>
-
-        </tr>
-               
-
-        <tr>
-           
-            <td class="tdText" colspan="4">
-            
-            <label ><font color="red">*</font>地址  &nbsp </label>
-            <div>
-             <input placeholder="请输入地址" maxlength="100" style=" width:90%" class="input-xlarge" id="Address" onblur="CheckAddress()" name="Address" value="@ViewData["Address"]"  type="text" />
-            </div>
-            <div><span id="SpanAddressMsg"></span></div>
-                       
-        </tr>
-        <tr>
             
             <td class="tdText">
             
@@ -629,13 +424,13 @@
 
       <hr/>
 
-      <div>       
-       <input  id="Creator"  type="hidden" value="@ViewData["Creator"]" />
-        <input id="GUID" name="Id" type="hidden" value="@ViewData["Id"]" />
+      <div>    
+        <input  id="AccountId" name="AccountId" type="hidden" value="@ViewData["AccountId"]" />          
+        <input  id="Creator" name="Creator" type="hidden" value="@ViewData["Creator"]" /> 
+        <input id="Id" name="Id" type="hidden" value="@ViewData["Id"]" />
       </div>
       
-      
-      
+           
   </form>
     </div>
 </body>
