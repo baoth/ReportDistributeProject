@@ -107,6 +107,8 @@
     <Content Include="Content\Css\jquery.toolbars.css" />
     <Content Include="Content\Css\layer.css" />
     <Content Include="Content\Css\public.css" />
+    <Content Include="Content\Css\Upload\basic.css" />
+    <Content Include="Content\Css\Upload\dropzone.css" />
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
@@ -136,6 +138,8 @@
     <Content Include="Content\Img\sort_both.png" />
     <Content Include="Content\Img\sort_desc.png" />
     <Content Include="Content\Img\sort_desc_disabled.png" />
+    <Content Include="Content\Img\spritemap%402x.png" />
+    <Content Include="Content\Img\spritemap.png" />
     <Content Include="Content\Img\userface.png" />
     <Content Include="Content\Css\layer.ext.css" />
     <Content Include="Global.asax" />
@@ -164,6 +168,8 @@
     <None Include="Content\Css\fonts\fontawesome-webfont.ttf" />
     <None Include="Content\Css\fonts\fontawesome-webfont.woff" />
     <None Include="Content\Css\fonts\FontAwesome.otf" />
+    <None Include="Content\Css\Upload\stylus\basic.styl" />
+    <None Include="Content\Css\Upload\stylus\dropzone.styl" />
     <None Include="Content\Img\Sorting icons.psd" />
     <Content Include="Views\Lisence\Index.cshtml">
       <SubType>Code</SubType>
