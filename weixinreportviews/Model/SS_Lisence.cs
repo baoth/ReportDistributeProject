@@ -80,16 +80,6 @@ namespace weixinreportviews.Model
             set { _EffectiveDate = value; }
         }
 
-        private short _EffectiveYear = 0;
-        /// <summary>
-        /// 有效年
-        /// </summary>
-        public short EffectiveYear
-        {
-            get { return _EffectiveYear; }
-            set { _EffectiveYear = value; }
-        }
-
         private DateTime _ExpiryDate = DateTime.Now;
         /// <summary>
         /// 失效结束日期
