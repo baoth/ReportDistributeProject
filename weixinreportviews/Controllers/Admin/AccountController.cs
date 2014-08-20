@@ -26,13 +26,16 @@ namespace weixinreportviews.Controllers.Admin
                 DbSession session = General.CreateDbSession();
                 SS_CompanyAccount account = session.Retrieve<SS_CompanyAccount>(
                     "Id", Guid.Parse(id));
-                PropertyInfo[] pis = account.GetType().GetProperties();
-                
-                for (int i = 0; i < pis.Length; i++)
+                if (account != null)
                 {
-                    var objvalue = pis[i].GetValue(account, null);
-                    var value = objvalue == null ? "" : objvalue.ToString();
-                    ViewData.Add(pis[i].Name, value);
+                    PropertyInfo[] pis = account.GetType().GetProperties();
+
+                    for (int i = 0; i < pis.Length; i++)
+                    {
+                        var objvalue = pis[i].GetValue(account, null);
+                        var value = objvalue == null ? "" : objvalue.ToString();
+                        ViewData.Add(pis[i].Name, value);
+                    }
                 }
             }
             return View("Model");

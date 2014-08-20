@@ -103,6 +103,10 @@ vertical-align: middle;
 margin: 2px 0 0 6px;
 }
 .option{position:relative;margin:0;}
+.option1
+{
+    margin-bottom: 10px;
+    }
 .option .mod-tit{line-height:28px;}
 .option .mod-tit h2{width:82px;float:left;margin-right:10px;background:#eaeaea;text-align:center;font-size:14px;color:#3a3a3a;}
 .mod-tit p {float:left;}

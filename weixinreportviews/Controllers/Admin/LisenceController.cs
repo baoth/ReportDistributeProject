@@ -24,15 +24,25 @@ using QSmart.Core.DataBase;
             if (!string.IsNullOrEmpty(id))
             {
                 DbSession session = General.CreateDbSession();
-                SS_Lisence lisence = session.Retrieve<SS_Lisence>(
+                SS_LisenceView lisence = session.Retrieve<SS_LisenceView>(
                     "Id", int.Parse(id));
-                PropertyInfo[] pis = lisence.GetType().GetProperties();
-                for (int i = 0; i < pis.Length; i++)
+                if (lisence != null)
                 {
-                    ViewData.Add(pis[i].Name, pis[i].GetValue(lisence, null).ToString());
+                    PropertyInfo[] pis = lisence.GetType().GetProperties();
+                    for (int i = 0; i < pis.Length; i++)
+                    {
+                        ViewData.Add(pis[i].Name, pis[i].GetValue(lisence, null).ToString());
+                    }
                 }
             }
             return View("Model");
+        }
+
+        [HttpGet]
+        public ActionResult AccountLisence(string id)
+        {
+            ViewData.Add("AccountId", id);
+            return View("AccountLisence");
         }
 
         /// <summary>
@@ -189,6 +199,16 @@ using QSmart.Core.DataBase;
                      result.Add(new QSmartQueryFilterCondition
                      {
                          Column = new QSmartQueryColumn { columnName = "year(" + colName + ")", dataType = typeof(int) },
+                         Operator = QSmartOperatorEnum.equal,
+                         Connector = QSmartConnectorEnum.and,
+                         Values = new List<object> { this.exactSearch[i] }
+                     });
+                 }
+                 else if (colName == "AccountId".ToLower())
+                 {
+                     result.Add(new QSmartQueryFilterCondition
+                     {
+                         Column = new QSmartQueryColumn { columnName = colName, dataType = typeof(Guid) },
                          Operator = QSmartOperatorEnum.equal,
                          Connector = QSmartConnectorEnum.and,
                          Values = new List<object> { this.exactSearch[i] }
