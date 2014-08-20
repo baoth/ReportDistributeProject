@@ -1,0 +1,25 @@
+
+.mod_category_item {
+word-wrap: break-word;
+width: 100%;
+}
+
+.mod_category_item li {
+white-space: nowrap;
+float: left;
+display: inline;
+margin: 0 20px 6px 0;
+line-height: 22px;
+}
+.mod_category_item .selected a {
+background: #699f00;
+padding: 1px 7px 2px;
+color: #fff;
+border-radius: 1px;
+}
+.mod_category_item a {
+display: inline-block;
+padding: 1px 7px 2px;
+text-decoration: none;
+outline: 0;
+}
