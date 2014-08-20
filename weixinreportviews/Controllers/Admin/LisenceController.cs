@@ -35,6 +35,13 @@ using QSmart.Core.DataBase;
             return View("Model");
         }
 
+        [HttpGet]
+        public ActionResult AccountLisence(string id)
+        {
+            ViewData.Add("AccountId", id);
+            return View("AccountLisence");
+        }
+
         /// <summary>
         /// 新建或修改授权信息
         /// </summary>
@@ -189,6 +196,16 @@ using QSmart.Core.DataBase;
                      result.Add(new QSmartQueryFilterCondition
                      {
                          Column = new QSmartQueryColumn { columnName = "year(" + colName + ")", dataType = typeof(int) },
+                         Operator = QSmartOperatorEnum.equal,
+                         Connector = QSmartConnectorEnum.and,
+                         Values = new List<object> { this.exactSearch[i] }
+                     });
+                 }
+                 else if (colName == "AccountId".ToLower())
+                 {
+                     result.Add(new QSmartQueryFilterCondition
+                     {
+                         Column = new QSmartQueryColumn { columnName = colName, dataType = typeof(Guid) },
                          Operator = QSmartOperatorEnum.equal,
                          Connector = QSmartConnectorEnum.and,
                          Values = new List<object> { this.exactSearch[i] }
