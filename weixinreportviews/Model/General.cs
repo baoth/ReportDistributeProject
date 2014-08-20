@@ -267,7 +267,6 @@ namespace weixinreportviews.Model
 
                 tableNameCreator = QueryB
             });
-
             DataTable dt = this.Context.QueryTable(Query);
             if (dt != null && dt.Rows.Count > 0) TotalCount = (int)dt.Rows[0]["TotalCount"];
             
@@ -353,10 +352,13 @@ namespace weixinreportviews.Model
             List<QSmartQueryFilterCondition> fuzzys = this.FuzzySearch(pis);
             if (exacts == null || exacts.Count == 0) return fuzzys;
             if (fuzzys == null || fuzzys.Count ==0) return exacts;
+            QSmartQueryFilterCondition combinitem = new QSmartQueryFilterCondition();
+            combinitem.Connector = QSmartConnectorEnum.and;
             foreach (var item in fuzzys)
             {
-                exacts[exacts.Count - 1].Combins.Add(item);
+                combinitem.Combins.Add(item);
             }
+            exacts.Add(combinitem);
             return exacts;
         }
 

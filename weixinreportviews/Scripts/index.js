@@ -113,7 +113,7 @@ $(document).ready(function () {
     };
     var table = $('#example').dataTable({
         "order": [[1, 'asc']],
-        "processing": true,
+        "processing": false,
         "bServerSide": true,
         "scrollCollapse": true,
 
