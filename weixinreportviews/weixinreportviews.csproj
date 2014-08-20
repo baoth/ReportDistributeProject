@@ -94,7 +94,7 @@
     <Content Include="Content\Css\bootstrap.css" />
     <Content Include="Content\Css\bootstrap.icons.css" />
     <Content Include="Content\Css\button.css" />
-    <Content Include="Content\Css\Copy of flat-ui.css" />
+    <Content Include="Content\Css\select.css" />
     <Content Include="Content\Css\dataTables.editor.min.css" />
     <Content Include="Content\Css\DateTime\bootstrap-datetimepicker.css" />
     <Content Include="Content\Css\flat-ui.css" />
@@ -107,7 +107,6 @@
     <Content Include="Content\Css\jquery.toolbars.css" />
     <Content Include="Content\Css\layer.css" />
     <Content Include="Content\Css\public.css" />
-    <Content Include="Content\favicon.ico" />
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
     <Content Include="Content\Img\back_enabled_hover.png" />

@@ -185,14 +185,15 @@
                     if (data != null) {
                         if (data.result == 0) {
                             //layer.alert("保存成功！");
-                            layer.alert("操作成功！");
+                            layer.msg("操作成功！");
+                            CloseBack();
                         }
                         else {
-                            layer.alert("保存失败！");
+                            layer.msg("保存失败！");
                         }
                     }
                     else {
-                        layer.alert("保存失败！");
+                        layer.msg("保存失败！");
                     }
                 }
 
@@ -414,6 +415,7 @@
             display:block;  
         }
         .showMsg{ height:15px;}
+        
        
     </style>
     
@@ -444,7 +446,7 @@
          <tr>
             <td class="tdText"> 
             
-             <label><font color="red">*</font>公司名 &nbsp </label>  
+             <label><font color="red">*</font>公司&nbsp </label>  
              <div>                             
              <input placeholder="请输入公司名称" maxlength="50" id="Name" name="Name" onblur="CheckName(this)" value="@ViewData["Name"]" class="input-xlarge" type="text" />
                                   
