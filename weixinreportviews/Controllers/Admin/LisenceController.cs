@@ -18,7 +18,7 @@ using QSmart.Core.DataBase;
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Model(string id)
+        public ActionResult Model(string id,string accountid,string accountname)
         {
 
             if (!string.IsNullOrEmpty(id))
@@ -31,9 +31,25 @@ using QSmart.Core.DataBase;
                     PropertyInfo[] pis = lisence.GetType().GetProperties();
                     for (int i = 0; i < pis.Length; i++)
                     {
-                        ViewData.Add(pis[i].Name, pis[i].GetValue(lisence, null).ToString());
+                        var objvalue = pis[i].GetValue(lisence, null);
+                        if (pis[i].PropertyType == typeof(DateTime) || pis[i].PropertyType == typeof(Nullable<DateTime>))
+                        {
+                            var objvalue1 = (DateTime)objvalue;
+                            var value1 = objvalue == null ? "" : objvalue1.ToShortDateString();
+                            ViewData.Add(pis[i].Name, value1);
+                        }
+                        else
+                        {
+                            var value = objvalue == null ? "" : objvalue.ToString();
+                            ViewData.Add(pis[i].Name, value);
+                        }
                     }
                 }
+            }
+            else
+            {
+                ViewData.Add("AccountId", accountid);
+                ViewData.Add("AccountName", accountname);
             }
             return View("Model");
         }
@@ -55,7 +71,6 @@ using QSmart.Core.DataBase;
             try
             {              
                 SS_Lisence lisence = General.CreateInstance<SS_Lisence>(Request);
-                lisence.ExpiryDate = lisence.EffectiveDate.AddYears(lisence.EffectiveYear);
                 DbSession session = General.CreateDbSession();
                 if (lisence.Id != 0)
                 {
@@ -64,6 +79,7 @@ using QSmart.Core.DataBase;
                 else
                 {
                     lisence.OrderNumber = General.CreateOrderNumber("LE");
+                    lisence.CreateDate = DateTime.Now;
                     session.Context.InsertEntity(lisence.CreateQSmartObject());
                 }
                 session.Context.SaveChange();
