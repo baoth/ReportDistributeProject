@@ -47,7 +47,16 @@
             SetDefault(Id);
             $("#btn_save").bind("click", Save);
             $("#btn_signIn").bind("click", Save);
-
+            /*验证数字*/
+            $('#Phone').bind('keydown', function () {
+                var e = $(this).event || window.event;
+                var code = parseInt(e.keyCode);
+                if (code >= 96 && code <= 105 || code >= 48 && code <= 57 || code == 8 || code == 110 || code == 190) {
+                    return true;
+                } else {
+                    return false;
+                }  
+            })
 
         });
         var nameValid = false;
