@@ -12,6 +12,7 @@
     <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
 
+    <link href="../../Content/Css/select.css" rel="stylesheet" type="text/css" />
      @*按钮开关样式*@
    @* <link href="../../Content/Css/flat-ui.css" rel="stylesheet" type="text/css" />*@
 
@@ -44,13 +45,61 @@
         function BindEvent() {
             $("#btn_save").bind("click", Save);
             $("#btn_signIn").bind("click", Save);
+            $(".mod_category_item a").bind("click",SelectProductType);
         }
+
+        $.GetSelectProductKey = function () {          
+            var a = $(".mod_category_item li").filter(".selected").children();
+            var keycode = a.attr("keycode");           
+            return keycode;
+        }
+        $.SetSelectProductKey = function (keyValue) {            
+          var a= $(".mod_category_item li a").filter(function (index) {
+                return $(this).attr("keycode") ==keyValue;
+           });
+            a.parent().addClass("selected");
+            a.parent().siblings().removeClass();
+        }
+
+        function CheckLisencePoint() {
+            var LisencePoint = $("#LisencePoint").val();
+            if (LisencePoint == "") {
+                $("#SpanLisencePointMsg").html("<font color='red'>授权点数不能为空！</font>");
+                return false;
+            }
+            return true;
+        }
+        function CheckDateTime() {
+            debugger
+            var EffectiveDate = $("#EffectiveDate").val();
+            var ExpiryDate = $("#ExpiryDate").val();
+            if (EffectiveDate && ExpiryDate) {
+                if (EffectiveDate>ExpiryDate) {
+                    $("#SpanExpiryDateMsg").html("<font color='red'>失效日期不能大于等于有效开始日期！</font>");
+                    return false; 
+                }
+            }
+            return true;
+       }
+       function Check() {
+           if (CheckLisencePoint() == false) return false;
+           if (CheckDateTime() == false) return false;
+            return true;
+        }
+
+        function SelectProductType() {
+            var a = $(this);
+            a.parent().addClass("selected");
+            a.parent().siblings().removeClass();
+        }
+
         function Save() {
             debugger
             //检查
-            //if (Check() == false) return; 
-            var Id = $("#Id").val();
-            var ProductKind =$("#ProductKind").val();
+            if (Check() == false) return;
+            var AccountId = $("#AccountId").val();
+            var Id = $("#Id").val() ;
+            var ProductKind = $.GetSelectProductKey(); //$("#ProductKind").val();
             var OrderNumber = $("#OrderNumber").val();
             var CreateDate = $("#CreateDate").val();
             var Creator = $("#Creator").val();
@@ -59,7 +108,7 @@
             var ExpiryDate = $("#ExpiryDate").val();          
             var isStop = $("#Stoped").attr("checked");
             var Stoped = (isStop == "checked" || isStop == "true") ? true : false;
-            var data = { Id: Id, ProductKind: ProductKind, OrderNumber: OrderNumber, CreateDate: CreateDate, Creator: Creator, EffectiveDate: EffectiveDate,ExpiryDate: ExpiryDate, Stoped: Stoped };
+            var data = { Id: Id,AccountId:AccountId, ProductKind: ProductKind, OrderNumber: OrderNumber, CreateDate: CreateDate, Creator: Creator, EffectiveDate: EffectiveDate,ExpiryDate: ExpiryDate, Stoped: Stoped };
             $.ajax({
                 url: "/Lisence/Save",
                 data: data,
@@ -67,22 +116,25 @@
                 type: "POST",
                 success: function (data) {
                     if (data != null) {
-                        if (data.result == 0) {                           
-                            layer.alert("操作成功！");
+                        if (data.result == 0) {
+                            layer.msg("操作成功！");
+                            CloseBack();
                         }
                         else {
-                            layer.alert("保存失败！");
+                            //msg alert
+                            layer.msg("保存失败！");
                         }
                     }
                     else {
-                        layer.alert("保存失败！");
+                        layer.msg("保存失败！");
                     }
                 }
 
             });
         }
         function SetDefault() {
-
+            var keyValue = $("#ProductKind").val();
+            $.SetSelectProductKey(keyValue);
         }
         function Init() {
             $('#EffectiveDate').datetimepicker({
@@ -137,6 +189,7 @@
 
       
     </script>
+
     <style type="text/css">
         table
         {
@@ -199,8 +252,7 @@
         }
         .showMsg{ height:15px;}
        
-       @*开关按钮*@
-     
+      
     </style>
     
      
@@ -216,16 +268,16 @@
       
      
      
-       <div style="margin: 0px auto; width: 100%; height: auto; "> @*background: url(../../Content/Img/border.jpg)*@
+       <div style="margin: 10px auto; width: 100%; height: auto; "> @*background: url(../../Content/Img/border.jpg)*@
            
         <table>
 
          <tr>
             <td class="tdText"> 
             
-             <label>账号 &nbsp </label>  
+             <label>公司 &nbsp </label>  
              <div>                             
-             <input  maxlength="50" id="LoginKey" disabled="disabled" name="LoginKey" value="@ViewData["LoginKey"]" class="input-xlarge" type="text" />
+             <input  maxlength="50" id="LoginKey" disabled="disabled" name="LoginKey" value="@ViewData["AccountName"]" class="input-xlarge" type="text" />
                                   
              </div>          
                    
@@ -263,15 +315,17 @@
          <tr> 
             
             <td class="tdText" >
-            
+                       
+            <div >
             <label><font color="red">*</font>产品类型  &nbsp </label>
-            <div> 
-                @*<select>
-                 <option value="0"> 微信第一表</option>                 
-                </select>*@
-              <input placeholder="请输入产品类型" maxlength="15" id="ProductKind" value="@ViewData["ProductKind"]" onblur="CheckProductKind()" name="LoginKey" class="input-xlarge" type="text" />            
-            </div>  
-                
+            <ul class="mod_category_item" actionField="ProductKind">                
+                 <li class="selected"> <a href="#" keyCode="0">微信第一表</a> </li>  
+                 <li > <a href="#" keyCode="1">微信第二表</a> </li>    
+                 <li > <a href="#" keyCode="2">微信第三表</a> </li>                      
+            </ul>
+
+           </div>   
+                 
             </td>
              <td class="tdtitle" >
              
@@ -281,7 +335,7 @@
             
             <label ><font color="red">*</font>授权点数 &nbsp </label>
             <div> 
-            <input placeholder="请输入授权点数" id="LisencePoint" name="LisencePoint"  value="@ViewData["LisencePoint"]" class="input-xlarge" type="text" />
+            <input placeholder="请输入授权点数" id="LisencePoint" name="LisencePoint" onblur="CheckLisencePoint()"  value="@ViewData["LisencePoint"]" class="input-xlarge" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
             </div>
             
             </td>
@@ -319,7 +373,7 @@
              </div>*@
            
             <div class="controls input-append date form_date" >
-                <input id="EffectiveDate"  name="EffectiveDate" readonly value="@ViewData["EffectiveDate"]"  type="text" />
+                <input id="EffectiveDate"  name="EffectiveDate" onblur="CheckDateTime()" readonly value="@ViewData["EffectiveDate"]"  type="text" />
                 <span class="add-on"><i class="icon-remove"></i></span>
 			    <span class="add-on"><i class="icon-th"></i></span>
            </div>
@@ -331,7 +385,7 @@
           
             <label >失效结束日期</label>
             <div>
-           <input  class="input-xlarge" id="ExpiryDate" readonly name="ExpiryDate" value="@ViewData["ExpiryDate"]" type="text" /> 
+           <input  class="input-xlarge" id="ExpiryDate" onblur="CheckDateTime()" readonly name="ExpiryDate" value="@ViewData["ExpiryDate"]" type="text" /> 
            </div>
          
             </td>
@@ -351,7 +405,7 @@
 
             <td>
             <div>
-            
+            <span id="SpanExpiryDateMsg"></span>
             </div>
             </td>
             <td>
@@ -428,6 +482,9 @@
         <input  id="AccountId" name="AccountId" type="hidden" value="@ViewData["AccountId"]" />          
         <input  id="Creator" name="Creator" type="hidden" value="@ViewData["Creator"]" /> 
         <input id="Id" name="Id" type="hidden" value="@ViewData["Id"]" />
+        <input id="ProductKind" value="@ViewData["ProductKind"]"  name="LoginKey"  type="hidden" />
+                    
+
       </div>
       
            
