@@ -96,7 +96,8 @@
         function Save() {
             debugger
             //检查
-            if (Check() == false) return; 
+            if (Check() == false) return;
+            var AccountId = $("#AccountId").val();
             var Id = $("#Id").val() ;
             var ProductKind = $.GetSelectProductKey(); //$("#ProductKind").val();
             var OrderNumber = $("#OrderNumber").val();
@@ -107,7 +108,7 @@
             var ExpiryDate = $("#ExpiryDate").val();          
             var isStop = $("#Stoped").attr("checked");
             var Stoped = (isStop == "checked" || isStop == "true") ? true : false;
-            var data = { Id: Id, ProductKind: ProductKind, OrderNumber: OrderNumber, CreateDate: CreateDate, Creator: Creator, EffectiveDate: EffectiveDate,ExpiryDate: ExpiryDate, Stoped: Stoped };
+            var data = { Id: Id,AccountId:AccountId, ProductKind: ProductKind, OrderNumber: OrderNumber, CreateDate: CreateDate, Creator: Creator, EffectiveDate: EffectiveDate,ExpiryDate: ExpiryDate, Stoped: Stoped };
             $.ajax({
                 url: "/Lisence/Save",
                 data: data,
