@@ -143,6 +143,7 @@
     <Content Include="Content\Img\userface.png" />
     <Content Include="Content\Css\layer.ext.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\accountindex.js" />
     <Content Include="Scripts\numeralInput.js" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
