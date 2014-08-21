@@ -27,14 +27,10 @@ namespace weixinreportviews.Controllers
         /// <param name="password">密码</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Login(string loginkey, string password)
+        public JsonResult Login(string loginkey, string password)
         {
             CustomerLoginInfo logininfo = General.Login(loginkey, password);
-            if (logininfo.Error != CustomerLoginErrorEnum.成功)
-            {
-                return Json(new { error = (int)logininfo.Error });
-            }
-            return Redirect("Account/Index");
+            return Json(new { error = (int)logininfo.Error });
         }
       
     }
