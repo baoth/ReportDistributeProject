@@ -171,10 +171,9 @@ namespace weixinreportviews.Model
             CustomerLoginInfo result=new CustomerLoginInfo();
             DbSession session = General.CreateDbSession();
             result.Account = session.Retrieve<SS_CompanyAccount>("LoginKey", LoginKey);
-            result.Error = !(result.Account != null && !result.Account.Stoped && Password == result.Account.Password);
-            result.ErrorMsg = result.Account == null ? "账户不存在，请联系客服人员解决。" :
-                result.Account.Stoped ? "账户已停用，请联系客服人员解决。" :
-                result.Account.Password != Password ? "账户密码错误。" : string.Empty;
+            if (result.Account == null) result.Error = CustomerLoginErrorEnum.账户不存在;
+            else if (result.Account.Stoped) result.Error = CustomerLoginErrorEnum.账户停用;
+            else if (result.Account.Password.Trim() != Password.Trim()) result.Error = CustomerLoginErrorEnum.密码错误;
             return result;
         }
 
@@ -188,11 +187,21 @@ namespace weixinreportviews.Model
             CustomerLoginInfo result = new CustomerLoginInfo();
             DbSession session = General.CreateDbSession();
             result.Account = session.Retrieve<SS_CompanyAccount>("LoginKey", LoginKey);
-            result.Error = !(result.Account != null && !result.Account.Stoped);
-            result.ErrorMsg = result.Account == null ? "您关注的账户不存在，请联系客服人员解决。" :
-                result.Account.Stoped ? "您关注的账户已停用，请联系客服人员解决。" : string.Empty;
+            if (result.Account == null) result.Error = CustomerLoginErrorEnum.账户不存在;
+            else if (result.Account.Stoped) result.Error = CustomerLoginErrorEnum.账户停用;
             return result;
         }
+    }
+
+    /// <summary>
+    /// 错误类型枚举
+    /// </summary>
+    public enum CustomerLoginErrorEnum
+    {
+        成功=0,
+        账户不存在=1,
+        账户停用=2,
+        密码错误=3
     }
 
     /// <summary>
@@ -201,8 +210,14 @@ namespace weixinreportviews.Model
     public class CustomerLoginInfo
     {
         public SS_CompanyAccount Account { get; set; }
-        public bool Error { get; set; }
-        public string ErrorMsg { get; set; }
+
+        private CustomerLoginErrorEnum _Error = CustomerLoginErrorEnum.成功;
+
+        public CustomerLoginErrorEnum Error
+        {
+            get { return _Error; }
+            set { _Error = value; }
+        }
     }
 
     public abstract class DbSession: QSmartSession
