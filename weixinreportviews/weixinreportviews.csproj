@@ -107,14 +107,14 @@
     <Content Include="Content\Css\jquery.toolbars.css" />
     <Content Include="Content\Css\layer.css" />
     <Content Include="Content\Css\public.css" />
-    <Content Include="Content\Css\Upload\basic.css" />
-    <Content Include="Content\Css\Upload\dropzone.css" />
-    <Content Include="Content\favicon.ico" />
+    <Content Include="Content\Css\Switch\bootstrap-switch.css" />
+    <Content Include="Content\Css\Switch\bootstrap-switch.min.css" />
+    <Content Include="Content\Css\Switch\bootstrap.min.css" />
+    <Content Include="Content\Css\Switch\highlight.css" />
+    <Content Include="Content\Css\Switch\main.css" />
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
     <Content Include="Content\Img\back_enabled_hover.png" />
-    <Content Include="Content\Img\border.jpg" />
-    <Content Include="Content\Img\bottom.jpg" />
     <Content Include="Content\Img\favicon.ico" />
     <Content Include="Content\Img\forward_disabled.png" />
     <Content Include="Content\Img\forward_enabled.png" />
@@ -124,8 +124,6 @@
     <Content Include="Content\Img\icon-cog-shadow.png" />
     <Content Include="Content\Img\icon-cog-small.png" />
     <Content Include="Content\Img\icon-cog.png" />
-    <Content Include="Content\Img\imageError.jpg" />
-    <Content Include="Content\Img\imageSuccess.jpg" />
     <Content Include="Content\Img\layerskin\icon_ext.png" />
     <Content Include="Content\Img\layerskin\textbg.png" />
     <Content Include="Content\Img\layerskin\xubox_ico0.png" />
@@ -142,14 +140,9 @@
     <Content Include="Content\Img\sort_both.png" />
     <Content Include="Content\Img\sort_desc.png" />
     <Content Include="Content\Img\sort_desc_disabled.png" />
-    <Content Include="Content\Img\spritemap%402x.png" />
-    <Content Include="Content\Img\spritemap.png" />
-    <Content Include="Content\Img\titleMsg.jpg" />
-    <Content Include="Content\Img\topborder.jpg" />
     <Content Include="Content\Img\userface.png" />
     <Content Include="Content\Css\layer.ext.css" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\accountindex.js" />
     <Content Include="Scripts\numeralInput.js" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
@@ -169,6 +162,12 @@
     <Content Include="Scripts\layer.ext.js" />
     <Content Include="Scripts\layer.js" />
     <Content Include="Scripts\layer.min.js" />
+    <Content Include="Scripts\Switch\bootstrap-switch.js" />
+    <Content Include="Scripts\Switch\bootstrap-switch.min.js" />
+    <Content Include="Scripts\Switch\bootstrap.min.js" />
+    <Content Include="Scripts\Switch\highlight.js" />
+    <Content Include="Scripts\Switch\jquery.min.js" />
+    <Content Include="Scripts\Switch\main.js" />
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Model.cshtml" />
@@ -176,8 +175,6 @@
     <None Include="Content\Css\fonts\fontawesome-webfont.ttf" />
     <None Include="Content\Css\fonts\fontawesome-webfont.woff" />
     <None Include="Content\Css\fonts\FontAwesome.otf" />
-    <None Include="Content\Css\Upload\stylus\basic.styl" />
-    <None Include="Content\Css\Upload\stylus\dropzone.styl" />
     <None Include="Content\Img\Sorting icons.psd" />
     <Content Include="Views\Lisence\Index.cshtml">
       <SubType>Code</SubType>
