@@ -5,6 +5,15 @@
         var char = url.indexOf('?') >= 0 ? "&" : "?"
         return url + char + name + "=" + val;
     };
+    function GetSingleSelectedRowData() {
+        if (id != undefined && id != "") {
+            var name = $('#example tbody tr td div.pressed').attr('n')
+            return { id: id, name: name };
+        }
+
+        var selectedDom = $('#example tbody tr.selected td div');
+        return { id: selectedDom.attr('v'), name: selectedDom.attr('n') };
+    }
     function GetSelectedRowId() {
 
         var selectids = [];
@@ -65,7 +74,10 @@
             if (ids.length != 1) {
                 return;
             }
+            debugger
+            var selectedRow = GetSingleSelectedRowData();
             url = AddParams('id', ids[0], urllisence);
+            url = AddParams('name', selectedRow.name, url);
             window.parent.ControlIFrame(url);
         },
         ControlBtn: function () {
@@ -167,7 +179,7 @@ $(document).ready(function () {
                         { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
                         { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
                             "mRender": function (val, isShow, row) {
-                                return '<div class="settings-button" v="' + val + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                                return '<div class="settings-button" v="' + val + '" n="' + row['Name'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
                             }
                         }
                     ]
