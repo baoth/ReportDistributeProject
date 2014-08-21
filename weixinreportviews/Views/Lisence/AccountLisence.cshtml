@@ -59,7 +59,9 @@
             }
             return {
                 Add: function () {
-                    window.parent.ControlIFrame(urlaccount);
+                   var url1 = AddParams('id', $('#AccountId').val(), '/Lisence/Model?id='); //AccountName
+                   url1 = AddParams('name', $('#AccountName').val(), url1);
+                   window.parent.ControlIFrame(url1);
                 },
                 Delete: function () {
 
@@ -124,9 +126,8 @@
         };
         $(document).ready(function () {
 
-            
             var BindGridChecked = function () {
-                $('#b-edit,#b-auth,#b-del').addClass('disabled');
+                $('#b-edit,#b-del').addClass('disabled');
                 $('#checkall').bind('click', function () {
                     var check = $(this).attr("checked") == undefined ? false : true;
                     $("#example tbody tr input[type='checkbox']").each(function () {
@@ -136,7 +137,7 @@
                     });
                 });
             };
-            $('#b-edit,#b-del').on('click', function () {
+            $('#b-add,#b-edit,#b-del').on('click', function () {
                 if ($(this).hasClass('disabled')) return;
                 var action = $(this).attr('action'), val = '';
                 if (action != 'add') {
@@ -217,7 +218,7 @@
                               }
                           }
                     ]
-                      });
+            });
 
 
             $('.openBtn-txt').bind('click', function () {

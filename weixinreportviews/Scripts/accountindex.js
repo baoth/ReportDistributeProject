@@ -12,7 +12,7 @@
         }
 
         var selectedDom = $('#example tbody tr.selected td div');
-        return { id: selectedDom.attr('id'), name: selectedDom.attr('name') };
+        return { id: selectedDom.attr('v'), name: selectedDom.attr('n') };
     }
     function GetSelectedRowId() {
 
@@ -74,6 +74,7 @@
             if (ids.length != 1) {
                 return;
             }
+            debugger
             var selectedRow = GetSingleSelectedRowData();
             url = AddParams('id', ids[0], urllisence);
             url = AddParams('name', selectedRow.name, url);
