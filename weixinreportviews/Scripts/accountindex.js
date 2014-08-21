@@ -165,6 +165,9 @@ $(document).ready(function () {
                     PageAction(val)[action]();
                 });
             });
+            if (window.layerFilter) {
+                layer.close(window.layerFilter);
+            }
         },
         "aoColumns": [
                         { data: null, defaultContent: '', bSortable: false, sWidth: 5,

@@ -159,6 +159,65 @@ namespace weixinreportviews.Model
                 throw new Exception("不支持的类型解析");
             }
         }
+
+        /// <summary>
+        /// 客户登陆后台管理
+        /// </summary>
+        /// <param name="LoginKey">账户名</param>
+        /// <param name="Password">密码</param>
+        /// <returns>信息</returns>
+        public static CustomerLoginInfo Login(string LoginKey, string Password)
+        {
+            CustomerLoginInfo result=new CustomerLoginInfo();
+            DbSession session = General.CreateDbSession();
+            result.Account = session.Retrieve<SS_CompanyAccount>("LoginKey", LoginKey);
+            if (result.Account == null) result.Error = CustomerLoginErrorEnum.账户不存在;
+            else if (result.Account.Stoped) result.Error = CustomerLoginErrorEnum.账户停用;
+            else if (result.Account.Password.Trim() != Password.Trim()) result.Error = CustomerLoginErrorEnum.密码错误;
+            return result;
+        }
+
+        /// <summary>
+        /// 微信客户关注
+        /// </summary>
+        /// <param name="LoginKey">账户名</param>
+        /// <returns>信息</returns>
+        public static CustomerLoginInfo Attension(string LoginKey)
+        {
+            CustomerLoginInfo result = new CustomerLoginInfo();
+            DbSession session = General.CreateDbSession();
+            result.Account = session.Retrieve<SS_CompanyAccount>("LoginKey", LoginKey);
+            if (result.Account == null) result.Error = CustomerLoginErrorEnum.账户不存在;
+            else if (result.Account.Stoped) result.Error = CustomerLoginErrorEnum.账户停用;
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// 错误类型枚举
+    /// </summary>
+    public enum CustomerLoginErrorEnum
+    {
+        成功=0,
+        账户不存在=1,
+        账户停用=2,
+        密码错误=3
+    }
+
+    /// <summary>
+    /// 客户登陆或关注返回信息
+    /// </summary>
+    public class CustomerLoginInfo
+    {
+        public SS_CompanyAccount Account { get; set; }
+
+        private CustomerLoginErrorEnum _Error = CustomerLoginErrorEnum.成功;
+
+        public CustomerLoginErrorEnum Error
+        {
+            get { return _Error; }
+            set { _Error = value; }
+        }
     }
 
     public abstract class DbSession: QSmartSession
@@ -449,6 +508,37 @@ namespace weixinreportviews.Model
                      (QSmartOrderByEnum)Enum.Parse(typeof(QSmartOrderByEnum), allDir[i].ToLower()));
             }
             return result;
+        }
+    }
+
+    public class LoginInfo
+    {
+        private bool _Error = false;
+        /// <summary>
+        /// 是否错误
+        /// </summary>
+        public bool Error
+        {
+            get { return _Error; }
+            set { _Error = value; }
+        }
+
+        private string _ErrorMsg = string.Empty;
+        /// <summary>
+        /// 错误信息
+        /// </summary>
+        public string ErrorMsg
+        {
+            get { return _ErrorMsg; }
+            set { _ErrorMsg = value; }
+        }
+
+        private SS_CompanyAccount _Account = null;
+
+        public SS_CompanyAccount Account
+        {
+            get { return _Account; }
+            set { _Account = value; }
         }
     }
 }
