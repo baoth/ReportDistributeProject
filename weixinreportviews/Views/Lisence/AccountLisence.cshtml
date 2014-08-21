@@ -37,7 +37,7 @@
             return false;
         }
         var PageAction = function (id) {
-            var urllisence = '/Lisence/Model';
+            var urllisence = '/Lisence/Model?ActionSource=1';
             function AddParams(name, val, url) {
                 var char = url.indexOf('?') >= 0 ? "&" : "?"
                 return url + char + name + "=" + val;
@@ -58,6 +58,11 @@
                 return selectids;
             }
             return {
+                Add: function () {
+                    var url1 = AddParams('accountid', $('#AccountId').val(), '/Lisence/Model?id=&ActionSource=1'); //AccountName
+                    url1 = AddParams('accountname', $('#AccountName').val(), url1);
+                   window.parent.ControlIFrame(url1);
+                },
                 Delete: function () {
 
                     var ids = GetSelectedRowId();
@@ -121,9 +126,8 @@
         };
         $(document).ready(function () {
 
-            
             var BindGridChecked = function () {
-                $('#b-edit,#b-auth,#b-del').addClass('disabled');
+                $('#b-edit,#b-del').addClass('disabled');
                 $('#checkall').bind('click', function () {
                     var check = $(this).attr("checked") == undefined ? false : true;
                     $("#example tbody tr input[type='checkbox']").each(function () {
@@ -133,7 +137,7 @@
                     });
                 });
             };
-            $('#b-edit,#b-del').on('click', function () {
+            $('#b-add,#b-edit,#b-del').on('click', function () {
                 if ($(this).hasClass('disabled')) return;
                 var action = $(this).attr('action'), val = '';
                 if (action != 'add') {
@@ -214,7 +218,7 @@
                               }
                           }
                     ]
-                      });
+            });
 
 
             $('.openBtn-txt').bind('click', function () {
@@ -373,6 +377,7 @@
 
     <div>       
         <input id="AccountId" name="AccountId" type="hidden" value="@ViewData["AccountId"]" />
+        <input id="AccountName" name="AccountName" type="hidden" value="@ViewData["AccountName"]" />
     </div>
 </body>
 </html>

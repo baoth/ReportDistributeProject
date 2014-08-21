@@ -51,13 +51,15 @@ using QSmart.Core.DataBase;
                 ViewData.Add("AccountId", accountid);
                 ViewData.Add("AccountName", accountname);
             }
+            ViewData.Add("ActionSource", Request["ActionSource"] + "");
             return View("Model");
         }
 
         [HttpGet]
-        public ActionResult AccountLisence(string id)
+        public ActionResult AccountLisence(string id,string name)
         {
             ViewData.Add("AccountId", id);
+            ViewData.Add("AccountName", name);
             return View("AccountLisence");
         }
 
