@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using weixinreportviews.Model;
 using System.Reflection;
 using QSmart.Core.Object;
+using QSmart.Core.DataBase;
 
 namespace weixinreportviews.Controllers.Admin
 {
@@ -133,7 +134,7 @@ namespace weixinreportviews.Controllers.Admin
        //[HttpPost]
         public JsonResult GridDatas()
         {
-            DataTablesParameter dtp = General.CreateInstance<DataTablesParameter>(Request);
+            AccountDataTablesParameter dtp = General.CreateInstance<AccountDataTablesParameter>(Request);
             int totalcount = 0;
             DbSession session = General.CreateDbSession();
             var rows = session.PaginationRetrieve<SS_CompanyAccount>(dtp.iDisplayStart,
@@ -164,6 +165,41 @@ namespace weixinreportviews.Controllers.Admin
             });
         }
     }
-    
-    
+
+    public class AccountDataTablesParameter : DataTablesParameter
+    {
+        protected override List<QSmartQueryFilterCondition> ExactSearch(PropertyInfo[] pis)
+        {
+            if (this.exactFilter == null || this.exactSearch == null || this.exactFilter.Length == 0
+               || this.exactSearch.Length == 0 || this.exactSearch.Length != this.exactFilter.Length) return null;
+
+            List<QSmartQueryFilterCondition> result = new List<QSmartQueryFilterCondition>();
+            for (int i = 0; i < this.exactFilter.Length; i++)
+            {
+                var colName = this.exactFilter[i].ToLower();
+                
+                if (colName == "Stoped".ToLower())
+                {
+                    result.Add(new QSmartQueryFilterCondition
+                    {
+                        Column = new QSmartQueryColumn { columnName = colName, dataType = typeof(int) },
+                        Operator = QSmartOperatorEnum.equal,
+                        Connector = QSmartConnectorEnum.and,
+                        Values = new List<object> { this.exactSearch[i] }
+                    });
+                }
+                else if (colName == "CreateDate".ToLower())
+                {
+                    result.Add(new QSmartQueryFilterCondition
+                    {
+                        Column = new QSmartQueryColumn { columnName = "year(" + colName + ")", dataType = typeof(int) },
+                        Operator = QSmartOperatorEnum.equal,
+                        Connector = QSmartConnectorEnum.and,
+                        Values = new List<object> { this.exactSearch[i] }
+                    });
+                }   
+            }
+            return result;
+        }
+    }
 }
