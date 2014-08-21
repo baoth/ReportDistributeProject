@@ -51,6 +51,7 @@ using QSmart.Core.DataBase;
                 ViewData.Add("AccountId", accountid);
                 ViewData.Add("AccountName", accountname);
             }
+            ViewData.Add("ActionSource", Request["ActionSource"] + "");
             return View("Model");
         }
 

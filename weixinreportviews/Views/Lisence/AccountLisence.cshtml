@@ -37,7 +37,7 @@
             return false;
         }
         var PageAction = function (id) {
-            var urllisence = '/Lisence/Model?ac=1';
+            var urllisence = '/Lisence/Model?ActionSource=1';
             function AddParams(name, val, url) {
                 var char = url.indexOf('?') >= 0 ? "&" : "?"
                 return url + char + name + "=" + val;
@@ -59,7 +59,7 @@
             }
             return {
                 Add: function () {
-                   var url1 = AddParams('id', $('#AccountId').val(), '/Lisence/Model?id=&ac=1'); //AccountName
+                    var url1 = AddParams('id', $('#AccountId').val(), '/Lisence/Model?id=&ActionSource=1'); //AccountName
                    url1 = AddParams('name', $('#AccountName').val(), url1);
                    window.parent.ControlIFrame(url1);
                 },
