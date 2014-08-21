@@ -107,6 +107,11 @@
     <Content Include="Content\Css\jquery.toolbars.css" />
     <Content Include="Content\Css\layer.css" />
     <Content Include="Content\Css\public.css" />
+    <Content Include="Content\Css\Switch\bootstrap-switch.css" />
+    <Content Include="Content\Css\Switch\bootstrap-switch.min.css" />
+    <Content Include="Content\Css\Switch\bootstrap.min.css" />
+    <Content Include="Content\Css\Switch\highlight.css" />
+    <Content Include="Content\Css\Switch\main.css" />
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
     <Content Include="Content\Img\back_enabled_hover.png" />
@@ -157,6 +162,12 @@
     <Content Include="Scripts\layer.ext.js" />
     <Content Include="Scripts\layer.js" />
     <Content Include="Scripts\layer.min.js" />
+    <Content Include="Scripts\Switch\bootstrap-switch.js" />
+    <Content Include="Scripts\Switch\bootstrap-switch.min.js" />
+    <Content Include="Scripts\Switch\bootstrap.min.js" />
+    <Content Include="Scripts\Switch\highlight.js" />
+    <Content Include="Scripts\Switch\jquery.min.js" />
+    <Content Include="Scripts\Switch\main.js" />
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Model.cshtml" />
