@@ -159,6 +159,50 @@ namespace weixinreportviews.Model
                 throw new Exception("不支持的类型解析");
             }
         }
+
+        /// <summary>
+        /// 客户登陆后台管理
+        /// </summary>
+        /// <param name="LoginKey">账户名</param>
+        /// <param name="Password">密码</param>
+        /// <returns>信息</returns>
+        public static CustomerLoginInfo Login(string LoginKey, string Password)
+        {
+            CustomerLoginInfo result=new CustomerLoginInfo();
+            DbSession session = General.CreateDbSession();
+            result.Account = session.Retrieve<SS_CompanyAccount>("LoginKey", LoginKey);
+            result.Error = !(result.Account != null && !result.Account.Stoped && Password == result.Account.Password);
+            result.ErrorMsg = result.Account == null ? "账户不存在，请联系客服人员解决。" :
+                result.Account.Stoped ? "账户已停用，请联系客服人员解决。" :
+                result.Account.Password != Password ? "账户密码错误。" : string.Empty;
+            return result;
+        }
+
+        /// <summary>
+        /// 微信客户关注
+        /// </summary>
+        /// <param name="LoginKey">账户名</param>
+        /// <returns>信息</returns>
+        public static CustomerLoginInfo Attension(string LoginKey)
+        {
+            CustomerLoginInfo result = new CustomerLoginInfo();
+            DbSession session = General.CreateDbSession();
+            result.Account = session.Retrieve<SS_CompanyAccount>("LoginKey", LoginKey);
+            result.Error = !(result.Account != null && !result.Account.Stoped);
+            result.ErrorMsg = result.Account == null ? "您关注的账户不存在，请联系客服人员解决。" :
+                result.Account.Stoped ? "您关注的账户已停用，请联系客服人员解决。" : string.Empty;
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// 客户登陆或关注返回信息
+    /// </summary>
+    public class CustomerLoginInfo
+    {
+        public SS_CompanyAccount Account { get; set; }
+        public bool Error { get; set; }
+        public string ErrorMsg { get; set; }
     }
 
     public abstract class DbSession: QSmartSession
@@ -449,6 +493,37 @@ namespace weixinreportviews.Model
                      (QSmartOrderByEnum)Enum.Parse(typeof(QSmartOrderByEnum), allDir[i].ToLower()));
             }
             return result;
+        }
+    }
+
+    public class LoginInfo
+    {
+        private bool _Error = false;
+        /// <summary>
+        /// 是否错误
+        /// </summary>
+        public bool Error
+        {
+            get { return _Error; }
+            set { _Error = value; }
+        }
+
+        private string _ErrorMsg = string.Empty;
+        /// <summary>
+        /// 错误信息
+        /// </summary>
+        public string ErrorMsg
+        {
+            get { return _ErrorMsg; }
+            set { _ErrorMsg = value; }
+        }
+
+        private SS_CompanyAccount _Account = null;
+
+        public SS_CompanyAccount Account
+        {
+            get { return _Account; }
+            set { _Account = value; }
         }
     }
 }
