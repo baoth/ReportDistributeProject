@@ -78,7 +78,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Admin\HomeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
-    <Compile Include="Controllers\LogonController.cs" />
+    <Compile Include="Controllers\Customer\LogonController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -222,7 +222,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\Customer\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
