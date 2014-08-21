@@ -54,45 +54,27 @@
         submit: function () {
             if (!n()) return;
             var e = m.getVal();
-            t.post("/cgi-bin/login?lang=zh_CN", {
-                username: e.account,
-                pwd: t.md5(e.password.substr(0, 16)),
-                imgcode: c.data("isHide") ? "" : e.verify,
-                f: "json"
+            t.post("/Logon/Login", {
+                loginkey: e.account,
+                password: e.password
             }, function (t) {
-                var n = t.base_resp.ret + "", i;
+                debugger
+                var n = t.error + "", i;
                 u.hasClass("checkbox_checked") ? WXM.Helpers.setCookie("remember_acct", e.account, 30) : WXM.Helpers.setCookie("remember_acct", "EXPIRED", -1);
                 switch (n) {
-                    case "-1":
-                        i = "系统错误，请稍候再试。";
+                
+                    case "2":
+                        i = "帐号停用。";
                         break;
-                    case "-2":
-                        i = "帐号或密码错误。";
+                    case "3":
+                        i = "密码错误。";
                         break;
-                    case "-23":
-                        i = "您输入的帐号或者密码不正确，请重新输入。";
-                        break;
-                    case "-21":
-                        i = "不存在该帐户。";
-                        break;
-                    case "-7":
-                        i = "您目前处于访问受限状态。";
-                        break;
-                    case "-8":
-                        i = "请输入图中的验证码", r();
-                        return;
-                    case "-27":
-                        i = "您输入的验证码不正确，请重新输入", r();
-                        break;
-                    case "-26":
-                        i = "该公众会议号已经过期，无法再登录使用。";
+                    case "1":
+                        i = "帐户不存在。";
                         break;
                     case "0":
-                        i = "成功登录，正在跳转...", location.href = t.redirect_url;
+                        i = "成功登录，正在跳转...", location.href ='/Home/Index';
                         return;
-                    case "-25":
-                        i = '海外帐号请在公众平台海外版登录,<a href="http://admin.wechat.com/">点击登录</a>';
-                        break;
                     default:
                         i = "未知的返回。";
                         return;
