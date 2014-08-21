@@ -78,6 +78,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Admin\HomeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\LogonController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -96,6 +97,8 @@
     <Content Include="Content\Css\bootstrap.css" />
     <Content Include="Content\Css\bootstrap.icons.css" />
     <Content Include="Content\Css\button.css" />
+    <Content Include="Content\Css\Logon\form.css" />
+    <Content Include="Content\Css\Logon\logon.css" />
     <Content Include="Content\Css\select.css" />
     <Content Include="Content\Css\dataTables.editor.min.css" />
     <Content Include="Content\Css\DateTime\bootstrap-datetimepicker.css" />
@@ -114,9 +117,11 @@
     <Content Include="Content\Css\Switch\bootstrap.min.css" />
     <Content Include="Content\Css\Switch\highlight.css" />
     <Content Include="Content\Css\Switch\main.css" />
+    <Content Include="Content\favicon.ico" />
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
     <Content Include="Content\Img\back_enabled_hover.png" />
+    <Content Include="Content\Img\bg_login_banner_v51e5b3a.jpg" />
     <Content Include="Content\Img\favicon.ico" />
     <Content Include="Content\Img\forward_disabled.png" />
     <Content Include="Content\Img\forward_enabled.png" />
@@ -135,6 +140,7 @@
     <Content Include="Content\Img\layerskin\xubox_loading3.gif" />
     <Content Include="Content\Img\layerskin\xubox_title0.png" />
     <Content Include="Content\Img\manage_01.png" />
+    <Content Include="Content\Img\page_login_old_z1fcd41.png" />
     <Content Include="Content\Img\search.png" />
     <Content Include="Content\Img\search3.png" />
     <Content Include="Content\Img\sort_asc.png" />
@@ -171,6 +177,7 @@
     <Content Include="Scripts\Switch\highlight.js" />
     <Content Include="Scripts\Switch\jquery.min.js" />
     <Content Include="Scripts\Switch\main.js" />
+    <Content Include="Scripts\logon.js" />
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Model.cshtml" />
@@ -184,6 +191,7 @@
     </Content>
     <Content Include="Views\Lisence\model.cshtml" />
     <Content Include="Views\Lisence\AccountLisence.cshtml" />
+    <Content Include="Views\Logon\Index.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config" />
