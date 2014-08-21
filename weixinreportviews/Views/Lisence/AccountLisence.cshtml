@@ -59,8 +59,8 @@
             }
             return {
                 Add: function () {
-                    var url1 = AddParams('id', $('#AccountId').val(), '/Lisence/Model?id=&ActionSource=1'); //AccountName
-                   url1 = AddParams('name', $('#AccountName').val(), url1);
+                    var url1 = AddParams('accountid', $('#AccountId').val(), '/Lisence/Model?id=&ActionSource=1'); //AccountName
+                    url1 = AddParams('accountname', $('#AccountName').val(), url1);
                    window.parent.ControlIFrame(url1);
                 },
                 Delete: function () {
