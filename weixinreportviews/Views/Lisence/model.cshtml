@@ -245,7 +245,15 @@
             $("#LisencePoint").numeral();
         }
         function CloseBack() {
+            var as = $("#ActionSource").val();
             var urlaccount = '/Lisence/Grid';
+            
+            if (as) {
+                var id = $("#AccountId").val();
+                var name = $("#AccountName").val();
+                urlaccount = '/Lisence/AccountLisence?id=' & id & 'name='&name;
+            }
+            
             window.parent.ControlIFrame(urlaccount);
 
         }
@@ -287,7 +295,7 @@
             
              <label>公司 &nbsp </label>  
              <div>                             
-             <input  maxlength="50" id="LoginKey" disabled="disabled" name="LoginKey" value="@ViewData["AccountName"]" class="input-xlarge" type="text" />
+             <input  maxlength="50" id="AccountName" disabled="disabled" name="LoginKey" value="@ViewData["AccountName"]" class="input-xlarge" type="text" />
                                   
              </div>          
                    
@@ -496,6 +504,7 @@
         <input  id="Creator" name="Creator" type="hidden" value="@ViewData["Creator"]" /> 
         <input id="Id" name="Id" type="hidden" value="@ViewData["Id"]" />
         <input id="ProductKind" value="@ViewData["ProductKind"]"  name="LoginKey"  type="hidden" />
+        <input id="ActionSource" value="@ViewData["ActionSource"]"  name="ActionSource"  type="hidden" />
                     
 
       </div>
