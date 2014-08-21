@@ -9,27 +9,32 @@ namespace weixinreportviews.Model
     /// <summary>
     /// 客户绑定信息微信Id类
     /// </summary>
-    public class CS_BindUser
+    public class CS_BindUser : QSmartEntity
     {
-        private int _Id = 0;
-        [PrimaryKey]
-        [AutoIncrement]
-        public int Id
-        {
-            get { return _Id; }
-            set { _Id = value; }
-        }
-
         private string _OpenId = string.Empty;
-
+        /// <summary>
+        /// 客户微信OpenId
+        /// </summary>
+        [PrimaryKey]
         public string OpenId
         {
             get { return _OpenId; }
             set { _OpenId = value; }
         }
 
-        private Guid _AccountId = Guid.Empty;
+        private ProductKindEnum _ProductKind = ProductKindEnum.微信第一表;
+        /// <summary>
+        /// 产品类型
+        /// </summary>
+        [PrimaryKey]
+        public ProductKindEnum ProductKind
+        {
+            get { return _ProductKind; }
+            set { _ProductKind = value; }
+        }
 
+        private Guid _AccountId = Guid.Empty;
+        [PrimaryKey]
         public Guid AccountId
         {
             get { return _AccountId; }
@@ -44,14 +49,5 @@ namespace weixinreportviews.Model
             set { _BindDate = value; }
         }
 
-        private ProductKindEnum _ProductKind = ProductKindEnum.微信第一表;
-        /// <summary>
-        /// 产品类型
-        /// </summary>
-        public ProductKindEnum ProductKind
-        {
-            get { return _ProductKind; }
-            set { _ProductKind = value; }
-        }
     }
 }
