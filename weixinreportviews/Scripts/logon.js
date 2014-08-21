@@ -70,7 +70,7 @@
                         i = "密码错误。";
                         break;
                     case "1":
-                        i = "不存在该帐户。";
+                        i = "帐户不存在。";
                         break;
                     case "0":
                         i = "成功登录，正在跳转...", location.href ='/Home/Index';
