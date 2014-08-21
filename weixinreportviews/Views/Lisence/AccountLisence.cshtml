@@ -58,6 +58,9 @@
                 return selectids;
             }
             return {
+                Add: function () {
+                    window.parent.ControlIFrame(urlaccount);
+                },
                 Delete: function () {
 
                     var ids = GetSelectedRowId();
@@ -373,6 +376,7 @@
 
     <div>       
         <input id="AccountId" name="AccountId" type="hidden" value="@ViewData["AccountId"]" />
+        <input id="AccountName" name="AccountName" type="hidden" value="@ViewData["AccountName"]" />
     </div>
 </body>
 </html>
