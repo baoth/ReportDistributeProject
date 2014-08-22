@@ -130,7 +130,7 @@
             return true;
         }
         function CheckDateTime() {
-            debugger
+            
             var EffectiveDate = $("#EffectiveDate").val();
             var ExpiryDate = $("#ExpiryDate").val();
             if (EffectiveDate && ExpiryDate) {
@@ -157,7 +157,7 @@
         }
 
         function Save() {
-            debugger
+            
             //检查
             if (Check() == false) return;
             var AccountId = $("#AccountId").val();
@@ -168,8 +168,9 @@
             var Creator = $("#Creator").val();
             var EffectiveDate = $("#EffectiveDate").val();
             //var EffectiveYear = $("#EffectiveYear").val();
-            var ExpiryDate = $("#ExpiryDate").val();
+            var ExpiryDate = $("#ExpiryDate").val();            
             var Stoped = $("#CheckSwitch").bootstrapSwitch("state");
+            Stoped = !Stoped;
             var data = { Id: Id,AccountId:AccountId, ProductKind: ProductKind, OrderNumber: OrderNumber, CreateDate: CreateDate, Creator: Creator, EffectiveDate: EffectiveDate,ExpiryDate: ExpiryDate, Stoped: Stoped };
             $.ajax({
                 url: "/Lisence/Save",
@@ -202,7 +203,8 @@
             var flag = false;
             if (Stoped.toLowerCase()=="true") {
                 flag = true;
-             }
+            }
+            flag = !flag;
             $('#CheckSwitch').bootstrapSwitch('state', flag); // true || false
         }
         function Init() {
@@ -231,7 +233,7 @@
             });
             $("#LisencePoint").numeral();
             //开关           
-            $("#CheckSwitch").bootstrapSwitch("onText", "开启");
+            $("#CheckSwitch").bootstrapSwitch("onText", "启用");
             $("#CheckSwitch").bootstrapSwitch("offText", "停用");
         }
         function CloseBack() {
@@ -483,7 +485,7 @@
             
             <td class="tdText">
             
-            <label>可用  &nbsp </label>           
+            <label> &nbsp </label>           
             <div > 
                 @*  <input data-toggle="switch" type="checkbox" id="Stoped" name="Stoped" checked="@ViewData["Stoped"]" />
 *@
