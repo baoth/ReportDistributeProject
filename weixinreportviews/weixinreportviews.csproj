@@ -77,6 +77,7 @@
     <Compile Include="Controllers\Admin\LisenceController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Admin\HomeController.cs" />
+    <Compile Include="Controllers\Customer\FirstReportProduct\FReportHomeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\Customer\LogonController.cs" />
     <Compile Include="Global.asax.cs">
@@ -200,6 +201,7 @@
     <Content Include="Views\Lisence\model.cshtml" />
     <Content Include="Views\Lisence\AccountLisence.cshtml" />
     <Content Include="Views\Logon\Index.cshtml" />
+    <Content Include="Views\FReportHome\Index.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config" />

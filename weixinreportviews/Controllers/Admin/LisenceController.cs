@@ -50,6 +50,9 @@ using QSmart.Core.DataBase;
             {
                 ViewData.Add("AccountId", accountid);
                 ViewData.Add("AccountName", accountname);
+                ViewData.Add("LisencePoint", "1");
+                ViewData.Add("EffectiveDate", DateTime.Now.ToShortDateString());
+                ViewData.Add("ExpiryDate", DateTime.Now.AddYears(1).ToShortDateString());
             }
             ViewData.Add("ActionSource", Request["ActionSource"] + "");
             return View("Model");
