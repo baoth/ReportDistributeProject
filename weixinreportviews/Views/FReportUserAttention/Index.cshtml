@@ -9,7 +9,19 @@
     <title></title>  
     <style>
       *{padding: 0px;margin: 0px; font-size: 13px;font-family:"微软雅黑","SimSun","Arial Narrow";color: #444;}
+       .Operate-button ul {
+        margin:0;
+        padding:0;
+        list-style:none;
+        }
+       .Operate-button li {
+        float:left;
+        padding:10px;
+        }
    </style> 
+
+ 
+
    <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/jquery.dataTables.css?r=7" rel="stylesheet" type="text/css" />
@@ -21,6 +33,12 @@
         <link href="../../Content/Css/fliter.css?r=4" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery.toolbar.js" type="text/javascript"></script>
     <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
+
+    @*开关按钮引用start *@
+    <link href="../../Content/Css/Switch/bootstrap-switch.css" rel="stylesheet" type="text/css" /> 
+   @* <script src="../../Scripts/Switch/jquery.min.js" type="text/javascript"></script> *@
+    <script src="../../Scripts/Switch/bootstrap-switch.js" type="text/javascript"></script>   
+    @*  开关按钮 end*@
 
     <script type="text/javascript">
 
@@ -188,7 +206,9 @@
                     });
                     if (window.layerFilter) {
                         layer.close(window.layerFilter);
+
                     }
+                    $.setSwitch(); 
                 },
                 "aoColumns": [
                               { data: null, defaultContent: '', bSortable: false, sWidth: 5,
@@ -199,16 +219,22 @@
                             { "data": "OpenId", "sName": 'OpenId', "sTitle": "客户微信OpenId", "bVisible": false },
                             { "data": "ProductKind", "sName": 'ProductKind', "sTitle": "微信产品类型", "bVisible": false },
                             { "data": "AccountId", "sName": 'AccountId', "sTitle": "公司Id", "bVisible": false },
-                            { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号","bVisible": false },
 
-                            { "data": "AccountName", "sName": 'AccountName', "sTitle": "照片", "sWidth": 100 },
-                            { "data": "Name", "sName": 'Name', "sTitle": "昵称", "sWidth": 120 },
-                            { "data": "Binded", "sName": 'Binded', "bSortable": false, "sTitle": "绑定", "sWidth": 60 },                            
-                            { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
-                              "mRender": function (val, isShow, row) {
-                                  return '<div class="settings-button" v="' + val + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
-                              }
-                          }
+                            { "data": "HeadImgUrl", "sName": 'HeadImgUrl', "sTitle": "照片", "sWidth": 100 },
+                            { "data": "NickName", "sName": 'NickName', "sTitle": "昵称", "sWidth": 120 },
+                            { "data": "BindedDisplay", "sName": 'Binded', "bSortable": false, "sTitle": "绑定", "sWidth": 60 },
+                            { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 300,
+                                "mRender": function (val, isShow, row) {
+                                   
+                                    var div = '<div class="Operate-button" v="' + val + '">';
+                                    div += '<ul class="dtOperate">';
+                                    div += '<li><input type="checkbox" name="CheckSwitch" accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" id="CheckSwitch"' + val + ' name="CheckSwitch"  /></li>';
+                                    div += '<li> <a href="#" id="b-refresh" action="Refresh" class="button button-rounded button-flat-primary">刷新</a> </li>';
+                                    div += '</ul>';
+                                    div += '</div>';
+                                    return div;
+                                }
+                            }
                     ]
             });
 
@@ -227,6 +253,7 @@
             window.filterFiled = {};
             window.keyToText = {};
             $('.mod_category_item li a').bind('click', function () {
+                debugger
                 var item = $(this), text = this.innerText;
                 var key = item.attr('keyCode');
                 var type = item.parent().parent().attr('actionField');
@@ -282,7 +309,57 @@
                 settings.oLanguage.exactSearch = s.join(',');
                 $('#example').dataTable().fnDraw();
             }
+
+           
+
         });
+
+        $.setSwitch = function () {
+            debugger
+            $("input[name='CheckSwitch']").bootstrapSwitch();
+            //开关           
+            $("input[name='CheckSwitch']").bootstrapSwitch("onText", "绑定");
+            $("input[name='CheckSwitch']").bootstrapSwitch("offText", "解绑");
+            $("input[name='CheckSwitch']").bootstrapSwitch("onSwitchChange", function (value) {
+                var msg = "确定要解绑吗？";
+                var state = $(value.target).bootstrapSwitch("state");
+                if (state==true) {
+                    msg="确定要绑定吗？";
+                }
+                //string openid,ProductKindEnum productKind,Guid accountId,bool bandState
+                var openid=$(value.target).attr('openid');
+                var productKind=$(value.target).attr('productKind');
+                var accountId=$(value.target).attr('accountId');
+                var argData = { "openid": openid, "productKind": productKind, "accountId": accountId };
+                $.ajaxSave(msg,argData);
+                
+            });
+        }
+        $.ajaxSave = function (msg, argData) {
+            layer.confirm(msg, function () {
+                layer.load('处理中..', 0);
+                $.ajax({
+                    type: "post",
+                    url: "/FReportUserAttention/BindUpdate",
+                    data: argData, // { "openid": ids.join(',') },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.result == 1) {
+                            layer.alert(data.msg, 3);
+                            layer.closeAll();
+                        }
+                        else {
+                            layer.closeAll();
+                            $("#example").dataTable().fnDraw();
+                        }
+                    },
+                    error:function()
+                    {
+                        layer.closeAll();
+                    }
+                });
+            });
+        }
     </script>
 
 </head>
@@ -301,7 +378,7 @@
       <div id="zdcontext" class="mod_sear_menu mb30">                                                                                                    
         <div class="mod_sear_list" >
             <h3>绑定状态：</h3>
-            <ul class="mod_category_item" actionField="StateCode">
+            <ul class="mod_category_item" actionField="Binded">
                 <li class="selected"> <a href="#" keyCode="-1">全部</a> </li>
                 <li> <a href="#" keyCode="0">未绑定</a> </li>
                 <li> <a href="#" keyCode="1">已绑定</a> </li>                
