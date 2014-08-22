@@ -176,10 +176,13 @@
             var Creator = $("#Creator").val();
             var EffectiveDate = $("#EffectiveDate").val();
             //var EffectiveYear = $("#EffectiveYear").val();
-            var ExpiryDate = $("#ExpiryDate").val();            
+            var ExpiryDate = $("#ExpiryDate").val();
+            var LisencePoint = $("#LisencePoint").val();   
+            debugger       
             var Stoped = $("#CheckSwitch").bootstrapSwitch("state");
             Stoped = !Stoped;
-            var data = { Id: Id,AccountId:AccountId, ProductKind: ProductKind, OrderNumber: OrderNumber, CreateDate: CreateDate, Creator: Creator, EffectiveDate: EffectiveDate,ExpiryDate: ExpiryDate, Stoped: Stoped };
+
+            var data = { Id: Id, AccountId: AccountId, ProductKind: ProductKind, OrderNumber: OrderNumber, CreateDate: CreateDate, Creator: Creator, EffectiveDate: EffectiveDate, ExpiryDate: ExpiryDate, Stoped: Stoped, LisencePoint: LisencePoint };
             $.ajax({
                 url: "/Lisence/Save",
                 data: data,
