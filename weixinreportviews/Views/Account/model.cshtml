@@ -7,7 +7,7 @@
 <html>
 <head>
     <title></title>
- 
+    <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/bootstrap.css" rel="stylesheet" type="text/css" />
      <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />   
@@ -32,7 +32,7 @@
                 $("#btn_save").hide();
             }
             else {
-
+             
                 $("#btn_signIn").hide(); //
                 $("#btn_save").show();
             }           
@@ -171,7 +171,9 @@
             var Creator = $("#Creator").val();
             var CreateDate = $("#CreateDate").val();           
             var Address = $("#Address").val();
-            var Stoped = $("#CheckSwitch").bootstrapSwitch("state");           
+            var Stoped = $("#CheckSwitch").bootstrapSwitch("state");
+            
+            Stoped = !Stoped;   
             var Id = $("#GUID").val();
             var data = { Name: Name, OrderNumber: OrderNumber, LoginKey: LoginKey, Address: Address, Phone: Phone, Stoped: Stoped, Password: Password, Id: Id, Creator: Creator, CreateDate: CreateDate };
             $.ajax({
@@ -204,13 +206,14 @@
             }
             $("#Phone").numeral();
             //开关           
-            $("#CheckSwitch").bootstrapSwitch("onText", "开启");
+            $("#CheckSwitch").bootstrapSwitch("onText", "启用");
             $("#CheckSwitch").bootstrapSwitch("offText", "停用");
             var Stoped = $("#Stoped").val();
             var flag = false;
-            if (Stoped.toLowerCase() == "true") {
+            if (Stoped.toLowerCase() == "true") {//ture 是停用 即对应
                 flag = true;
             }
+            flag = !flag;//取反
             $('#CheckSwitch').bootstrapSwitch('state', flag); // true || false
         }
         function CloseBack() {
@@ -415,7 +418,15 @@
         .showMsg{ height:15px;
                    text-align:left;
                 }
-        
+        a:visited{
+        text-decoration:none;
+        }
+        a:hover{
+        text-decoration:none;
+        }
+        a:active{
+        text-decoration:none;
+        }
        
     </style>
     
@@ -612,7 +623,7 @@
             
             <td class="tdText">
             
-            <label>可用  &nbsp </label>           
+            <label>  &nbsp </label>           
             <div > 
                 <input type="checkbox" id="CheckSwitch" name="CheckSwitch"  />
                 
