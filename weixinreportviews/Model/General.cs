@@ -75,6 +75,10 @@ namespace weixinreportviews.Model
             {
                 return value;
             }
+            else if (PropertyType.IsEnum)
+            {
+                return int.Parse(value);
+            }
             else if (PropertyType == typeof(Int16) || PropertyType == typeof(Nullable<Int16>))
             {
                 Int16 result = 0;
