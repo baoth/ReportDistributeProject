@@ -91,7 +91,7 @@ namespace weixinreportviews.Model
 
         public List<QObject> CreateDeleteCommand()
         {
-            if (string.IsNullOrEmpty(this.OpenId) && this.ProductKind!=null && this.AccountId!=Guid.Empty)
+            if (!string.IsNullOrEmpty(this.OpenId) && this.ProductKind!=null && this.AccountId!=Guid.Empty)
             {
                 QSmartQuery QueryA = new QSmartQuery();
 
