@@ -50,6 +50,10 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         {
             return Json(new { result = 0 });
         }
+        public ActionResult UploadView ()
+        {
+           return View("Upload");
+        }
         public JsonResult Upload() 
         {
             var files = Request.Files;

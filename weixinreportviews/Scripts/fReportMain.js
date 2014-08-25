@@ -39,7 +39,7 @@
                 layer.load('删除中..', 0);
                 $.ajax({
                     type: "post",
-                    url: "/Account/Delete",
+                    url: "/FReportMain/Delete",
                     data: { "id": ids.join(',') },
                     dataType: "json",
                     success: function (data) {
@@ -68,14 +68,14 @@
         Add: function () {
             window.parent.ControlIFrame(urlaccount);
         },
-        SetAuth: function () {
+        CreateHtml: function () {
             var ids = GetSelectedRowId();
             if (ids.length != 1) {
                 return;
             }
             debugger
             var selectedRow = GetSingleSelectedRowData();
-            url = AddParams('id', ids[0], urllisence);
+            url = AddParams('id', ids[0], '/FReportMain/UploadView');
             url = AddParams('name', selectedRow.name, url);
             window.parent.ControlIFrame(url);
         },
@@ -171,28 +171,27 @@ $(document).ready(function () {
             }
         },
         "aoColumns": [
-                        { data: null, defaultContent: '', bSortable: false, sWidth: 5,
-                            "mRender": function (val, isShow, row) {
-                                return '<input style="margin-left: 7px;" type="checkbox" id="' + val + '" onClick="onDataGridCheck(this)"/>'
-                            }
-                        },
-                        { "data": "OrderNumber", "sName": 'OrderNumber', "sTitle": "订单号" },
-                        { "data": "Name", "sName": 'Name', "sTitle": "公司", "sWidth": 250 },
-                        { "data": "LoginKey", "sName": 'LoginKey', "sTitle": "账户", "sWidth": 120 },
-                        { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
-                        { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
-                        { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
-                            "mRender": function (val, isShow, row) {
-                                return '<div class="settings-button" v="' + val + '" n="' + row['Name'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
-                            }
-                        }
-                    ]
+            { data: null, defaultContent: '', bSortable: false, sWidth: 5,
+                "mRender": function (val, isShow, row) {
+                    return '<input style="margin-left: 7px;" type="checkbox" id="' + val + '" onClick="onDataGridCheck(this)"/>'
+                }
+            },  
+            { "data": "Title", "sName": 'Title', "sTitle": "标题", "sWidth": 250 },
+            { "data": "ReportKey", "sName": 'ReportKey', "sTitle": "关键字", "sWidth": 90 },
+            { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
+            { "data": "BuildedDisplay", "sName": 'Builded', "sTitle": "生成", "sWidth": 70 }, 
+            { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
+            { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
+                "mRender": function (val, isShow, row) {
+                    return '<div class="settings-button" v="' + val + '" n="' + row['Name'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                }
+            }
+        ]
     });
     $('#b-add,#b-edit,#b-del,#b-auth').on('click', function () {
         if ($(this).hasClass('disabled')) return;
         var action = $(this).attr('action'), val = '';
         if (action != 'add') {
-
             val = "";
         }
         PageAction(val)[action]();
