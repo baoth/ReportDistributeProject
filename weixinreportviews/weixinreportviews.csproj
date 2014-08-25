@@ -86,6 +86,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Model\CS_BindUser.cs" />
+    <Compile Include="Model\CS_FirstReport.cs" />
     <Compile Include="Model\CS_UserAttention.cs" />
     <Compile Include="Model\General.cs" />
     <Compile Include="Model\SS_CompanyAccount.cs" />
