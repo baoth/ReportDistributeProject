@@ -101,18 +101,21 @@ namespace weixinreportviews.Model
                 {
                     Column = new QSmartQueryColumn { columnName = "OpenId", dataType = typeof(string) },
                     Operator = QSmartOperatorEnum.equal,
+                    Connector= QSmartConnectorEnum.and,
                     Values = new List<object> { this.OpenId }
                 });
                 QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
                 {
                     Column = new QSmartQueryColumn { columnName = "ProductKind", dataType = typeof(ProductKindEnum) },
                     Operator = QSmartOperatorEnum.equal,
+                    Connector = QSmartConnectorEnum.and,
                     Values = new List<object> { this.ProductKind }
                 });
                 QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
                 {
                     Column = new QSmartQueryColumn { columnName = "AccountId", dataType = typeof(Guid) },
                     Operator = QSmartOperatorEnum.equal,
+                    Connector = QSmartConnectorEnum.and,
                     Values = new List<object> { this.AccountId }
                 });
 
@@ -124,18 +127,21 @@ namespace weixinreportviews.Model
                 {
                     Column = new QSmartQueryColumn { columnName = "OpenId", dataType = typeof(string) },
                     Operator = QSmartOperatorEnum.equal,
+                    Connector = QSmartConnectorEnum.and,
                     Values = new List<object> { this.OpenId }
                 });
                 QueryB.FilterConditions.Add(new QSmartQueryFilterCondition
                 {
                     Column = new QSmartQueryColumn { columnName = "ProductKind", dataType = typeof(ProductKindEnum) },
                     Operator = QSmartOperatorEnum.equal,
+                    Connector = QSmartConnectorEnum.and,
                     Values = new List<object> { this.ProductKind }
                 });
                 QueryB.FilterConditions.Add(new QSmartQueryFilterCondition
                 {
                     Column = new QSmartQueryColumn { columnName = "AccountId", dataType = typeof(Guid) },
                     Operator = QSmartOperatorEnum.equal,
+                    Connector = QSmartConnectorEnum.and,
                     Values = new List<object> { this.AccountId }
                 });
                 return new List<QObject> { QueryA, QueryB };
@@ -159,17 +165,20 @@ namespace weixinreportviews.Model
             {
                 Column = new QSmartQueryColumn { columnName = "OpenId", dataType = typeof(string) },
                 Operator = QSmartOperatorEnum.equal,
+                Connector= QSmartConnectorEnum.and,
                 Values = new List<object> { this.OpenId }
             });
             QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
             {
                 Column = new QSmartQueryColumn { columnName = "ProductKind", dataType = typeof(ProductKindEnum) },
                 Operator = QSmartOperatorEnum.equal,
+                Connector = QSmartConnectorEnum.and,
                 Values = new List<object> { this.ProductKind }
             });
             QueryA.ObjectState = QSmartObjectState.Update;
 
             CS_BindUser buser = new CS_BindUser();
+            buser.OpenId = this.OpenId;
             buser.AccountId = this.AccountId;
             buser.ProductKind = this.ProductKind;
             buser.BindDate = DateTime.Now;
@@ -195,12 +204,14 @@ namespace weixinreportviews.Model
             {
                 Column = new QSmartQueryColumn { columnName = "OpenId", dataType = typeof(string) },
                 Operator = QSmartOperatorEnum.equal,
+                Connector = QSmartConnectorEnum.and,
                 Values = new List<object> { this.OpenId }
             });
             QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
             {
                 Column = new QSmartQueryColumn { columnName = "ProductKind", dataType = typeof(ProductKindEnum) },
                 Operator = QSmartOperatorEnum.equal,
+                Connector = QSmartConnectorEnum.and,
                 Values = new List<object> { this.ProductKind }
             });
             QueryA.ObjectState = QSmartObjectState.Update;
