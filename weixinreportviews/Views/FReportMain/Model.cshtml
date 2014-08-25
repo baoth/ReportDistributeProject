@@ -91,9 +91,11 @@
         }
         function Save() {
             var data = { Id: $('#txtGUID').val() }
-            if (!CheckField('txtGJZ')) {
+            if (!CheckField('txtGJZ') || !CheckField('txtBBMC')) {
                 return;
             }
+            data.ReportKey = $('#txtGJZ').val();
+            data.Title = $('#txtBBMC').val();
             /*todo*/
             $.ajax({
                 url: "/FReportMain/Save",
@@ -150,7 +152,7 @@
             
             <label ><font color="red">*</font>关键字  &nbsp </label>
             <div>
-             <input placeholder="请输入关键字" maxlength="100" class="input-xlarge" id="txtGJZ" onblur="CheckField('txtGJZ')" name="txtGJZ" value="@ViewData["Address"]"  type="text" />
+             <input placeholder="请输入关键字" maxlength="100" class="input-xlarge" id="txtGJZ" onblur="CheckField('txtGJZ')" name="txtGJZ" value="@ViewData["ReportKey"]"  type="text" />
             </div>
             <div><span id="txtGJZMsg"></span></div>
                        
@@ -161,7 +163,7 @@
             
             <label ><font color="red">*</font>报表名称  &nbsp </label>
             <div>
-             <input placeholder="请输入报表名称" maxlength="100" class="input-xlarge" id="txtBBMC" onblur="CheckField('txtBBMC')" name="txtBBMC" value="@ViewData["Address"]"  type="text" />
+             <input placeholder="请输入报表名称" maxlength="100" class="input-xlarge" id="txtBBMC" onblur="CheckField('txtBBMC')" name="txtBBMC" value="@ViewData["Title"]"  type="text" />
             </div>
             <div><span id="txtBBMCMsg"></span></div>
                        
