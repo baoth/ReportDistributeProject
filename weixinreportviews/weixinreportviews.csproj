@@ -86,6 +86,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Model\CS_BindUser.cs" />
+    <Compile Include="Model\CS_FirstReport.cs" />
     <Compile Include="Model\CS_UserAttention.cs" />
     <Compile Include="Model\General.cs" />
     <Compile Include="Model\SS_CompanyAccount.cs" />
@@ -249,7 +250,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>10624</DevelopmentServerPort>
+          <DevelopmentServerPort>15372</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
