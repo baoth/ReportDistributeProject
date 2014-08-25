@@ -7,63 +7,173 @@
 <html>
 <head>
     <title></title>
+    <style>
+        *{padding: 0px;margin: 0px; font-size: 13px;font-family:"微软雅黑","SimSun","Arial Narrow";}
+    </style>
      <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />   
-    <link href="../../Content/Css/Upload/basic.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/Css/Upload/dropzone.css?r=32" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>        
-   @*开关按钮引用start *@
-    <link href="../../Content/Css/Switch/bootstrap-switch.css" rel="stylesheet" type="text/css" /> 
-    <script src="../../Scripts/Switch/bootstrap-switch.js" type="text/javascript"></script>
-    <script src="../../Scripts/dropzone.js" type="text/javascript"></script>
-    <script language="javascript" type="text/javascript">
-        $(document).ready(function () {debugger
-     
-            $(".dropzone").dropzone({
-                url: "/FReportMain/Upload",
-                addRemoveLinks: true,
-                dictRemoveLinks: "x",
-                dictCancelUpload: "x",
-                maxFiles: 1,
-                maxFilesize: 5,
-                acceptedFiles: ".xls",
-                init: function() {
-                    this.on("success", function(file) {
-                        console.log("File " + file.name + "uploaded");
-                    });
-                    this.on("removedfile", function(file) {
-                        console.log("File " + file.name + "removed");
-                    });
-                }
-            });
-        });
- 
-        function CloseBack() {
+        <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
+       <style type="text/css">
+        table
+        {
+            width:100%;
+            height:300px;
+            text-align:center;
+           
+            
+        }
+        tr 
+        {
+           
+             height:30px;    
+        }
+        
+        .tdtitle
+        {
+            text-align:left; 
+            width:10%;
+              
+        }
+        .tdText
+        {
+             text-align:left;
+             width:40%; 
+             vertical-align:top;
+            
+             
+        }
+        
+   
+
+        .accountinfo p{width:400px;padding-bottom: 10px;}
+        .accountinfo p label{display: block;height:26px;line-height: 26px;}
+       
+        input{border: 1px solid #ccc;border-radius: 4px;height: 24px;line-height: 24px;vertical-align:middle;}
+        input[type=checkbox]{border: 1px solid #fff;}
+        input[type="text"]:focus,
+        input[type="password"]:focus{
+            border-color: rgba(82, 168, 236, 0.8);
+            outline: 0;
+            outline: thin dotted \9;
+            /* IE6-9 */
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+            -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+        }
+         input[type="text"]
+        {
+             width:50%; 
+             height:30px;
+             padding:2px; 
+               
+        }
+        
+       
+    </style>
+    <script>
+        function CheckField(id) {
+            var ele = $("#"+id).val();
+            if (ele == "") {
+                $("#" + id + "Msg").html("<font color='red'>该字段不能为空！</font>");
+                return false;
+            } else {
+                $("#" + id + "Msg").html('');
+                return true;
+            }
+
+    };
+    var PageAction = function () {
+        function GoBack() {
             var urlaccount = '/FReportMain/Grid';
             window.parent.ControlIFrame(urlaccount);
 
         }
+        function Save() {
+            var data = { Id: $('#txtGUID').val() }
+            if (!CheckField('txtGJZ')) {
+                return;
+            }
+            /*todo*/
+            $.ajax({
+                url: "/FReportMain/Save",
+                data: data,
+                dataType: "JSON",
+                type: "POST",
+                success: function (data) {
+                    if (data != null) {
+                        if (data.result == 0) {
+                            layer.msg("操作成功！");
+                            new PageAction().GoBack();
+                        }
+                        else {
+                            layer.msg("保存失败！");
+                        }
+                    }
+                    else {
+                        layer.msg("保存失败！");
+                    }
+                }
 
+            });
+        }
+        return {
+            GoBack: GoBack,
+            Save: Save
+        }
+    }
+        $(document).ready(function () {
+            $('#b-close,#b-save').bind('click', function () {
+                var action = $(this).attr('action');
+                new PageAction()[action]();
+            })
+        })
     </script>
-      
-    
-     
 </head>
 <body style="background: #f6f6f6; border:0px; margin:10px;"> @*background: #f6f6f6;*@
-      
-        <table>
-         <tr>
-          <div style="text-align:left; margin:0px auto;" >
-            <a class="button button-rounded button-flat-highlight" id="btn_close" onclick="CloseBack()" href="#">返回</a>
-            <a class="button button-rounded button-flat-action" id="btn_save" href="#">确定</a>
+       <div style="margin: 0px auto; width: 100%; height: auto; "> @*background: url(../../Content/Img/border.jpg)*@
+           
+        <table width="100%">
+        <tr>
+             <div style="text-align:left; margin:0px auto;" >
+        <a class="button button-rounded button-flat-highlight" id="b-close" action="GoBack" href="#">返回</a>
+        <a class="button button-rounded button-flat-action" id="b-save" action="Save" href="#">保存</a>
        
-        </div> 
-         </tr>
-         <tr>
-           <div style="margin-top:10px" class="dropzone"></div>
-         </tr>
-      </table>
+       </div> 
+        </tr>
+         
+               
 
+        <tr>
+           
+            <td class="tdText" colspan="4">
+            
+            <label ><font color="red">*</font>关键字  &nbsp </label>
+            <div>
+             <input placeholder="请输入关键字" maxlength="100" class="input-xlarge" id="txtGJZ" onblur="CheckField('txtGJZ')" name="txtGJZ" value="@ViewData["Address"]"  type="text" />
+            </div>
+            <div><span id="txtGJZMsg"></span></div>
+                       
+        </tr>
+          <tr>
+           
+            <td class="tdText" colspan="4">
+            
+            <label ><font color="red">*</font>报表名称  &nbsp </label>
+            <div>
+             <input placeholder="请输入报表名称" maxlength="100" class="input-xlarge" id="txtBBMC" onblur="CheckField('txtBBMC')" name="txtBBMC" value="@ViewData["Address"]"  type="text" />
+            </div>
+            <div><span id="txtBBMCMsg"></span></div>
+                       
+        </tr>
+        
+      </table>
+       </div>
+
+
+
+       <input id="txtGUID" name="txtGUID" type="hidden" value="@ViewData["Id"]" />
+      
       
 </body>
 </html>

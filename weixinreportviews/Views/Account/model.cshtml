@@ -176,28 +176,28 @@
             Stoped = !Stoped;   
             var Id = $("#GUID").val();
             var data = { Name: Name, OrderNumber: OrderNumber, LoginKey: LoginKey, Address: Address, Phone: Phone, Stoped: Stoped, Password: Password, Id: Id, Creator: Creator, CreateDate: CreateDate };
-            $.ajax({
-                url: "/Account/Save",
-                data: data,
-                dataType: "JSON",
-                type: "POST",
-                success: function (data) {
-                    if (data != null) {
-                        if (data.result == 0) {
-                            //layer.alert("保存成功！");
-                            layer.msg("操作成功！");
-                            CloseBack();
+                $.ajax({
+                    url: "/Account/Save",
+                    data: data,
+                    dataType: "JSON",
+                    type: "POST",
+                    success: function (data) {
+                        if (data != null) {
+                            if (data.result == 0) {
+                                //layer.alert("保存成功！");
+                                layer.msg("操作成功！");
+                                CloseBack();
+                            }
+                            else {
+                                layer.msg("保存失败！");
+                            }
                         }
                         else {
                             layer.msg("保存失败！");
                         }
                     }
-                    else {
-                        layer.msg("保存失败！");
-                    }
-                }
 
-            });
+                });
         }
         function SetDefault(id) {
             if (id != "") {
