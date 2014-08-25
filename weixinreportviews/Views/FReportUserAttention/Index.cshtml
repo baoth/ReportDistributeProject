@@ -51,7 +51,7 @@
             return false;
         }
         var PageAction = function (id) {
-            var urllisence = '/Lisence/Model';
+            var urllisence = '/FReportUserAttention/Model';
             function AddParams(name, val, url) {
                 var char = url.indexOf('?') >= 0 ? "&" : "?"
                 return url + char + name + "=" + val;
@@ -167,7 +167,7 @@
                 "processing": true,
                 "bServerSide": true,
                 "scrollCollapse": true,
-
+               
                 "sAjaxSource": "/FReportUserAttention/GridDatas",
                 "sPaginationType": "full_numbers",
                 "oLanguage": {
@@ -219,17 +219,16 @@
                                       return '<input style="margin-left: 7px;" type="checkbox" id="' + val + '" onClick="onDataGridCheck(this)"/>'
                                   }
                               },
-                            { "data": "OpenId", "sName": 'OpenId', "sTitle": "客户微信OpenId", "bVisible": false },
-                            { "data": "ProductKind", "sName": 'ProductKind', "sTitle": "微信产品类型", "bVisible": false },
-                            { "data": "AccountId", "sName": 'AccountId', "sTitle": "公司Id", "bVisible": false },
-
-                            { "data": "HeadImgUrl", "sName": 'HeadImgUrl', "sTitle": "照片", "sWidth":"15%"},
+                            { "data": "OpenId", "sName": 'OpenId', "sTitle": "客户微信OpenId", "bVisible": false},
+                            { "data": "ProductKind", "sName": 'ProductKind', "sTitle": "微信产品类型", "bVisible": false},
+                            { "data": "AccountId", "sName": 'AccountId', "sTitle": "公司Id", "bVisible": false},
+                            { "data": "HeadImgUrl", "sName": 'HeadImgUrl', "bSortable": false, "sTitle": "照片", "sWidth": "15%" },
                             { "data": "NickName", "sName": 'NickName', "sTitle": "昵称", "sWidth":"40%" },
                             { "data": "BindedDisplay", "sName": 'Binded', "bSortable": false, "sTitle": "绑定", "sWidth":"20%", 
                                 "mRender":function(val,isShow,row){
                                     var div = '<div class="Operate-button" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId+ '">';
                                     div += '<ul class="dtOperate">';
-                                    div += '<li><input type="checkbox" name="CheckSwitch" accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" id="CheckSwitch"' + val + ' name="CheckSwitch"  /></li>';                                   
+                                    div += '<li><input type="checkbox" name="CheckSwitch" Binded="'+row.Binded+'"  accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" id="CheckSwitch"' + val + ' name="CheckSwitch"  /></li>';                                   
                                     div += '</ul>';
                                     div += '</div>';
                                     return div;
@@ -238,9 +237,9 @@
                             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": "20%",
                                 "mRender": function (val, isShow, row) {
 
-                                    var div = '<div class="Operate-button" v="' + val + '">';
-                                    div += '<ul class="dtOperate">';                   
-                                    div += '<li> <a href="#" name="refresh" id="refresh" action="Refresh" class="button button-rounded button-flat-primary">刷新</a> </li>';
+                                    var div = '<div  class="Operate-button" v="' + val + '">';
+                                    div += '<ul class="dtOperate">';
+                                    div += '<li> <a href="#" name="refresh" id="refresh" action="Refresh" title="刷新"><i class="icon-refresh"></i></a> </li>';
                                     div += '</ul>';
                                     div += '</div>';
                                     return div;
@@ -336,7 +335,12 @@
         $.setSwitch = function () {
             debugger
             switchTarget = $("input[name='CheckSwitch']");
-            switchTarget.bootstrapSwitch();
+            switchTarget.each(function (i) {
+                debugger
+                var s = $(this).attr("Binded");
+                $(this).bootstrapSwitch("state",!s);
+            })
+
             //开关           
             switchTarget.bootstrapSwitch("onText", "绑定");
             switchTarget.bootstrapSwitch("offText", "解绑");
@@ -351,7 +355,7 @@
                     if (state == true) {
                         msg = "确定要绑定吗？";
                     }
-                  
+
                     var openid = $(value.target).attr('openid');
                     var productKind = $(value.target).attr('productKind');
                     var accountId = $(value.target).attr('accountId');
@@ -416,8 +420,7 @@
 
 </head>
 <body style=" min-height: 100%;margin:10px;">
-     <div style="width:800px;height:50px;" >
-        <a href="#" id="b-edit" action="Edit"  class="disabled button button-rounded button-flat-action">编辑</a>
+     <div style="width:800px;height:50px;" >       
         <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
        @* <a href="#" id="b-auth" action="SetAuth" class="disabled button button-rounded button-flat-caution">授权</a>*@
     </div>
@@ -436,7 +439,7 @@
             <h3>绑定状态：</h3>
             <ul class="mod_category_item" actionField="Binded">
                 <li class="selected"> <a href="#" keyCode="-1">全部</a> </li>
-                <li> <a href="#" keyCode="0">未绑定</a> </li>
+                <li> <a  href="#" keyCode="0">未绑定</a> </li>
                 <li> <a href="#" keyCode="1">已绑定</a> </li>                
             </ul>
         </div>
@@ -450,9 +453,7 @@
             <th>OrderNumber</th>
             <th></th>
             <th>Name</th>
-            <th>LoginKey</th>
-            <th>StopedDisplay</th>
-            <th>CreateDateDisplay</th>
+            <th>LoginKey</th>            
             <th></th>
             <th></th>
             <th></th>
