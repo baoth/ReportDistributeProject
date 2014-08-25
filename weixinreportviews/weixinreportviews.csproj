@@ -210,6 +210,7 @@
     <Content Include="Views\FReportHome\Index.cshtml" />
     <Content Include="Views\FReportUserAttention\Index.cshtml" />
     <Content Include="Views\FReportMain\Index.cshtml" />
+    <Content Include="Views\FReportMain\Upload.cshtml" />
     <Content Include="Views\FReportMain\Model.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />

@@ -11,6 +11,7 @@ namespace weixinreportviews.Model
 {
     public static class General
     {
+        public const string LogonSessionName = "userInfo";        
         public const string Token = "tiantian315";
         public const string AppId = "wxadcc12090e7138b3";
         public const string AppSecret = "722dfaf58953c47ffd9ac9548c727461";
@@ -544,5 +545,6 @@ namespace weixinreportviews.Model
             get { return _Account; }
             set { _Account = value; }
         }
+
     }
 }

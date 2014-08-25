@@ -30,6 +30,10 @@ namespace weixinreportviews.Controllers
         public JsonResult Login(string loginkey, string password)
         {
             CustomerLoginInfo logininfo = General.Login(loginkey, password);
+            if (logininfo.Error == CustomerLoginErrorEnum.成功)
+            {
+                Session[General.LogonSessionName] = logininfo;
+            }
             return Json(new { error = (int)logininfo.Error });
         }
       
