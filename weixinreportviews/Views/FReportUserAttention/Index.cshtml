@@ -73,7 +73,7 @@
             }
             return {
                 Delete: function () {
-
+                    
                     var ids = GetSelectedRowId();
                     if (ids.length == 0) {
                         return;
@@ -82,15 +82,17 @@
                         layer.load('删除中..', 0);
                         $.ajax({
                             type: "post",
-                            url: "/Lisence/Delete",
-                            data: { "id": ids.join(',') },
+                            url: "/FReportUserAttention/Delete",
+                            data: { "id": ids.join('#') },
                             dataType: "json",
                             success: function (data) {
                                 if (data.result == 1) {
-                                    layer.alert(data.msg, 3);
+                                    //layer.alert(data.msg, 3);
+                                    layer.msg("删除失败！");
                                 }
                                 else {
-                                    layer.closeAll();
+                                    layer.msg("删除成功！");
+                                    //layer.closeAll();
                                     $("#example").dataTable().fnDraw();
                                 }
                             }
@@ -225,7 +227,7 @@
                             { "data": "NickName", "sName": 'NickName', "sTitle": "昵称", "sWidth":"40%" },
                             { "data": "BindedDisplay", "sName": 'Binded', "bSortable": false, "sTitle": "绑定", "sWidth":"20%", 
                                 "mRender":function(val,isShow,row){
-                                     var div = '<div class="Operate-button" v="' + val + '">';
+                                    var div = '<div class="Operate-button" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId+ '">';
                                     div += '<ul class="dtOperate">';
                                     div += '<li><input type="checkbox" name="CheckSwitch" accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" id="CheckSwitch"' + val + ' name="CheckSwitch"  /></li>';                                   
                                     div += '</ul>';
@@ -414,7 +416,11 @@
 
 </head>
 <body style=" min-height: 100%;margin:10px;">
-     
+     <div style="width:800px;height:50px;" >
+        <a href="#" id="b-edit" action="Edit"  class="disabled button button-rounded button-flat-action">编辑</a>
+        <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
+       @* <a href="#" id="b-auth" action="SetAuth" class="disabled button button-rounded button-flat-caution">授权</a>*@
+    </div>
       <div id="optionid" class="option cfix">
 		<div class="mod-tit cfix mod_sear_bar">
 			<div class="r"><a class="openBtn-txt" href="#"><em class="vm-inline">过滤</em><i class="site-icons ico-explain-b"></i></a></div>
