@@ -52,7 +52,19 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         }
         public JsonResult Upload() 
         {
-
+            var files = Request.Files;
+            var path =System.IO.Path.Combine(General.BaseDirector,"Upload");
+            for (int i = 0; i < files.Count; i++)
+            {
+                var httpFile = files[i]; ;
+                if (httpFile.ContentLength > 0) {
+                    if (!System.IO.Directory.Exists(path)) {
+                        System.IO.Directory.CreateDirectory(path);
+                    }
+                    httpFile.SaveAs(System.IO.Path.Combine(path,httpFile.FileName));
+                }
+                
+            }
             return Json(new { data=""});
         }
         /// <summary>

@@ -44,6 +44,45 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             }
             
         }
+        /// <summary>
+        /// 删除账户信息
+        /// </summary>
+        /// <param name="id">账户Id</param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult Delete(string id)
+        {
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                List<string> ids = id.Split('#').ToList();
+                DbSession session = General.CreateDbSession();
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    if (!string.IsNullOrEmpty(ids[i]))
+                    {
+                        var arr = ids[i].Split(',') ;
+                        CS_UserAttention entity = new CS_UserAttention {
+                            OpenId = arr[0],
+                            ProductKind=(ProductKindEnum)int.Parse(arr[1]),
+                            AccountId=Guid.Parse(arr[2])
+                        };
+                        session.Context.DeleteEntity(entity.CreateDeleteCommand());
+                    }
+                }
+
+                try
+                {
+                    session.Context.SaveChange();
+                    return Json(new { result = 0 });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { result = 1, msg = ex.Message });
+                }
+            }
+            return Json(new { result = 0 });
+        }
        [HttpPost]
         public ActionResult BindUpdate() 
         {
