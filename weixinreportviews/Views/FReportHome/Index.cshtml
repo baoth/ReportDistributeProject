@@ -1,0 +1,47 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>微信第一表</title>
+    <link href="../../Content/Css/public.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.column li').bind('click', function () {
+                $(".column li").removeClass("column5");
+                var c = $(this).attr('controll');
+                $(this).addClass("column5");
+                $("#childiframe").attr("src", c);
+            })
+        });
+        window.ControlIFrame = function (url) {
+            $("#childiframe").attr("src", url);
+        };
+    </script>
+
+</head>
+<body>
+<div class="manage">
+    <div class="manage_l">
+        <div class="w_logo">  <img src="../../Content/Img/manage_01.png" /></div>
+        <div class="userface"><img src="../../Content/Img/userface.png"></div>
+        <p class="username"><span class="username1">@ViewData["Name"]</span> | <span class="username2">
+        <a href="/login/logout">退出</a></span></p>
+        <div class="column">
+            <ul>
+                <li class="column1 column5" controll="/FReportUserAttention/Index"><a href="#" onclick="return false;" >绑定管理</a></li>
+                <li class="column2 "  controll="/Lisence/Grid"><a href="#"  onclick="return false;">报表管理</a></li>
+            </ul>
+        </div>
+    </div>
+ <!--   <div class="manage_r">-->
+    <iframe id="childiframe" src="/FReportUserAttention/Index"  class="manage_r" style="border:0px;"></iframe>
+<!--</div>-->
+</div>
+
+</body>
+</html>

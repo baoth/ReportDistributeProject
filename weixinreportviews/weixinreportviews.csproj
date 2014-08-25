@@ -77,6 +77,8 @@
     <Compile Include="Controllers\Admin\LisenceController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Admin\HomeController.cs" />
+    <Compile Include="Controllers\Customer\FirstReportProduct\FReportHomeController.cs" />
+    <Compile Include="Controllers\Customer\FirstReportProduct\FReportUserAttentionController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\Customer\LogonController.cs" />
     <Compile Include="Global.asax.cs">
@@ -103,7 +105,6 @@
     <Content Include="Content\Css\select.css" />
     <Content Include="Content\Css\dataTables.editor.min.css" />
     <Content Include="Content\Css\DateTime\bootstrap-datetimepicker.css" />
-    <Content Include="Content\Css\flat-ui.css" />
     <Content Include="Content\Css\fliter.css" />
     <Content Include="Content\Css\font-awesome.min.css" />
     <Content Include="Content\Css\fonts\fontawesome-webfont.svg" />
@@ -174,12 +175,6 @@
     <Content Include="Scripts\jquery.toolbar.min.js" />
     <Content Include="Scripts\JSDatetime\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\JSDatetime\bootstrap-datetimepicker.zh-CN.js" />
-    <Content Include="Scripts\JSFlatUI\application.js" />
-    <Content Include="Scripts\JSFlatUI\bootstrap-select.js" />
-    <Content Include="Scripts\JSFlatUI\bootstrap-switch.js" />
-    <Content Include="Scripts\JSFlatUI\bootstrap.min.js" />
-    <Content Include="Scripts\JSFlatUI\jquery.placeholder.js" />
-    <Content Include="Scripts\JSFlatUI\jquery.tagsinput.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\layer.ext.js" />
     <Content Include="Scripts\layer.js" />
@@ -207,6 +202,8 @@
     <Content Include="Views\Lisence\model.cshtml" />
     <Content Include="Views\Lisence\AccountLisence.cshtml" />
     <Content Include="Views\Logon\Index.cshtml" />
+    <Content Include="Views\FReportHome\Index.cshtml" />
+    <Content Include="Views\FReportUserAttention\Index.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config" />

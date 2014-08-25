@@ -16,6 +16,7 @@ namespace weixinreportviews.Model
         /// 客户微信OpenId
         /// </summary>
         [PrimaryKey]
+        [StringMaxLength(40, VarCharType.nvarchar)]
         public string OpenId
         {
             get { return _OpenId; }

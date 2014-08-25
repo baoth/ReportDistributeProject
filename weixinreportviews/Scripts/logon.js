@@ -73,7 +73,7 @@
                         i = "帐户不存在。";
                         break;
                     case "0":
-                        i = "成功登录，正在跳转...", location.href ='/Home/Index';
+                        i = "成功登录，正在跳转...", location.href ='/FReportHome/Index';
                         return;
                     default:
                         i = "未知的返回。";

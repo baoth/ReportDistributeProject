@@ -17,6 +17,7 @@ namespace weixinreportviews.Model
         /// 客户微信OpenId
         /// </summary>
         [PrimaryKey]
+        [StringMaxLength(40, VarCharType.nvarchar)]
         public string OpenId
         {
             get { return _OpenId; }
@@ -34,14 +35,15 @@ namespace weixinreportviews.Model
             set { _ProductKind = value; }
         }
 
-        private string _Name = string.Empty;
+        private string _NickName = string.Empty;
         /// <summary>
-        /// 客户名称
+        /// 客户昵称
         /// </summary>
-        public string Name
+        [StringMaxLength(12, VarCharType.nvarchar)]
+        public string NickName
         {
-            get { return _Name; }
-            set { _Name = value; }
+            get { return _NickName; }
+            set { _NickName = value; }
         }
 
         private Guid _AccountId = Guid.Empty;
@@ -67,6 +69,25 @@ namespace weixinreportviews.Model
             get { return _Binded; }
             set { _Binded = value; }
         }
+
+        private string _HeadImgUrl = string.Empty;
+        /// <summary>
+        /// 客户头像
+        /// </summary>
+        [StringMaxLength(VarCharType.ntext)]
+        public string HeadImgUrl
+        {
+            get { return _HeadImgUrl; }
+            set { _HeadImgUrl = value; }
+        }
+
+        #region 属性(仅作呈现用)
+        [Ignore]
+        public string BindedDisplay
+        {
+            get { return this.Binded ? "是" : "否"; }
+        }
+        #endregion
 
         public List<QObject> CreateDeleteCommand()
         {

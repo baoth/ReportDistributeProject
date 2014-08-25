@@ -12,39 +12,19 @@
     <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
 
-    <link href="../../Content/Css/select.css" rel="stylesheet" type="text/css" />
-     @*按钮开关样式 圆角样式与日期控件有冲突*@
-     @* <link href="../../Content/Css/flat-ui.css" rel="stylesheet" type="text/css" />*@     
+    <link href="../../Content/Css/select.css" rel="stylesheet" type="text/css" />     
     @*日期样式*@
     <link href="../../Content/Css/DateTime/bootstrap-datetimepicker.css" rel="stylesheet"
         type="text/css" />
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
-    
-
-     @*开关按钮引用start 圆角JS *@
-    @*<script src="../../Scripts/JSFlatUI/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/JSFlatUI/bootstrap-select.js" type="text/javascript"></script>
-    <script src="../../Scripts/JSFlatUI/bootstrap-switch.js" type="text/javascript"></script> 
-    <script src="../../Scripts/JSFlatUI/jquery.tagsinput.js" type="text/javascript"></script> 
-    <script src="../../Scripts/JSFlatUI/jquery.placeholder.js" type="text/javascript"></script>   
-    <script src="../../Scripts/JSFlatUI/application.js" type="text/javascript"></script>*@
-  @*  开关按钮 end*@
-   
-
 
     @*开关按钮引用start *@
-
-    <link href="../../Content/Css/Switch/bootstrap-switch.css" rel="stylesheet" type="text/css" />    
-    <link href="../../Content/Css/Switch/main.css" rel="stylesheet" type="text/css" />
-
-    <script src="../../Scripts/Switch/jquery.min.js" type="text/javascript"></script>   
-    <script src="../../Scripts/Switch/highlight.js" type="text/javascript"></script>
-    <script src="../../Scripts/Switch/bootstrap-switch.js" type="text/javascript"></script>
-    <script src="../../Scripts/Switch/main.js" type="text/javascript"></script>
+    <link href="../../Content/Css/Switch/bootstrap-switch.css" rel="stylesheet" type="text/css" /> 
+    <script src="../../Scripts/Switch/jquery.min.js" type="text/javascript"></script> 
+    <script src="../../Scripts/Switch/bootstrap-switch.js" type="text/javascript"></script>   
     @*  开关按钮 end*@
 
-   <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
-    
+   <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>    
    
     <script src="../../Scripts/JSDatetime/bootstrap-datetimepicker.js" type="text/javascript"></script>
     <script src="../../Scripts/JSDatetime/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>  
@@ -107,8 +87,16 @@
          text-align:left;
         }
          
+        a:visited{
+        text-decoration:none;
+        }
+        a:hover{
+        text-decoration:none;
+        }
+        a:active{
+        text-decoration:none;
+        }
         
-       
     </style>
           
     <script language="javascript" type="text/javascript">
@@ -121,7 +109,8 @@
         function BindEvent() {
             $("#btn_save").bind("click", Save);
             $("#btn_signIn").bind("click", Save);
-            $(".mod_category_item a").bind("click",SelectProductType);
+            $(".mod_category_item a").bind("click", SelectProductType);
+
         }
 
         $.GetSelectProductKey = function () {          
@@ -149,7 +138,7 @@
             return true;
         }
         function CheckDateTime() {
-            debugger
+            
             var EffectiveDate = $("#EffectiveDate").val();
             var ExpiryDate = $("#ExpiryDate").val();
             if (EffectiveDate && ExpiryDate) {
@@ -176,7 +165,7 @@
         }
 
         function Save() {
-            debugger
+            
             //检查
             if (Check() == false) return;
             var AccountId = $("#AccountId").val();
@@ -187,10 +176,13 @@
             var Creator = $("#Creator").val();
             var EffectiveDate = $("#EffectiveDate").val();
             //var EffectiveYear = $("#EffectiveYear").val();
-            var ExpiryDate = $("#ExpiryDate").val();          
-            var isStop = $("#Stoped").attr("checked");
-            var Stoped = (isStop == "checked" || isStop == "true") ? true : false;
-            var data = { Id: Id,AccountId:AccountId, ProductKind: ProductKind, OrderNumber: OrderNumber, CreateDate: CreateDate, Creator: Creator, EffectiveDate: EffectiveDate,ExpiryDate: ExpiryDate, Stoped: Stoped };
+            var ExpiryDate = $("#ExpiryDate").val();
+            var LisencePoint = $("#LisencePoint").val();   
+            debugger       
+            var Stoped = $("#CheckSwitch").bootstrapSwitch("state");
+            Stoped = !Stoped;
+
+            var data = { Id: Id, AccountId: AccountId, ProductKind: ProductKind, OrderNumber: OrderNumber, CreateDate: CreateDate, Creator: Creator, EffectiveDate: EffectiveDate, ExpiryDate: ExpiryDate, Stoped: Stoped, LisencePoint: LisencePoint };
             $.ajax({
                 url: "/Lisence/Save",
                 data: data,
@@ -217,6 +209,14 @@
         function SetDefault() {
             var keyValue = $("#ProductKind").val();
             $.SetSelectProductKey(keyValue);
+          
+            var Stoped = $("#Stoped").val();
+            var flag = false;
+            if (Stoped.toLowerCase()=="true") {
+                flag = true;
+            }
+            flag = !flag;
+            $('#CheckSwitch').bootstrapSwitch('state', flag); // true || false
         }
         function Init() {
             $('#EffectiveDate').datetimepicker({
@@ -243,6 +243,9 @@
                 forceParse: 0
             });
             $("#LisencePoint").numeral();
+            //开关           
+            $("#CheckSwitch").bootstrapSwitch("onText", "启用");
+            $("#CheckSwitch").bootstrapSwitch("offText", "停用");
         }
         function CloseBack() {
             var as = $("#ActionSource").val();
@@ -287,9 +290,7 @@
                 return true;
 
         }         
-    </script>
-
-   
+    </script>  
     
      
 </head>
@@ -356,8 +357,8 @@
             <label><font color="red">*</font>产品类型  &nbsp </label>
             <ul class="mod_category_item" actionField="ProductKind">                
                  <li class="selected"> <a href="#" keyCode="0">微信第一表</a> </li>  
-                 <li > <a href="#" keyCode="1">微信第二表</a> </li>    
-                 <li > <a href="#" keyCode="2">微信第三表</a> </li>                      
+                 @*<li > <a href="#" keyCode="1">微信第二表</a> </li>    
+                 <li > <a href="#" keyCode="2">微信第三表</a> </li>  *@                    
             </ul>
 
            </div>   
@@ -495,13 +496,13 @@
             
             <td class="tdText">
             
-            <label>可用  &nbsp </label>           
+            <label> &nbsp </label>           
             <div > 
                 @*  <input data-toggle="switch" type="checkbox" id="Stoped" name="Stoped" checked="@ViewData["Stoped"]" />
 *@
-                <div class="switch" data-animated="false">
-                    <input type="checkbox" checked />
-                </div>
+               
+             <input id="CheckSwitch" type="checkbox" />
+              
             </div> 
 
             </td>
@@ -523,7 +524,7 @@
         <input id="Id" name="Id" type="hidden" value="@ViewData["Id"]" />
         <input id="ProductKind" value="@ViewData["ProductKind"]"  name="LoginKey"  type="hidden" />
         <input id="ActionSource" value="@ViewData["ActionSource"]"  name="ActionSource"  type="hidden" />
-                    
+        <input  type="hidden" id="Stoped" name="Stoped" value="@ViewData["Stoped"]" />
 
       </div>
       
