@@ -81,6 +81,14 @@ namespace weixinreportviews.Model
             set { _HeadImgUrl = value; }
         }
 
+        #region 属性(仅作呈现用)
+        [Ignore]
+        public string BindedDisplay
+        {
+            get { return this.Binded ? "是" : "否"; }
+        }
+        #endregion
+
         public List<QObject> CreateDeleteCommand()
         {
             if (string.IsNullOrEmpty(this.OpenId) && this.ProductKind!=null && this.AccountId!=Guid.Empty)
