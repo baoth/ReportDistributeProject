@@ -208,7 +208,8 @@
                         layer.close(window.layerFilter);
 
                     }
-                    $.setSwitch(); 
+                    $.setSwitch();
+                    BindreFreshEvent();
                 },
                 "aoColumns": [
                               { data: null, defaultContent: '', bSortable: false, sWidth: 5,
@@ -225,11 +226,11 @@
                             { "data": "BindedDisplay", "sName": 'Binded', "bSortable": false, "sTitle": "绑定", "sWidth": 60 },
                             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 300,
                                 "mRender": function (val, isShow, row) {
-                                   
+
                                     var div = '<div class="Operate-button" v="' + val + '">';
                                     div += '<ul class="dtOperate">';
                                     div += '<li><input type="checkbox" name="CheckSwitch" accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" id="CheckSwitch"' + val + ' name="CheckSwitch"  /></li>';
-                                    div += '<li> <a href="#" id="b-refresh" action="Refresh" class="button button-rounded button-flat-primary">刷新</a> </li>';
+                                    div += '<li> <a href="#" name="refresh" id="refresh" action="Refresh" class="button button-rounded button-flat-primary">刷新</a> </li>';
                                     div += '</ul>';
                                     div += '</div>';
                                     return div;
@@ -310,9 +311,16 @@
                 $('#example').dataTable().fnDraw();
             }
 
-           
 
         });
+        //绑定事件
+        function BindreFreshEvent() {
+            debugger
+            $("a[name='refresh']").bind("click", function () {                
+                $.refreshFilter();
+                $.reDrawTable();
+            });
+        }
         var switchTarget;
         var switchState;
         $.setSwitch = function () {
