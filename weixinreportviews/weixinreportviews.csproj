@@ -78,6 +78,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Admin\HomeController.cs" />
     <Compile Include="Controllers\Customer\FirstReportProduct\FReportHomeController.cs" />
+    <Compile Include="Controllers\Customer\FirstReportProduct\FReportMainController.cs" />
     <Compile Include="Controllers\Customer\FirstReportProduct\FReportUserAttentionController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\Customer\LogonController.cs" />
@@ -204,6 +205,8 @@
     <Content Include="Views\Logon\Index.cshtml" />
     <Content Include="Views\FReportHome\Index.cshtml" />
     <Content Include="Views\FReportUserAttention\Index.cshtml" />
+    <Content Include="Views\FReportMain\Index.cshtml" />
+    <Content Include="Views\FReportMain\Model.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config" />
