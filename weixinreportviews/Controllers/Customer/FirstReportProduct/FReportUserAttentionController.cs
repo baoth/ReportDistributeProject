@@ -44,40 +44,39 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             }
             
         }
-                
-        public ActionResult BindUpdate(string openid,ProductKindEnum productKind,Guid accountId,bool bandState)
+       [HttpPost]
+        public ActionResult BindUpdate(string openid, int productKind, Guid accountId, bool bandState) 
         {
-            
-               // List<string> ids = openid.Split(',').ToList();
-                DbSession session = General.CreateDbSession();
+            DbSession session = General.CreateDbSession();
 
-                if (!string.IsNullOrEmpty(openid) && productKind!=null && (accountId!=null && accountId!=Guid.Empty))
+            if (!string.IsNullOrEmpty(openid) && productKind != null && (accountId != null && accountId != Guid.Empty))
+            {
+                CS_UserAttention entity = new CS_UserAttention();
+                entity.OpenId = openid;
+                entity.Binded = bandState;
+                entity.ProductKind = (ProductKindEnum)productKind;
+                entity.AccountId = accountId;
+                if (bandState)
                 {
-                    CS_UserAttention entity = new CS_UserAttention();
-                    entity.Binded = bandState;
-                    entity.ProductKind = productKind;
-                    entity.AccountId = accountId;
-                    if (bandState)
-                    {
-                        session.Context.ModifyEntity(entity.CreateBindCommand());
-                    }
-                    else
-                    {
-                        session.Context.ModifyEntity(entity.CreateUnBindCommand());
-                    }
-                }               
+                    session.Context.ModifyEntity(entity.CreateBindCommand());
+                }
+                else
+                {
+                    session.Context.ModifyEntity(entity.CreateUnBindCommand());
+                }
+            }
 
-                try
-                {
-                    session.Context.SaveChange();
-                    return Json(new { result = 0 });
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { result = 1, msg = ex.Message });
-                }
-            
-           
+            try
+            {
+                session.Context.SaveChange();
+                return Json(new { result = 0 });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { result = 1, msg = ex.Message });
+            }
+              
+         
         }
         public JsonResult GridDatas()
         {

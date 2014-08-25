@@ -208,7 +208,8 @@
                         layer.close(window.layerFilter);
 
                     }
-                    $.setSwitch(); 
+                    $.setSwitch();
+                    BindreFreshEvent();
                 },
                 "aoColumns": [
                               { data: null, defaultContent: '', bSortable: false, sWidth: 5,
@@ -225,11 +226,11 @@
                             { "data": "BindedDisplay", "sName": 'Binded', "bSortable": false, "sTitle": "绑定", "sWidth": 60 },
                             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 300,
                                 "mRender": function (val, isShow, row) {
-                                   
+
                                     var div = '<div class="Operate-button" v="' + val + '">';
                                     div += '<ul class="dtOperate">';
                                     div += '<li><input type="checkbox" name="CheckSwitch" accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" id="CheckSwitch"' + val + ' name="CheckSwitch"  /></li>';
-                                    div += '<li> <a href="#" id="b-refresh" action="Refresh" class="button button-rounded button-flat-primary">刷新</a> </li>';
+                                    div += '<li> <a href="#" name="refresh" id="refresh" action="Refresh" class="button button-rounded button-flat-primary">刷新</a> </li>';
                                     div += '</ul>';
                                     div += '</div>';
                                     return div;
@@ -310,54 +311,91 @@
                 $('#example').dataTable().fnDraw();
             }
 
-           
 
         });
-
-        $.setSwitch = function () {
+        //绑定事件
+        function BindreFreshEvent() {
             debugger
-            $("input[name='CheckSwitch']").bootstrapSwitch();
-            //开关           
-            $("input[name='CheckSwitch']").bootstrapSwitch("onText", "绑定");
-            $("input[name='CheckSwitch']").bootstrapSwitch("offText", "解绑");
-            $("input[name='CheckSwitch']").bootstrapSwitch("onSwitchChange", function (value) {
-                var msg = "确定要解绑吗？";
-                var state = $(value.target).bootstrapSwitch("state");
-                if (state==true) {
-                    msg="确定要绑定吗？";
-                }
-                //string openid,ProductKindEnum productKind,Guid accountId,bool bandState
-                var openid=$(value.target).attr('openid');
-                var productKind=$(value.target).attr('productKind');
-                var accountId=$(value.target).attr('accountId');
-                var argData = { "openid": openid, "productKind": productKind, "accountId": accountId };
-                $.ajaxSave(msg,argData);
-                
+            $("a[name='refresh']").bind("click", function () {                
+                $.refreshFilter();
+                $.reDrawTable();
             });
         }
-        $.ajaxSave = function (msg, argData) {
-            layer.confirm(msg, function () {
-                layer.load('处理中..', 0);
-                $.ajax({
-                    type: "post",
-                    url: "/FReportUserAttention/BindUpdate",
-                    data: argData, // { "openid": ids.join(',') },
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.result == 1) {
-                            layer.alert(data.msg, 3);
-                            layer.closeAll();
-                        }
-                        else {
-                            layer.closeAll();
-                            $("#example").dataTable().fnDraw();
-                        }
-                    },
-                    error:function()
-                    {
-                        layer.closeAll();
+        var switchTarget;
+        var switchState;
+        $.setSwitch = function () {
+            debugger
+            switchTarget = $("input[name='CheckSwitch']");
+            switchTarget.bootstrapSwitch();
+            //开关           
+            switchTarget.bootstrapSwitch("onText", "绑定");
+            switchTarget.bootstrapSwitch("offText", "解绑");
+            var beforeState = switchTarget.bootstrapSwitch("state");
+            switchTarget.bootstrapSwitch("onSwitchChange", function (value) {
+                var msg = "确定要解绑吗？";
+                debugger
+                switchTarget = $(value.target);
+                var state = switchTarget.bootstrapSwitch("state");
+                if (beforeState != state) {
+                    switchState = state;
+                    if (state == true) {
+                        msg = "确定要绑定吗？";
                     }
-                });
+                    //string openid,ProductKindEnum productKind,Guid accountId,bool bandState
+                    var openid = $(value.target).attr('openid');
+                    var productKind = $(value.target).attr('productKind');
+                    var accountId = $(value.target).attr('accountId');
+                    var argData = { "openid": openid, "productKind": productKind, "accountId": accountId, "bandState": switchState };
+                    $.ajaxSave(msg, argData);
+                }
+
+            });
+        }
+        $.ajaxSave = function (msg, argData) {            
+            $.layer({
+                shade: [0],
+                area: ['200px', '150px'],
+                dialog: {
+                    msg: msg,
+                    btns: 2,
+                    type: 4,
+                    btn: ['确定', '取消'],
+                    yes: function () {
+                        layer.load('处理中..', 0);
+                        $.ajax({
+                            type: "post",
+                            url: "/FReportUserAttention/BindUpdate",
+                            data: argData, // { "openid": ids.join(',') },argData
+                            dataType: "json",
+                            success: function (data) {
+                                debugger
+                                if (data.result == 1) {
+                                    //layer.alert(data.msg, 3);
+                                    layer.msg('操作失败');
+                                    switchTarget.bootstrapSwitch("state", !switchState);
+                                   // layer.closeAll();
+                                }
+                                else {
+                                    layer.msg("操作成功！", 1, 1);
+                                    switchTarget.bootstrapSwitch("state",switchState);
+                                    //layer.closeAll();
+                                    $("#example").dataTable().fnDraw();
+                                }
+                            },
+                            error: function () {
+                                debugger
+                                switchTarget.bootstrapSwitch("state", !switchState);
+                                layer.msg("操作失败！");
+                                //layer.closeAll();
+                            }
+
+                        });
+
+                    }, no: function () {
+                        switchTarget.bootstrapSwitch("state", !switchState);
+                        //layer.msg('取消', 1, 9);
+                    }
+                }
             });
         }
     </script>
