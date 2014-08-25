@@ -45,38 +45,25 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             
         }
        [HttpPost]
-        public ActionResult BindUpdate(string openid, int productKind, Guid accountId, bool bandState) 
+        public ActionResult BindUpdate() 
         {
-            DbSession session = General.CreateDbSession();
-
-            if (!string.IsNullOrEmpty(openid) && productKind != null && (accountId != null && accountId != Guid.Empty))
+            CS_UserAttention entity = General.CreateInstance<CS_UserAttention>(Request);
+            if (!string.IsNullOrEmpty(entity.OpenId) && entity.ProductKind != null && (entity.AccountId != null && entity.AccountId != Guid.Empty))
             {
-                CS_UserAttention entity = new CS_UserAttention();
-                entity.OpenId = openid;
-                entity.Binded = bandState;
-                entity.ProductKind = (ProductKindEnum)productKind;
-                entity.AccountId = accountId;
-                if (bandState)
+                DbSession session = General.CreateDbSession();
+                if (entity.Binded) session.Context.AttachEntity(entity.CreateBindCommand());
+                else session.Context.AttachEntity(entity.CreateUnBindCommand());
+                try
                 {
-                    session.Context.ModifyEntity(entity.CreateBindCommand());
+                    session.Context.SaveChange();
+                    return Json(new { result = 0 });
                 }
-                else
+                catch (Exception ex)
                 {
-                    session.Context.ModifyEntity(entity.CreateUnBindCommand());
+                    return Json(new { result = 1, msg = ex.Message });
                 }
             }
-
-            try
-            {
-                session.Context.SaveChange();
-                return Json(new { result = 0 });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { result = 1, msg = ex.Message });
-            }
-              
-         
+            return Json(new { result = 0 });
         }
         public JsonResult GridDatas()
         {
