@@ -48,6 +48,30 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         [HttpPost]
         public JsonResult Delete(string id)
         {
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                List<string> ids = id.Split(',').ToList();
+                DbSession session = General.CreateDbSession();
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    if (!string.IsNullOrEmpty(ids[i]))
+                    {
+                        var entity = new CS_FirstReport { Id = Guid.Parse(ids[i]) };
+                        session.Context.DeleteEntity(entity.CreateDeleteCommand());
+                    }
+                }
+
+                try
+                {
+                    session.Context.SaveChange();
+                    return Json(new { result = 0 });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { result = 1, msg = ex.Message });
+                }
+            }
             return Json(new { result = 0 });
         }
         public ActionResult UploadView ()

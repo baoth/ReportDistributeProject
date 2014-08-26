@@ -35,7 +35,6 @@
             $('.openBtn-txt').bind('click', function () {
                 var context$ = $('#zdcontext');
                 var style = context$.attr("style") || "";
-                debugger
                 if (style.indexOf("none") > -1) {
                     $('#optionid').removeClass('option1');
                     $('#zdcontext').show();
@@ -110,7 +109,7 @@
         <a href="#" id="b-add"  action="Add" class=" button button-rounded button-flat-primary">新增</a>
         <a href="#" id="b-edit" action="Edit"  class="disabled button button-rounded button-flat-action">编辑</a>
         <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
-        <a href="#" id="b-auth" action="CreateHtml" class="disabled button button-rounded button-flat-caution">生成</a>
+        <a href="#" id="b-auth" action="CreateHtml" class="disabled button button-rounded button-flat-caution">预览</a>
    </div>
          <div id="optionid" class="option cfix">
 		<div class="mod-tit cfix mod_sear_bar">
@@ -164,7 +163,7 @@
     </table>
     
 	<div id="user-options" class="toolbar-icons" style="display: none;">
-		<a href="#" action="CreateHtml" title="生成"><i class="icon-user"></i></a>
+		<a href="#" action="CreateHtml" title="预览"><i class="icon-camera"></i></a>
 		<a href="#" action="Edit" title="编辑"><i class="icon-edit"></i></a>
 		<a href="#" action="Delete" title="删除"><i class="icon-trash"></i></a>
 	</div>
