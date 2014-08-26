@@ -101,6 +101,8 @@
     <Content Include="Content\Css\bootstrap.css" />
     <Content Include="Content\Css\bootstrap.icons.css" />
     <Content Include="Content\Css\button.css" />
+    <Content Include="Content\Css\font-awesome\4.1.0\css\font-awesome-ie7.min.css" />
+    <Content Include="Content\Css\font-awesome\4.1.0\css\font-awesome.min.css" />
     <Content Include="Content\Css\Logon\form.css" />
     <Content Include="Content\Css\Logon\logon.css" />
     <Content Include="Content\Css\Logon\ieform.css" />
@@ -194,6 +196,11 @@
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Model.cshtml" />
+    <None Include="Content\Css\font-awesome\4.1.0\fonts\fontawesome-webfont.eot" />
+    <None Include="Content\Css\font-awesome\4.1.0\fonts\fontawesome-webfont.svg" />
+    <None Include="Content\Css\font-awesome\4.1.0\fonts\fontawesome-webfont.ttf" />
+    <None Include="Content\Css\font-awesome\4.1.0\fonts\fontawesome-webfont.woff" />
+    <None Include="Content\Css\font-awesome\4.1.0\fonts\FontAwesome.otf" />
     <None Include="Content\Css\fonts\fontawesome-webfont.eot" />
     <None Include="Content\Css\fonts\fontawesome-webfont.ttf" />
     <None Include="Content\Css\fonts\fontawesome-webfont.woff" />
