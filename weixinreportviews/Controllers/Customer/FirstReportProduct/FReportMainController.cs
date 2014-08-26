@@ -23,17 +23,16 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         {
             try
             {
-                SS_CompanyAccount account = General.CreateInstance<SS_CompanyAccount>(Request);
-                DbSession session = General.CreateDbSession();
+                var account = General.CreateInstance<CS_FirstReport>(Request);
+                var session = General.CreateDbSession();
                 if (account.Id != Guid.Empty)
                 {
-                    account.ModifyDate = DateTime.Now;
                     session.Context.ModifyEntity(account.CreateQSmartObject());
                 }
                 else
                 {
                     account.Id = Guid.NewGuid();
-                    account.OrderNumber = General.CreateOrderNumber("AC");
+                    account.CreateDate = DateTime.Now;
                     session.Context.InsertEntity(account.CreateQSmartObject());
                 }
                 session.Context.SaveChange();
@@ -93,7 +92,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 }
                 
             }
-            return Json(new { data=""});
+            return Json(new { data="http://www.baidu.com"});
         }
         /// <summary>
         /// 获取账户列表页面
@@ -126,7 +125,15 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 aaData = rows
             }, JsonRequestBehavior.AllowGet);
         }
-
+        [HttpPost]
+        public JsonResult Validation(string col, string value)
+        {
+            DbSession session = General.CreateDbSession();
+            return Json(new
+            {
+                result = session.Exists<CS_FirstReport>(col, value) == true ? 0 : 1
+            });
+        }
        
     }
     public class FirstReportDataTablesParameter : DataTablesParameter
