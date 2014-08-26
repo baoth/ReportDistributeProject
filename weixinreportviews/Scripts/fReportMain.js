@@ -128,11 +128,11 @@ $(document).ready(function () {
         "bServerSide": true,
         "scrollCollapse": true,
 
-        "sAjaxSource": "/Account/GridDatas",
+        "sAjaxSource": "/FReportMain/GridDatas",
         "sPaginationType": "full_numbers",
         "oLanguage": {
             "searchDefalutText": "订单号",
-            "allFilter": 'OrderNumber', //过滤那些列
+            "allFilter": 'Title', //过滤那些列
             "sLengthMenu": "每页显示 _MENU_ 条记录",
             "sZeroRecords": "抱歉， 没有找到",
             "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",

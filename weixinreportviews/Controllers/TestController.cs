@@ -21,18 +21,18 @@ namespace weixinreportviews.Controllers
             return View("connext1");
         }
 
-        public void CreateTable()
+        public JsonResult CreateTable()
         {
             try
             {
-                //DbSession session = General.CreateDbSession();
-                //session.Context.CreateTable<CS_UserAttention>();
-                //session.Context.SaveChange();
-                Response.Write("=====创建完成=======");
+                DbSession session = General.CreateDbSession();
+                session.Context.CreateTable<CS_FirstReport>();
+                session.Context.SaveChange();
+             return  Json("=====创建完成=======");
             }
             catch (Exception ex)
             {
-                Response.Write(ex.Message);
+             return   Json(ex.Message);
             }
 
         }

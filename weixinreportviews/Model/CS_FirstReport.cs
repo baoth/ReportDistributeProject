@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using QSmart.Core.Object;
+using QSmart.Core.DataBase;
 
 namespace weixinreportviews.Model
 {
@@ -52,6 +53,7 @@ namespace weixinreportviews.Model
         /// 关键字
         /// </summary>
         [StringMaxLength(20, VarCharType.nvarchar)]
+        [Unique]
         public string ReportKey
         {
             get { return _ReportKey; }
@@ -96,6 +98,25 @@ namespace weixinreportviews.Model
         {
             get { return string.Empty; }
             
+        }
+        public List<QObject> CreateDeleteCommand()
+        {
+            if (this.Id != Guid.Empty)
+            {
+                QSmartQuery QueryA = new QSmartQuery();
+
+                QueryA.Tables.Add(new QSmartQueryTable { tableName = "CS_FirstReport" });
+
+                QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
+                {
+                    Column = new QSmartQueryColumn { columnName = "Id", dataType = typeof(Guid) },
+                    Operator = QSmartOperatorEnum.equal,
+                    Values = new List<object> { this.Id }
+                });
+
+                return new List<QObject> { QueryA };
+            }
+            return null;
         }
     }
 }

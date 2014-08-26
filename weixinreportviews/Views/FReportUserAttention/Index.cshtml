@@ -7,8 +7,29 @@
 <html>
 <head>
     <title></title>  
-    <style>
-      *{padding: 0px;margin: 0px; font-size: 13px;font-family:"微软雅黑","SimSun","Arial Narrow";color: #444;}
+    
+    <link href="../../Content/Css/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css" />   
+    <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/jquery.dataTables.css?r=7" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.dataTables.js?r=6" type="text/javascript"></script>
+    <link href="../../Content/Css/dataTables.editor.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/jquery.toolbars.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/bootstrap.icons.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/fliter.css?r=4" rel="stylesheet" type="text/css" />
+
+
+    <script src="../../Scripts/jquery.toolbar.js" type="text/javascript"></script>
+    <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
+
+    @*开关按钮引用start *@
+    <link href="../../Content/Css/Switch/bootstrap-switch.css" rel="stylesheet" type="text/css" /> 
+   @* <script src="../../Scripts/Switch/jquery.min.js" type="text/javascript"></script> *@
+    <script src="../../Scripts/Switch/bootstrap-switch.js" type="text/javascript"></script>   
+    @*  开关按钮 end*@
+     <style>
+      *{padding: 0px;margin: 0px; font-size: 13px;font-family:"微软雅黑","SimSun","Arial Narrow";}
        .Operate-button ul {
         margin:0;
         padding:0;
@@ -18,27 +39,12 @@
         float:left;
         padding:10px;
         }
+        
+        .dtOperate a:hover, a:focus {
+        color:#21b384;
+        }
+        
    </style> 
-
- 
-
-   <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/Css/jquery.dataTables.css?r=7" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
-    <script src="../../Scripts/jquery.dataTables.js?r=6" type="text/javascript"></script>
-    <link href="../../Content/Css/dataTables.editor.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/Css/jquery.toolbars.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/Css/bootstrap.icons.css" rel="stylesheet" type="text/css" />
-        <link href="../../Content/Css/fliter.css?r=4" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/jquery.toolbar.js" type="text/javascript"></script>
-    <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
-
-    @*开关按钮引用start *@
-    <link href="../../Content/Css/Switch/bootstrap-switch.css" rel="stylesheet" type="text/css" /> 
-   @* <script src="../../Scripts/Switch/jquery.min.js" type="text/javascript"></script> *@
-    <script src="../../Scripts/Switch/bootstrap-switch.js" type="text/javascript"></script>   
-    @*  开关按钮 end*@
 
     <script type="text/javascript">
 
@@ -239,8 +245,8 @@
 
                                     var div = '<div  class="Operate-button" v="' + val + '">';
                                     div += '<ul class="dtOperate">';
-                                    div += '<li> <a href="#" name="refresh" id="refresh" action="Refresh" title="刷新"><i class="icon-refresh"></i></a> </li>';
-                                    div += '<li> <a href="#" name="delete" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '"  id="delete' + row.OpenId + '" accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" action="Delete" title="删除"><i class="icon-remove-sign"></i></a> </li>';
+                                    div += '<li> <a href="#" name="refresh" id="refresh" action="Refresh" title="刷新"><i class="fa fa-refresh"></i></a> </li>';
+                                    div += '<li> <a href="#" name="delete" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '"  id="delete' + row.OpenId + '" accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" action="Delete" title="删除"><i class="fa fa-times"></i></a> </li>';
                                     div += '</ul>';
                                     div += '</div>';
                                     return div;
@@ -445,7 +451,8 @@
 
 </head>
 <body style=" min-height: 100%;margin:10px;">
-     <div style="width:800px;height:50px;" >       
+
+     <div style="width:800px;height:50px;" >          
         <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
        @* <a href="#" id="b-auth" action="SetAuth" class="disabled button button-rounded button-flat-caution">授权</a>*@ @*icon-remove-sign*@
     </div>
