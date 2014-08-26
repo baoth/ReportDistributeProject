@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using weixinreportviews.Model;
 
 namespace weixinreportviews.Controllers.Customer.FirstReportProduct
 {
@@ -13,6 +14,11 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
 
         public ActionResult Index()
         {
+            if (Session[weixinreportviews.Model.General.LogonSessionName] != null)
+            {
+                var obj = (CustomerLoginInfo)Session[weixinreportviews.Model.General.LogonSessionName];
+                ViewData["Name"] = obj.Account.LoginKey;
+            }            
             return View();
         }
 

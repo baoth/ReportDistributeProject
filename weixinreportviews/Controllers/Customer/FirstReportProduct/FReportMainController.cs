@@ -88,11 +88,11 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
        //[HttpPost]
         public JsonResult GridDatas()
         {
-            AccountDataTablesParameter dtp = General.CreateInstance<AccountDataTablesParameter>(Request);
+            var dtp = General.CreateInstance<FirstReportDataTablesParameter>(Request);
             int totalcount = 0;
             DbSession session = General.CreateDbSession();
-            var rows = session.PaginationRetrieve<SS_CompanyAccount>(dtp.iDisplayStart,
-                dtp.iDisplayLength, dtp.GetFilters<SS_CompanyAccount>(),
+            var rows = session.PaginationRetrieve<CS_FirstReport>(dtp.iDisplayStart,
+                dtp.iDisplayLength, dtp.GetFilters<CS_FirstReport>(),
                 dtp.GetOrderBys(), out totalcount);
             return Json(new
             {
@@ -105,7 +105,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
 
        
     }
-    public class AccountDataTablesParameter : DataTablesParameter
+    public class FirstReportDataTablesParameter : DataTablesParameter
     {
         protected override List<QSmartQueryFilterCondition> ExactSearch(PropertyInfo[] pis)
         {

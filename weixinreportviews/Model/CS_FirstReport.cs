@@ -9,7 +9,7 @@ namespace weixinreportviews.Model
     /// <summary>
     /// 报表模型
     /// </summary>
-    public class CS_FirstReport
+    public class CS_FirstReport : QSmartEntity
     {
         private Guid _Id = Guid.Empty;
 
@@ -29,6 +29,23 @@ namespace weixinreportviews.Model
             get { return _Title; }
             set { _Title = value; }
         }
+        #region 属性(仅作呈现用)
+        [Ignore]
+        public string CreateDateDisplay
+        {
+            get { return this.CreateDate.ToShortDateString(); }
+        }
+        [Ignore]
+        public string StopedDisplay
+        {
+            get { return this.Stoped ? "是" : "否"; }
+        }
+        [Ignore]
+        public string BuildedDisplay
+        {
+            get { return this.Builded ? "是" : "否"; }
+        }
+        #endregion
 
         private string _ReportKey = string.Empty;
         /// <summary>

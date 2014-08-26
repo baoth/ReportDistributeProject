@@ -13,13 +13,21 @@ namespace weixinreportviews.Controllers
         /// 
         /// </summary>
         /// <param name="loginkey">账户</param>
-        /// <param name="password">密码</param>
-        /// <returns></returns>
+        /// <param name="password">密码</param>        
         public ActionResult Index()
         {
+           
             return View();
         }
-
+        /// <summary>
+        /// 退出
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult LogOut()
+        {
+            Session[General.LogonSessionName] = null;
+            return Json(new { result= 0});
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -32,7 +40,7 @@ namespace weixinreportviews.Controllers
             CustomerLoginInfo logininfo = General.Login(loginkey, password);
             if (logininfo.Error == CustomerLoginErrorEnum.成功)
             {
-                Session[General.LogonSessionName] = logininfo;
+                Session[General.LogonSessionName] = logininfo;               
             }
             return Json(new { error = (int)logininfo.Error });
         }
