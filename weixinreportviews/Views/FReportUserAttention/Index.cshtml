@@ -167,7 +167,7 @@
                 "processing": true,
                 "bServerSide": true,
                 "scrollCollapse": true,
-               
+
                 "sAjaxSource": "/FReportUserAttention/GridDatas",
                 "sPaginationType": "full_numbers",
                 "oLanguage": {
@@ -211,28 +211,28 @@
 
                     }
                     $.setSwitch();
-                    BindreFreshEvent();
+                    BindreDTEvent();
                 },
                 "aoColumns": [
-                              { data: null, defaultContent: '', bSortable: false, sWidth:"5%",
+                              { data: null, defaultContent: '', bSortable: false, sWidth: "5%",
                                   "mRender": function (val, isShow, row) {
                                       return '<input style="margin-left: 7px;" type="checkbox" id="' + val + '" onClick="onDataGridCheck(this)"/>'
                                   }
                               },
-                            { "data": "OpenId", "sName": 'OpenId', "sTitle": "客户微信OpenId", "bVisible": false},
-                            { "data": "ProductKind", "sName": 'ProductKind', "sTitle": "微信产品类型", "bVisible": false},
-                            { "data": "AccountId", "sName": 'AccountId', "sTitle": "公司Id", "bVisible": false},
+                            { "data": "OpenId", "sName": 'OpenId', "sTitle": "客户微信OpenId", "bVisible": false },
+                            { "data": "ProductKind", "sName": 'ProductKind', "sTitle": "微信产品类型", "bVisible": false },
+                            { "data": "AccountId", "sName": 'AccountId', "sTitle": "公司Id", "bVisible": false },
                             { "data": "HeadImgUrl", "sName": 'HeadImgUrl', "bSortable": false, "sTitle": "照片", "sWidth": "15%" },
-                            { "data": "NickName", "sName": 'NickName', "sTitle": "昵称", "sWidth":"40%" },
-                            { "data": "BindedDisplay", "sName": 'Binded', "bSortable": false, "sTitle": "绑定", "sWidth":"20%", 
-                                "mRender":function(val,isShow,row){
-                                    var div = '<div class="Operate-button" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId+ '">';
+                            { "data": "NickName", "sName": 'NickName', "sTitle": "昵称", "sWidth": "40%" },
+                            { "data": "BindedDisplay", "sName": 'Binded', "bSortable": false, "sTitle": "绑定", "sWidth": "20%",
+                                "mRender": function (val, isShow, row) {
+                                    var div = '<div class="Operate-button" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '">';
                                     div += '<ul class="dtOperate">';
-                                    div += '<li><input type="checkbox" name="CheckSwitch" Binded="'+row.Binded+'"  accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" id="CheckSwitch"' + val + ' name="CheckSwitch"  /></li>';                                   
+                                    div += '<li><input type="checkbox" name="CheckSwitch" Binded="' + row.Binded + '"  accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" id="CheckSwitch' + val + '" name="CheckSwitch"  /></li>';
                                     div += '</ul>';
                                     div += '</div>';
                                     return div;
-                                 }
+                                }
                             },
                             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": "20%",
                                 "mRender": function (val, isShow, row) {
@@ -240,6 +240,7 @@
                                     var div = '<div  class="Operate-button" v="' + val + '">';
                                     div += '<ul class="dtOperate">';
                                     div += '<li> <a href="#" name="refresh" id="refresh" action="Refresh" title="刷新"><i class="icon-refresh"></i></a> </li>';
+                                    div += '<li> <a href="#" name="delete" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '"  id="delete' + row.OpenId + '" accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" action="Delete" title="删除"><i class="icon-remove-sign"></i></a> </li>';
                                     div += '</ul>';
                                     div += '</div>';
                                     return div;
@@ -264,7 +265,7 @@
             window.keyToText = {};
             $('.mod_category_item li a').bind('click', function () {
                 debugger
-                var item = $(this), text = this.innerText;
+                var item = $(this), text = item.html(); //this.innerText;
                 var key = item.attr('keyCode');
                 var type = item.parent().parent().attr('actionField');
                 var code = type + "$" + key;
@@ -323,32 +324,55 @@
 
         });
         //绑定事件
-        function BindreFreshEvent() {
+        function BindreDTEvent() {
             debugger
-            $("a[name='refresh']").bind("click", function () {                
-                $.refreshFilter();
-                $.reDrawTable();
+            $("a[name='refresh']").bind("click", function () {
+                RefreshTable();
             });
+            $("a[name='delete']").bind("click", function (r) {
+                debugger
+                var action = $(this).attr("action");
+                var val = $(this).attr("v");
+                PageAction(val)[action]();
+
+            });
+
         }
+        function RefreshTable() {
+            $.refreshFilter();
+            $.reDrawTable();
+         }
         var switchTarget;
         var switchState;
         $.setSwitch = function () {
-            debugger
+
             switchTarget = $("input[name='CheckSwitch']");
             switchTarget.each(function (i) {
-                debugger
+
                 var s = $(this).attr("Binded");
-                $(this).bootstrapSwitch("state",!s);
+                var bState = false;
+                if (s == "true") {
+                    bState = true;
+                }
+                $(this).bootstrapSwitch("state", bState);
             })
 
             //开关           
             switchTarget.bootstrapSwitch("onText", "绑定");
             switchTarget.bootstrapSwitch("offText", "解绑");
-            var beforeState = switchTarget.bootstrapSwitch("state");
+
             switchTarget.bootstrapSwitch("onSwitchChange", function (value) {
                 var msg = "确定要解绑吗？";
                 debugger
+                
                 switchTarget = $(value.target);
+                var beforeState = switchTarget.attr("Binded");
+                if (beforeState == "true") {
+                    beforeState = true;
+                }
+                else {
+                    beforeState = false
+                }
                 var state = switchTarget.bootstrapSwitch("state");
                 if (beforeState != state) {
                     switchState = state;
@@ -393,7 +417,8 @@
                                     layer.msg("操作成功！", 1, 1);
                                     switchTarget.bootstrapSwitch("state", switchState);
                                     //layer.closeAll();
-                                    $("#example").dataTable().fnDraw();
+                                    //$("#example").dataTable().fnDraw();
+                                    RefreshTable();
                                 }
                             },
                             error: function () {
@@ -422,7 +447,7 @@
 <body style=" min-height: 100%;margin:10px;">
      <div style="width:800px;height:50px;" >       
         <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
-       @* <a href="#" id="b-auth" action="SetAuth" class="disabled button button-rounded button-flat-caution">授权</a>*@
+       @* <a href="#" id="b-auth" action="SetAuth" class="disabled button button-rounded button-flat-caution">授权</a>*@ @*icon-remove-sign*@
     </div>
       <div id="optionid" class="option cfix">
 		<div class="mod-tit cfix mod_sear_bar">
