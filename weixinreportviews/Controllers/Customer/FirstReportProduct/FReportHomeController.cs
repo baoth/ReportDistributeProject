@@ -14,8 +14,11 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
 
         public ActionResult Index()
         {
-            var c = (CustomerLoginInfo)Session[General.LogonSessionName];
-            ViewData["Name"] = c.Account.Name;
+            if (Session[weixinreportviews.Model.General.LogonSessionName] != null)
+            {
+                var obj = (CustomerLoginInfo)Session[weixinreportviews.Model.General.LogonSessionName];
+                ViewData["Name"] = obj.Account.LoginKey;
+            }            
             return View();
         }
 

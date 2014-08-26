@@ -212,6 +212,7 @@
     <Content Include="Views\FReportMain\Index.cshtml" />
     <Content Include="Views\FReportMain\Upload.cshtml" />
     <Content Include="Views\FReportMain\Model.cshtml" />
+    <Content Include="Views\Master\_CheckSession.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config" />

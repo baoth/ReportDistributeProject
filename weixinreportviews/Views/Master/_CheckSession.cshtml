@@ -1,0 +1,19 @@
+﻿
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>    
+    <script type="text/javascript">
+        var value = '@Session[weixinreportviews.Model.General.LogonSessionName]';
+        if (!value)
+        {
+            window.location.href="/Logon/Index";
+        }
+    </script>
+</head>
+<body>
+        @RenderBody()
+</body>
+</html>
