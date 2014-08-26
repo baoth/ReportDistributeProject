@@ -9,6 +9,9 @@
     <title>微信第一表</title>
     <link href="../../Content/Css/public.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/layer.js" type="text/javascript"></script>
+
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('.column li').bind('click', function () {
@@ -17,10 +20,81 @@
                 $(this).addClass("column5");
                 $("#childiframe").attr("src", c);
             })
+            $("#logout").bind("click", function (e) {
+                $.LogOut(e);
+            });
         });
         window.ControlIFrame = function (url) {
             $("#childiframe").attr("src", url);
         };
+        //退出
+        $.LogOut = function (e) {
+            debugger
+            var url = $(e.target).attr("action");
+            if (confirm("确定要退出系统吗？")) {
+                $.ajax({
+                    url: url,
+                    data: {},
+                    dataType: "json",
+                    type: "POST",
+                    success: function (data) {
+                        
+                        if (data != null) {
+                            if (data.result == 0) {
+                                window.location.href = "/Logon/Index";
+                            }
+                            else {
+                                layer.msg("退出失败！");
+                            }
+                        }
+                    },
+                    error: function () {
+                        
+                        layer.msg("退出失败！");
+                    }
+                });
+            };
+
+            //                $.layer({
+            //                    shade: [0.5, '#000'],
+            //                    area: ['300px', '200px'],
+            //                    dialog: {
+            //                        msg: "确定要退出系统吗？",
+            //                        btns: 2,
+            //                        type: 4,
+            //                        btn: ['确定', '取消'],
+            //                        yes: function () {
+
+            //                            $.ajax({
+            //                                url: url,
+            //                                data: {},
+            //                                dataType: "json",
+            //                                type: "POST",
+            //                                success: function (data) {
+            //                                    if (data != null) {
+            //                                        if (data.result == 0) {
+            //                                            window.location.href = "/Logon/Index";
+            //                                        }
+            //                                        else {
+            //                                            layer.msg("退出失败！");
+            //                                        }
+            //                                    }
+            //                                },
+            //                                error: function () {
+            //                                    layer.msg("退出失败！");
+            //                                }
+            //                            });
+
+            //                        },
+            //                        no: function () {
+
+            //                        }
+            //                    },
+            //                    close: function (index) {
+
+            //                    }
+            //                });
+        }
     </script>
 
 </head>
@@ -29,8 +103,8 @@
     <div class="manage_l">
         <div class="w_logo">  <img src="../../Content/Img/manage_01.png" /></div>
         <div class="userface"><img src="../../Content/Img/userface.png"></div>
-        <p class="username"><span class="username1">@ViewData["Name"]</span> | <span class="username2">
-        <a href="/login/logout">退出</a></span></p>
+        <p class="username"><span class="username1">@ViewData["Name"]</span> | <span class="username2"> @* ViewData["Name"]*@
+        <a href="#" action="/Logon/LogOut" id="logout">退出</a></span></p>
         <div class="column">
             <ul>
                 <li class="column1 column5" controll="/FReportUserAttention/Index"><a href="#" onclick="return false;" >绑定管理</a></li>
