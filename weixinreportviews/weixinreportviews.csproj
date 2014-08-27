@@ -99,7 +99,7 @@
     <Compile Include="Model\SS_CompanyAccount.cs" />
     <Compile Include="Model\SS_Lisence.cs" />
     <Compile Include="Model\Wx\WebSession.cs" />
-    <Compile Include="Model\Wx\WeixinAdaptor.cs" />
+    <Compile Include="Model\Wx\PathTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +180,7 @@
     <Content Include="Content\Img\topborder.jpg" />
     <Content Include="Content\Img\userface.png" />
     <Content Include="Content\Css\layer.ext.css" />
+    <Content Include="Content\themes\Report\SimpleFrame.css" />
     <Content Include="Global.asax" />
     <Content Include="ReportViews\ReportTemplete\简易框架.html" />
     <Content Include="Scripts\accountindex.js" />
@@ -206,6 +207,8 @@
     <Content Include="Scripts\Switch\main.js" />
     <Content Include="Scripts\logon.js" />
     <Content Include="Scripts\fReportMain.js" />
+    <Content Include="Scripts\zepto-1.1.4.min.js" />
+    <Content Include="Scripts\zepto.touch.js" />
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Model.cshtml" />

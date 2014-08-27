@@ -93,7 +93,7 @@ namespace weixinreportviews.Model
         /// <summary>
         /// html文件url
         /// </summary>
-        [Ignore]
+        [StringMaxLength(200, VarCharType.nvarchar)]
         public string CreateUrl
         {
             get;

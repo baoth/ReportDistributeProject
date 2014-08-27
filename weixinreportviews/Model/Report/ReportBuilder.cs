@@ -151,11 +151,16 @@ namespace weixinreportviews.Model
         {
             this.Id = Guid.NewGuid();
             this.Title = string.Empty;
+            this.TemplatePath = PathTools.BaseDirector + System.Configuration.ConfigurationManager.AppSettings["RPTemplate"];
         }
         #endregion
         public string Title { get; set; }
         public Guid Id { get; set; }
-        
+        public string TemplatePath
+        {
+            get;
+            set;
+        }
         /// <summary>
         /// 生成的html文件路径
         /// </summary>
@@ -164,8 +169,8 @@ namespace weixinreportviews.Model
         {
             get
             {
-                return WeixinAdaptor.BaseDirector + WeixinAdaptor.静态报表路径
-                            + this.Id + ".html";
+                return System.IO.Path.Combine(PathTools.BaseDirector, PathTools.静态报表路径,
+                            this.Id + ".html");
             }
         }
 
@@ -177,22 +182,17 @@ namespace weixinreportviews.Model
         {
             get
             {
-                return WeixinAdaptor.静态报表路径 + this.Id + ".html";
+                return System.IO.Path.Combine(PathTools.静态报表路径, this.Id + ".html");
             }
         }
 
         /// 生成Html文件
         /// </summary>
-        /// <param name="frameurl">模板框架url</param>
+        ///  <param name="frameurl">要转换文件路径</param>
         /// <returns>true,生成成功 false,生成失败</returns>
-        public abstract bool Build(string frameurl);
+        public abstract bool Build(string filepath,bool isDelSource=true);
 
-        /// <summary>
-        /// 生成Html文件
-        /// </summary>
-        /// <returns>true,生成成功 false,生成失败</returns>
-        public abstract bool Build();
-
+ 
         /// <summary>
         /// 删除生成的html文件
         /// </summary>
@@ -203,16 +203,7 @@ namespace weixinreportviews.Model
             return true;
         }
 
-        /// <summary>
-        /// 删除附属的文件或数据
-        /// </summary>
-        /// <returns></returns>
-        public abstract bool DeleteAttachData();
-
-        /// <summary>
-        /// 从request加载数据
-        /// </summary>
-        /// <param name="Request"></param>
+      
     }
 
     public class SimpleReportBuilder : ReportBuilder
@@ -222,34 +213,13 @@ namespace weixinreportviews.Model
         public SimpleReportBuilder(Guid id) {
             this.Id=id;
         }
-        /// <summary>
-        /// 类型
-        /// </summary>
-        /// <summary>
-        /// 数据文件路径
-        /// </summary>
-        [Ignore]
-        public string DataFileUrl
-        {
-            get
-            {
-                return WeixinAdaptor.BaseDirector + System.Configuration.ConfigurationManager.AppSettings["RPExcelFile"]
-                               + this.Id;
-            }
-        }
 
-        public override bool DeleteAttachData()
+        public override bool Build(string filePath,bool isDelSource=true)
         {
-            if (File.Exists(this.DataFileUrl + ".xls")) File.Delete(this.DataFileUrl + ".xls");
-            if (File.Exists(this.DataFileUrl + ".xlsx")) File.Delete(this.DataFileUrl + ".xlsx");
-            return true;
-        }
-
-        public override bool Build(string frameurl)
-        {
+            string templatePath = this.TemplatePath;
             try
             {
-                Html5Frame mframe = new Html5Frame(frameurl);
+                Html5Frame mframe = new Html5Frame(templatePath);
                 XElement xele = mframe.GetXElementById("title");
                 if (xele != null) xele.Value = string.IsNullOrEmpty(this.Title) ? "" : this.Title;
                 xele = mframe.GetXElementById("date");
@@ -257,15 +227,7 @@ namespace weixinreportviews.Model
 
                 XElement columns = mframe.GetXElementById("columns");
 
-                ExcelReader reader = null;
-                if (File.Exists(this.DataFileUrl + ".xls"))
-                {
-                    reader = new ExcelReader(this.DataFileUrl + ".xls");
-                }
-                else if (File.Exists(this.DataFileUrl + ".xlsx"))
-                {
-                    reader = new ExcelReader(this.DataFileUrl + ".xlsx");
-                }
+                ExcelReader reader = new ExcelReader(filePath);
                 XElement table = reader.Table();
                 if (table != null)
                 {
@@ -274,6 +236,10 @@ namespace weixinreportviews.Model
                 }
                 if (System.IO.File.Exists(this.HtmlFilePath)) System.IO.File.Delete(this.HtmlFilePath);
                 mframe.Save(this.HtmlFilePath);
+                if (isDelSource)
+                {
+                    File.Delete(filePath);
+                }
                 return true;
             }
             catch
@@ -283,11 +249,6 @@ namespace weixinreportviews.Model
             
         }
 
-        public override bool Build()
-        {
-            string filepath = WeixinAdaptor.BaseDirector + System.Configuration.ConfigurationManager.AppSettings["RPTemplate"];
-            return Build(filepath);
-        }
         
         private void AddColumn(XElement container, string field, string title, string align)
         {
