@@ -69,9 +69,10 @@
             window.parent.ControlIFrame(urlaccount);
         },
         CreateHtml: function () {
+            debugger
             var o = GetSingleSelectedRowData();
-            if (o.name) {
-                window.open(o);
+            if (o.name&&o.name.length>32) {
+                window.open('http://' + window.location.host + "/" + o.name.replace(/\/\//g, '/'));
             } else {
                 layer.alert("预览地址不存在!");
             }
@@ -180,6 +181,7 @@ $(document).ready(function () {
             { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
                 "mRender": function (val, isShow, row) {
+                    debugger
                     return '<div class="settings-button" v="' + val + '" n="' + row['CreateUrl'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
                 }
             }

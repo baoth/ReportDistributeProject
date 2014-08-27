@@ -15,6 +15,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         [HttpGet]
         public ActionResult Model(string id)
         {
+            ViewData.Add("YLState", "disabled");
             if (!string.IsNullOrEmpty(id))
             {
                 var session = General.CreateDbSession();
@@ -26,6 +27,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     ViewData.Add("ReportKey", ent.ReportKey);
                     ViewData.Add("Title", ent.Title);
                     ViewData.Add("eState", "disabled");
+                    ViewData.Remove("YLState");
                 }
             }
            return View("Model");
@@ -106,6 +108,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         }
         public JsonResult Upload() 
         {
+
             var files = Request.Files;
             var path =System.IO.Path.Combine(General.BaseDirector,"temp");
             var fileKey = Guid.NewGuid();
