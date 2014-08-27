@@ -2,6 +2,7 @@
 obj/
 [Rr]elease*/
 [Bb]in/
+[Tt]emp/
 [Uu]pload/
 [Pp]roperties/
 Web.Debug.config

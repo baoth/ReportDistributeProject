@@ -28,10 +28,6 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     ViewData.Add("eState", "disabled");
                 }
             }
-            else 
-            {
-
-            }
            return View("Model");
         }
 
@@ -98,7 +94,8 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         public JsonResult Upload() 
         {
             var files = Request.Files;
-            var path =System.IO.Path.Combine(General.BaseDirector,"Upload");
+            var path =System.IO.Path.Combine(General.BaseDirector,"temp");
+            var fileKey = Guid.NewGuid();
             for (int i = 0; i < files.Count; i++)
             {
                 var httpFile = files[i]; ;
@@ -108,7 +105,31 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     }
                     httpFile.SaveAs(System.IO.Path.Combine(path,httpFile.FileName));
                 }
-                
+                ReportBuilderSession rbs = WeixinAdaptor.CreateReportSession();
+                var rb = rbs.GetBuilder(fileKey, ReportBuilderEnum.Excel文件创建框架);
+                if (rb != null)
+                {
+                    try
+                    {
+                        if (!rb.Build())
+                        {
+                            return Json(new
+                            {
+                                err = 1,
+                                message = "读取数据文件出错！"
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                      
+                        return Json(new
+                        {
+                            err = 1,
+                            message = ex.Message
+                        });
+                    }
+                }
             }
             return Json(new { data="http://www.baidu.com"});
         }

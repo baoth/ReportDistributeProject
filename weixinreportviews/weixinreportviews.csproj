@@ -181,6 +181,7 @@
     <Content Include="Content\Img\userface.png" />
     <Content Include="Content\Css\layer.ext.css" />
     <Content Include="Global.asax" />
+    <Content Include="ReportViews\ReportTemplete\简易框架.html" />
     <Content Include="Scripts\accountindex.js" />
     <Content Include="Scripts\dropzone.js" />
     <Content Include="Scripts\dropzone.min.js" />

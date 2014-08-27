@@ -14,7 +14,7 @@ namespace weixinreportviews.Model
 
         public static string 静态报表路径
         {
-            get { return System.Configuration.ConfigurationManager.AppSettings["RP静态报表路径"]; }
+            get { return System.Configuration.ConfigurationManager.AppSettings["RPPath"]; }
         }
 
         public static string WebRoot
@@ -29,7 +29,7 @@ namespace weixinreportviews.Model
 
         public static ReportBuilderSession CreateReportSession()
         {
-            return new ReportBuilderSession("localdb");
+            return new ReportBuilderSession();
         }
 
         public static WeixinCore CreateWeixinCore()

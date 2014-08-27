@@ -144,57 +144,18 @@ namespace weixinreportviews.Model
         }
     }
 
-    public abstract class ReportBuilder : QSmartEntity
+    public abstract class ReportBuilder 
     {
         #region 构造函数
         protected ReportBuilder()
         {
             this.Id = Guid.NewGuid();
-            this.Builded = false;
-            this.CreateDate = DateTime.Now;
             this.Title = string.Empty;
-            this.KeyWord = string.Empty;
         }
         #endregion
-
-        public Guid Id { get; set; }
-        /// <summary>
-        /// 报表名称
-        /// </summary>
-        [StringMaxLength(20, VarCharType.nvarchar)]
         public string Title { get; set; }
-        /// <summary>
-        /// 关键字
-        /// </summary>
-        [StringMaxLength(20, VarCharType.nvarchar)]
-        public string KeyWord { get; set; }
-        /// <summary>
-        /// 创建日期
-        /// </summary>
-        public DateTime CreateDate { get; set; }
-        /// <summary>
-        /// 生成html日期
-        /// </summary>
-        public DateTime? BuildDate { get; set; }
-
-        /// <summary>
-        /// 页面显示用
-        /// </summary>
-        [Ignore]
-        public string BuildDateDisplay
-        {
-            get
-            {
-                if (this.BuildDate == null) return string.Empty;
-                return String.Format("{0:G}", this.BuildDate);
-            }
-        }
-
-        /// <summary>
-        /// 是否已生成
-        /// </summary>
-        public bool Builded { get; set; }
-
+        public Guid Id { get; set; }
+        
         /// <summary>
         /// 生成的html文件路径
         /// </summary>
@@ -220,16 +181,6 @@ namespace weixinreportviews.Model
             }
         }
 
-        [Ignore]
-        public abstract ReportBuilderEnum Type { get; }
-
-        /// <summary>
-        /// 页面显示用
-        /// </summary>
-        [Ignore]
-        public string TypeName { get { return this.Type.ToString(); } }
-
-        /// <summary>
         /// 生成Html文件
         /// </summary>
         /// <param name="frameurl">模板框架url</param>
@@ -249,7 +200,6 @@ namespace weixinreportviews.Model
         public bool DeleteBuilded()
         {
             if (System.IO.File.Exists(this.HtmlFilePath)) System.IO.File.Delete(this.HtmlFilePath);
-            this.Builded = false;
             return true;
         }
 
@@ -263,23 +213,18 @@ namespace weixinreportviews.Model
         /// 从request加载数据
         /// </summary>
         /// <param name="Request"></param>
-        public abstract void SetDataFromHttpRequest(HttpRequestBase Request);
     }
 
     public class SimpleReportBuilder : ReportBuilder
     {
 
         public SimpleReportBuilder() : base() { }
-
+        public SimpleReportBuilder(Guid id) {
+            this.Id=id;
+        }
         /// <summary>
         /// 类型
         /// </summary>
-        [Ignore]
-        public override ReportBuilderEnum Type
-        {
-            get { return ReportBuilderEnum.Excel文件创建框架; }
-        }
-
         /// <summary>
         /// 数据文件路径
         /// </summary>
@@ -304,12 +249,11 @@ namespace weixinreportviews.Model
         {
             try
             {
-                this.BuildDate = DateTime.Now;
                 Html5Frame mframe = new Html5Frame(frameurl);
                 XElement xele = mframe.GetXElementById("title");
                 if (xele != null) xele.Value = string.IsNullOrEmpty(this.Title) ? "" : this.Title;
                 xele = mframe.GetXElementById("date");
-                if (xele != null) xele.Value = this.BuildDate==null?string.Empty:((DateTime)this.BuildDate).ToShortDateString();
+                //if (xele != null) xele.Value = this.BuildDate==null?string.Empty:((DateTime)this.BuildDate).ToShortDateString();
 
                 XElement columns = mframe.GetXElementById("columns");
 
@@ -328,53 +272,8 @@ namespace weixinreportviews.Model
                     XElement div = mframe.GetXElementById("table");
                     if (div != null) div.Add(table);
                 }
-
-
-                ////读取excel数据
-                //ExcelReaderEx eReader = new ExcelReaderEx();
-                //if (File.Exists(this.DataFileUrl + ".xls"))
-                //{
-                //    if (!eReader.Load(this.DataFileUrl + ".xls")) return false;
-                //}
-                //else if (File.Exists(this.DataFileUrl + ".xlsx"))
-                //{
-                //    if (!eReader.Load(this.DataFileUrl + ".xlsx")) return false;
-                //}
-                //else { return false; }
-               
-
-                //try
-                //{
-
-                //    if (columns != null)
-                //    {
-                //        XElement tr = new XElement(mframe.ns + "tr");
-                //        columns.Add(tr);
-                //        foreach (DataColumn col in eReader.Columns)
-                //        {
-                //            this.AddColumn(tr, col.ColumnName, col.ColumnName, col.ExtendedProperties["align"].ToString());
-                //        }
-                //    }
-
-                //    XElement rows = mframe.GetXElementById("rows");
-                //    if (rows != null)
-                //    {
-                //        foreach (DataRow row in eReader.Rows)
-                //        {
-
-                //            this.AddRow(rows, row.ItemArray);
-                //        }
-                //    }
-                //}
-                //catch
-                //{
-                //    return false;
-                //}
-
-
                 if (System.IO.File.Exists(this.HtmlFilePath)) System.IO.File.Delete(this.HtmlFilePath);
                 mframe.Save(this.HtmlFilePath);
-                this.Builded = true;
                 return true;
             }
             catch
@@ -386,15 +285,8 @@ namespace weixinreportviews.Model
 
         public override bool Build()
         {
-            string frameName = "RP" + this.TypeName;
-            string filepath = WeixinAdaptor.BaseDirector + System.Configuration.ConfigurationManager.AppSettings[frameName];
+            string filepath = WeixinAdaptor.BaseDirector + System.Configuration.ConfigurationManager.AppSettings["RPTemplate"];
             return Build(filepath);
-        }
-
-        public override void SetDataFromHttpRequest(HttpRequestBase Request)
-        {
-            this.Title = Request["Title"];
-            this.KeyWord = Request["KeyWord"];
         }
         
         private void AddColumn(XElement container, string field, string title, string align)
