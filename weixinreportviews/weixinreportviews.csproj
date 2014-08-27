@@ -37,6 +37,10 @@
     <ApplicationIcon>Content\Img\favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Cbin\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
     </Reference>
@@ -89,11 +93,19 @@
     <Compile Include="Model\CS_FirstReport.cs" />
     <Compile Include="Model\CS_UserAttention.cs" />
     <Compile Include="Model\General.cs" />
+    <Compile Include="Model\Report\ExcelReader.cs" />
+    <Compile Include="Model\Report\ReportBuilder.cs" />
+    <Compile Include="Model\Report\ReportSession.cs" />
     <Compile Include="Model\SS_CompanyAccount.cs" />
     <Compile Include="Model\SS_Lisence.cs" />
+    <Compile Include="Model\Wx\WebSession.cs" />
+    <Compile Include="Model\Wx\WeixinAdaptor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Cbin\Aspose.Cells.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Cbin\QSmart.Core.dll" />
     <Content Include="Cbin\QSmart.Weixin.Core.dll" />
     <Content Include="Cbin\System.Web.Extensions.dll" />
