@@ -19,14 +19,16 @@ namespace weixinreportviews.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult Model(string id)
+        public ActionResult Model(string id,string ProductKind)
         {
             
             if (!string.IsNullOrEmpty(id))
             {
+                Guid Id;
+                Guid.TryParse(id,out Id);
                 DbSession session = General.CreateDbSession();
                 SS_CompanyAccount account = session.Retrieve<SS_CompanyAccount>(
-                    "Id", Guid.Parse(id));
+                    "Id", Id);
                 if (account != null)
                 {
                     PropertyInfo[] pis = account.GetType().GetProperties();
@@ -46,8 +48,12 @@ namespace weixinreportviews.Controllers
                             ViewData.Add(pis[i].Name, value);
                         }
                     }
+                    List<SS_LisenceView> lisenceList = GetSS_LisenceList(account.Id,"");
+                    ViewData["SS_LisenceList"] = lisenceList;
                 }
             }
+           
+
             return View("Model");
         }
 
@@ -148,7 +154,28 @@ namespace weixinreportviews.Controllers
                 aaData = rows
             }, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// 获取授权信息
+        /// </summary>
+        /// <param name="accountid"></param>
+        /// <param name="productKind"></param>
+        /// <returns></returns>
+        private List<SS_LisenceView> GetSS_LisenceList(Guid accountid,string productKind)
+        {
+            DbSession session = General.CreateDbSession();
+            QSmartQuery Query = new QSmartQuery();
+            Query.Tables.Add(new QSmartQueryTable());
+            Query.Tables[0].tableName = typeof(SS_LisenceView).Name;
+            Query.FilterConditions.Add(new QSmartQueryFilterCondition());
+            Query.FilterConditions[0].Column = new QSmartQueryColumn();
+            Query.FilterConditions[0].Column.columnName = "AccountId";
+            Query.FilterConditions[0].Column.dataType =typeof(Guid);
+            Query.FilterConditions[0].Operator = QSmartOperatorEnum.equal;
+            Query.FilterConditions[0].Values.Add(accountid);
 
+            var results = session.Context.QueryEntity<SS_LisenceView>(Query);
+            return results.Count == 0 ? null : results;
+        }
         /// <summary>
         /// 验证唯一键属性是否在数据库中存在
         /// </summary>
@@ -201,5 +228,11 @@ namespace weixinreportviews.Controllers
             }
             return result;
         }
+    }
+
+    public class test
+    {
+        public string ID { set; get; }
+        public string title { set; get; }
     }
 }

@@ -7,174 +7,53 @@
 <html>
 <head>
     <title></title>
-    <link href="../../Content/Css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css" />      
     <link href="../../Content/Css/bootstrap.css" rel="stylesheet" type="text/css" />
      <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />   
+    <link href="../../Content/Css/select.css" rel="stylesheet" type="text/css" /> 
+
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>        
-   @*开关按钮引用start *@
-
-    <link href="../../Content/Css/Switch/bootstrap-switch.css" rel="stylesheet" type="text/css" /> 
-    <script src="../../Scripts/Switch/jquery.min.js" type="text/javascript"></script> 
-    <script src="../../Scripts/Switch/bootstrap-switch.js" type="text/javascript"></script>
    
-    @*  开关按钮 end*@
-
    <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
     <script src="../../Scripts/numeralInput.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
         $(document).ready(function () {
-            var Id = $("#GUID").val(); //""表示新增  有值 表示修改
-
-            if (Id == "" || Id == undefined) {
-
-                $("#btn_signIn").show(); //
-                $("#btn_save").hide();
-            }
-            else {
-             
-                $("#btn_signIn").hide(); //
-                $("#btn_save").show();
-            }           
-            SetDefault(Id);
-            $("#btn_save").bind("click", Save);
-            $("#btn_signIn").bind("click", Save);
-            /*验证数字*/
-            $('#Phone').bind('keydown', function () {
-                var e = $(this).event || window.event;
-                var code = parseInt(e.keyCode);
-                if (code >= 96 && code <= 105 || code >= 48 && code <= 57 || code == 8 || code == 110 || code == 190) {
-                    return true;
-                } else {
-                    return false;
-                }  
+            BindEvent();
+            layer.use('../../Scripts/layer.ext.js', function () {
+                layer.ext = function () {
+                    layer.prompt();
+                }
             })
-
         });
-        var nameValid = false;
-        var loginKeyValid = false;
-        ///spanLoginKeyMsg
-        function CheckLoginKey(e) {
-
-            var LoginKey = $("#LoginKey").val();
-
-            if (CheckLoginKeyData(LoginKey) == false) return false;
-            $.ajax({
-                url: "/Account/Validation",
-                data: { col: "LoginKey", value: LoginKey },
-                dataType: "JSON",
-                type: "POST",
-               
-                success: function (data) {
-                    var imageName = $("#imgLoginKeyMsg")[0];
-                    imageName.style.display = "block";
-
-                    if (data != null) {
-                        if (data.result == 1) {
-                            imageName.src = "../../Content/Img/imageSuccess.jpg";
-                            loginKeyValid = true;
-                            return true;
-                        }
-                        else {
-                            imageName.src = "../../Content/Img/imageError.jpg";
-                            $("#spanLoginKeyMsg").html("<font color='red'>此账号已经注册！</font>");
-
-
-                        }
-                    }
-                    else {
-                        imageName.src = "../../Content/Img/imageError.jpg";
-                        $("#spanLoginKeyMsg").html("<font color='red'>校验失败！</font>");
-
-                    }
-                },
-                error: function () {
-                    var imageName = $("#imgLoginKeyMsg");
-                    imageName.style.display = "block";
-                    imageName.src = "../../Content/Img/imageError.jpg";
-                    $("#spanLoginKeyMsg").html("<font color='red'>网络原因，校验失败！</font>");
-                }
-
+        function BindEvent() {
+            $("#edit").bind("click", function () {               
+                //密码文本
+                layer.prompt({ title: '修改密码' }, function (val, index, elem) {                    
+                    Save(val);
+                })
             });
-            return false;
+
         }
-        function CheckName(e) {
-            //focus()
-            var oName = $("#Name");
-            var Name = oName.val();
-            if (CheckNameData(Name) == false) return false
-            $.ajax({
-                url: "/Account/Validation",
-                data: { col: "Name", value: Name },
-                dataType: "JSON",
-                type: "POST",
-               // async:false,
-                success: function (data) {
-                    var imageName = $("#imgNameMsg")[0];
-                    imageName.style.display = "block";
-
-                    if (data != null) {
-                        if (data.result == 1) {
-                            imageName.src = "../../Content/Img/imageSuccess.jpg";
-                            nameValid = true;
-                            return true;
-                        }
-                        else {
-                            imageName.src = "../../Content/Img/imageError.jpg";
-                            $("#SpanNameMsg").html("<font color='red'>此用户已经注册！</font>");
-                            
-                        }
-                    }
-                    else {
-                        imageName.src = "../../Content/Img/imageError.jpg";
-                        $("#SpanNameMsg").html("<font color='red'>校验失败！</font>");                       
-                    }
-                },
-                error: function () {
-                    var imageName = $("#imgNameMsg");
-                    imageName.style.display = "block";
-                    imageName.src = "../../Content/Img/imageError.jpg";
-                    $("#SpanNameMsg").html("<font color='red'>网络原因，校验失败！</font>");                    
-                }
-
-            });
-            return false;
-        }
-
-        function Save() {
-            
-            //检查
-            if (Check() == false) return;
-            var Id = $("#GUID").val(); //""表示新增  有值 表示修改  
-            if (Id == "" || Id == undefined) { //添加
-               
-                if (nameValid == false) {
-
-                    var imageName = $("#imgNameMsg")[0];
-                    imageName.src = "../../Content/Img/imageError.jpg";
-                    $("#SpanNameMsg").html("<font color='red'>此用户已经注册！</font>");
-                    return;
-                }
-                if (loginKeyValid == false) {
-                    var imageName = $("#imgLoginKeyMsg")[0];
-                    imageName.src = "../../Content/Img/imageError.jpg";
-                    $("#spanLoginKeyMsg").html("<font color='red'>此账号已经注册！</font>");
-                    return
-                }
+        function Save(password) {            
+           
+           debugger
+            var Id = $("#GUID").val(); 
+            if (Id == "" || Id == undefined) { 
+                layer.msg("无效账号！");
+                return;
             }
-
+           
             var Name = $("#Name").val();
             var OrderNumber = $("#OrderNumber").val();
             var LoginKey = $("#LoginKey").val();
-            var Password = $("#Password").val();
+            var Password = password; //$("#Password").val();
             var Phone = $("#Phone").val();
             var Creator = $("#Creator").val();
-            var CreateDate = $("#CreateDate").val();           
+            var CreateDate = $("#CreateDate").val();
             var Address = $("#Address").val();
-            var Stoped = $("#CheckSwitch").bootstrapSwitch("state");
-            
-            Stoped = !Stoped;   
-            var Id = $("#GUID").val();
+            var Stoped = $("#Stoped").val()=="true"?true:false;          
             var data = { Name: Name, OrderNumber: OrderNumber, LoginKey: LoginKey, Address: Address, Phone: Phone, Stoped: Stoped, Password: Password, Id: Id, Creator: Creator, CreateDate: CreateDate };
                 $.ajax({
                     url: "/Account/Save",
@@ -183,8 +62,7 @@
                     type: "POST",
                     success: function (data) {
                         if (data != null) {
-                            if (data.result == 0) {
-                                //layer.alert("保存成功！");
+                            if (data.result == 0) {                               
                                 layer.msg("操作成功！");
                                 CloseBack();
                             }
@@ -199,199 +77,110 @@
 
                 });
         }
-        function SetDefault(id) {
-            if (id != "") {
-                $("#Name").attr("disabled", "disabled");
-                $("#LoginKey").attr("disabled", "disabled");
-            }
-            $("#Phone").numeral();
-            //开关
-            var objSwitch = $("#CheckSwitch");
-            objSwitch.bootstrapSwitch("onText", "启用");
-            objSwitch.bootstrapSwitch("offText", "停用");
-            var Stoped = $("#Stoped").val();
-            var flag = false;
-            if (Stoped.toLowerCase() == "true") {//ture 是停用 即对应
-                flag = true;
-            }
-            flag = !flag;//取反
-            objSwitch.bootstrapSwitch('state', flag); // true || false
-            objSwitch.bootstrapSwitch('disabled',true); 
-            
-        }
+        
         function CloseBack() {
             var urlaccount = '/FReportUserAttention/Index';
                 window.parent.ControlIFrame(urlaccount);
           
         }
+        
+//        //校验Phone
+//        function CheckPhone() {
+//            var Phone = $("#Phone").val();
+//            if (Phone == "") {
+//                $("#SpanPhoneMsg").html("<font color='red'>电话不能为空！</font>");
+//                return false;
+//            }
+//            else {
 
-        function CheckNameData(Name) {
-            if (Name == "" || Name == undefined) {               
-                ClearMsgImage("imgNameMsg");
-                $("#SpanNameMsg").html("<font color='red'>公司名称不能为空！</font>");
-                return false;
-            }
-            else {
-                var nameLen = Name.length;
-                if (nameLen > 50) {                   
-                    ClearMsgImage("imgNameMsg");
-                    $("#SpanNameMsg").html("<font color='red'>公司名称字符长度不能大于50！</font>");
-                    return false;
-                }
-                else {
-                    $("#SpanNameMsg").html("");
-                }
-            }
-            return true;
-        }
+//                if (istell(Phone) == false) {
+//                    $("#SpanPhoneMsg").html("<font color='red'>电话格式不正确！<br> 格式：固定电话 0511-4405222 或 021-87888822 <br> 或者手机号码</font>");
+//                    return false;
+//                }
+//                var PhoneLen = Phone.length;
+//                if (PhoneLen > 20) {
+//                    $("#SpanPhoneMsg").html("<font color='red'>电话最长不能超过20字节！</font>");
+//                    return false;
+//                }
+//                else {
+//                    $("#SpanPhoneMsg").html("");
+//                }
+//            }
 
-        function CheckLoginKeyData(LoginKey) {
-            if (LoginKey == "" || LoginKey == undefined) {  
-            debugger              
-                ClearMsgImage("imgLoginKeyMsg");
-                $("#spanLoginKeyMsg").html("<font color='red'>账号名称不能为空！</font>");
-                return false;
-            }
-            else {
-                var LoginKeyLen = LoginKey.length;
-                if (LoginKeyLen > 50) {                    
-                    ClearMsgImage("imgLoginKeyMsg");
-                    $("#spanLoginKeyMsg").html("<font color='red'>账号最长不能超过50！</font>");
-                    return false;
-                }
-                else {
-                    $("#spanLoginKeyMsg").html("");
-                }
-            }
-            return true
-        }
-        //清除消息图片
-        function ClearMsgImage(id) {
-            var imageName = $("#" + id)[0];
-            imageName.style.display = "none";
-            imageName.src = "";
-        }
-        //校验Phone
-        function CheckPhone() {
-            var Phone = $("#Phone").val();
-            if (Phone == "") {
-                $("#SpanPhoneMsg").html("<font color='red'>电话不能为空！</font>");
-                return false;
-            }
-            else {
+//            return true;
+//        }
 
-                if (istell(Phone) == false) {
-                    $("#SpanPhoneMsg").html("<font color='red'>电话格式不正确！<br> 格式：固定电话 0511-4405222 或 021-87888822 <br> 或者手机号码</font>");
-                    return false;
-                }
-                var PhoneLen = Phone.length;
-                if (PhoneLen > 20) {
-                    $("#SpanPhoneMsg").html("<font color='red'>电话最长不能超过20字节！</font>");
-                    return false;
-                }
-                else {
-                    $("#SpanPhoneMsg").html("");
-                }
-            }
+//        function CheckPassword() {
+//            var Password = $("#Password").val();
+//            if (Password == "") {
+//                $("#SpanPasswordMsg").html("<font color='red'>密码不能为空!</font>");
+//                return false;
+//            }
+//            else {
+//                var PasswordLen = Password.length;
+//                if (PasswordLen > 50) {
+//                    $("#SpanPasswordMsg").html("<font color='red'>密码最长不能超过50字节！</font>");
+//                    return false;
+//                }
+//                else {
+//                    $("#SpanPasswordMsg").html("");
+//                }
+//            }
+//            return true;
+//        }
+//        function CheckAddress() {
+//            var Address = $("#Address").val();
+//            if (Address == "") {
+//                $("#SpanAddressMsg").html("<font color='red'>地址不能为空！</font>");
+//                return false;
+//            }
+//            else {
+//                var AddressLen = Address.length;
+//                if (AddressLen > 150) {
+//                    $("#SpanAddressMsg").html("<font color='red'>地址最长不能超过150！</font>");
+//                    return false;
+//                }
+//                else {
+//                    $("#SpanAddressMsg").html("");
+//                }
+//            }
+//        }
+//        function Check() {
 
-            return true;
-        }
-        function CheckPassword() {
-            var Password = $("#Password").val();
-            if (Password == "") {
-                $("#SpanPasswordMsg").html("<font color='red'>密码不能为空!</font>");
-                return false;
-            }
-            else {
-                var PasswordLen = Password.length;
-                if (PasswordLen > 50) {
-                    $("#SpanPasswordMsg").html("<font color='red'>密码最长不能超过50字节！</font>");
-                    return false;
-                }
-                else {
-                    $("#SpanPasswordMsg").html("");
-                }
-            }
-            return true;
-        }
-        function CheckAddress() {
-            var Address = $("#Address").val();
-            if (Address == "") {
-                $("#SpanAddressMsg").html("<font color='red'>地址不能为空！</font>");
-                return false;
-            }
-            else {
-                var AddressLen = Address.length;
-                if (AddressLen > 150) {
-                    $("#SpanAddressMsg").html("<font color='red'>地址最长不能超过150！</font>");
-                    return false;
-                }
-                else {
-                    $("#SpanAddressMsg").html("");
-                }
-            }
-        }
-        function Check() {
+//            var Name = $("#Name").val();
+//            if (CheckNameData(Name) == false) {
+//                return false
+//            }
+//            var LoginKey = $("#LoginKey").val();
 
-            var Name = $("#Name").val();
-            if (CheckNameData(Name) == false) {
-                return false
-            }
-            var LoginKey = $("#LoginKey").val();
+//            if (CheckLoginKeyData(LoginKey) == false) {
+//                return false;
+//            }
+//            if (CheckPassword() == false) { return false }
 
-            if (CheckLoginKeyData(LoginKey) == false) {
-                return false;
-            }
-            if (CheckPassword() == false) { return false }
+//            if (CheckAddress() == false) { return false }
+//            
+//            if (CheckPhone() == false) {return false; }
+//           
+//            return true;
+//        }
 
-            if (CheckAddress() == false) { return false }
-            
-            if (CheckPhone() == false) {return false; }
-           
-            return true;
-        }
+//        //匹配国内电话号码(0511-4405222 或 021-87888822)
+//        function istell(str) {          
+//            var reg1 = /\d{3}-\d{8}|\d{4}-\d{7}/;
+//            var reg2 = /^1[35]\d{9}$/;
+//            var result = reg1.test(str);
+//            var phone = reg2.test(str);
+//            if (result == false && phone == false) {
+//                return false;
+//            }
+//            return true;
+//        }
 
-        //匹配国内电话号码(0511-4405222 或 021-87888822)
-        function istell(str) {          
-            var reg1 = /\d{3}-\d{8}|\d{4}-\d{7}/;
-            var reg2 = /^1[35]\d{9}$/;
-            var result = reg1.test(str);
-            var phone = reg2.test(str);
-            if (result == false && phone == false) {
-                return false;
-            }
-            return true;
-        }
+
     </script>
     <style type="text/css">
-        table
-        {
-            width:100%;
-            height:300px;
-            text-align:center;
-           
-            
-        }
-        tr 
-        {
-           
-             height:30px;    
-        }
-        
-        .tdtitle
-        {
-            text-align:left; 
-            width:10%;
-              
-        }
-        .tdText
-        {
-             text-align:left;
-             width:40%; 
-             vertical-align:top;
-            
-             
-        }
+       
         
        *{padding: 0px;margin: 0px; font-size: 13px;font-family:"微软雅黑","SimSun","Arial Narrow";}
 
@@ -430,7 +219,63 @@
         a:active{
         text-decoration:none;
         }
+        .div_item_title
+        {
+            text-align:left;
+            font-size:x-large;
+        }
+        .div_item_content
+        {
+            text-align:left;
+            padding:10px 0px 0px 100px; 
+        }
+        .div_item_content ul
+        {
+            list-style-type:none;
+        }
+        .div_item_List
+        {
+             text-align:left;  
+             padding:10px 0px 0px 100px;            
+        }
+        .div_item_List ul
+        {
+            list-style-type:none;            
+            
+        }
        
+        
+        .div_item_List_table
+        {
+             width:600px;
+             border:5px;
+             
+        }
+        .div_item_List_tbody
+        {
+            text-align:left; 
+        }
+        .div_item_List_thead tr th
+        {
+            height:20px;
+            border:1px solid #ff00ff;
+            cellspacing:0px;
+            text-align:center;
+            
+        }
+        .div_item_List_tbody tr td
+        {
+             height:20px; 
+             border:1px solid #ff00ff;
+             cellspacing:0px;
+             text-align:center;
+        }
+       .div_item_content a:hover, a:focus {
+        color:#21b384;
+        }
+        .div_item_content a{
+        color:Black;
+        }
     </style>
     
      
@@ -439,217 +284,92 @@
     <div style="text-align:center;margin: 0px auto; " class="accountinfo">
     <form  id="from" class="form-horizontal">
        <div style="text-align:left; margin:0px auto;" >
-        <a class="button button-rounded button-flat-highlight" id="btn_close" onclick="CloseBack()" href="#">返回</a>
-        <a class="button button-rounded button-flat-primary" id="btn_signIn" href="#">注册</a> 
-        <a class="button button-rounded button-flat-action" id="btn_save" href="#">确定</a>
-       
-       </div> 
-      
-     
-     
-       <div style="margin: 10px auto; width: 100%; height: auto; "> @*background: url(../../Content/Img/border.jpg)*@
-           
-        <table>
-
-         @*<tr>
-            <td height="65"  style="width:900px" colspan="2" align="center">
-                <img src="../../Content/Img/titleMsg.jpg" />
-            </td>
-          </tr>*@
-
-         <tr>
-            <td class="tdText"> 
-            
-             <label><font color="red">*</font>公司&nbsp </label>  
-             <div>                             
-             <input placeholder="请输入公司名称" maxlength="50" id="Name" name="Name" onblur="CheckName(this)" value="@ViewData["Name"]" class="input-xlarge" type="text" />
-                                  
-             </div>          
-                   
-            </td>
-
-             <td class="tdtitle" >
-               <span style="padding:35px 0px 0px 0px"><img  id="imgNameMsg"src="" style="display:none"/></span>             
-             </td>    
-
-             <td class="tdText" >
-            <div> 
-            <label>订单号  &nbsp </label>
-            <input disabled="disabled" maxlength="16" id="OrderNumber" value="@ViewData["OrderNumber"]" name="OrderNumber" class="input-xlarge" type="text" />
-            </div>
-            
-            </td>
-             <td class="tdtitle" >             
-             </td>
-        </tr>
-        <tr class="showMsg">
-            <td>
-             <div>
-               <span id="SpanNameMsg"></span> 
-              </div>   
-            </td>
-
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
-        </tr>
-               
-         <tr> 
-            
-            <td class="tdText" >
-            
-            <label><font color="red">*</font>账号  &nbsp </label>
-            <div> 
-            <input placeholder="请输入用户名称" maxlength="15" id="LoginKey" value="@ViewData["LoginKey"]" onblur="CheckLoginKey()" name="LoginKey" class="input-xlarge" type="text" />            
-            </div>  
-                
-            </td>
-             <td class="tdtitle" >
-             <span style="padding:35px 0px 0px 0px"><img  id="imgLoginKeyMsg"src="" style="display:none"/></span>
-           
-             </td>
-
-            <td class="tdText"> 
-            
-            <label ><font color="red">*</font>密码 &nbsp </label>
-            <div> 
-            <input placeholder="请输入密码" maxlength="15" id="Password" name="Password" onblur="CheckPassword()" value="@ViewData["Password"]" class="input-xlarge" type="text" />
-            </div>
-            
-            </td>
-            <td class="tdtitle">             
-           </td>
-
-        </tr>   
-             
-        <tr class="showMsg">
-            <td>
-             <div>
-               <span id="spanLoginKeyMsg"></span>
-             </div>     
-            </td>
-
-            <td>
-            </td>
-
-            <td>
-            <div>
-            <span id="SpanPasswordMsg"></span>
-            </div>
-            </td>
-            <td>
-            </td>
-        </tr>
-         <tr>           
-           
-            <td class="tdText" >
-            
-            <label><font color="red">*</font>电话  &nbsp </label>
-            <div> 
-            <input placeholder="请输入电话" maxlength="15" class="input-xlarge" id="Phone" onblur="CheckPhone()" name="Phone" value="@ViewData["Phone"]" type="text" />
-            </div>
-            
-            </td>
-            <td class="tdtitle">
-                
-            </td>
-            
-            <td class="tdText">
-             
-           
-            <label >创建人&nbsp </label>
-            <div> 
-            <input class="input-xlarge" disabled="disabled" id="CreateorId" name="CreateorId" value="@ViewData["CreateorName"]" type="text" />
-            </div>
-           
-            </td>
-            <td class="tdtitle"></td> 
-         
-        </tr>
-         
-         <tr class="showMsg">
-            <td>
-              <div>
-             <span id="SpanPhoneMsg"></span>
-              </div>
-           
-            </td>
-
-            <td>
-            </td>
-            <td>
-            </td>
-            <td>
-            </td>
-        </tr>
-
-         <tr>
-           
-            <td class="tdText"> 
-           
-            <label >创建时间  &nbsp </label>
-
-             <div><input class="input-xlarge" id="CreateDate" disabled="disabled" name="CreateDate" value="@ViewData["CreateDate"]"  type="text" />
-             </div>
-           
-            </td>
-            <td class="tdtitle"></td>
-            
-            <td class="tdText" >
-          
-            <label >修改时间  &nbsp </label>
-            <div>
-           <input  class="input-xlarge" disabled="disabled" id="ModifyDate" name="ModifyDate" value="@ViewData["ModifyDate"]" type="text" /> 
-           </div>
-         
-            </td>
-         <td class="tdtitle"></td>
-
-        </tr>
-               
-
-        <tr>
-           
-            <td class="tdText" colspan="4">
-            
-            <label ><font color="red">*</font>地址  &nbsp </label>
-            <div>
-             <input placeholder="请输入地址" maxlength="100" style=" width:90%" class="input-xlarge" id="Address" onblur="CheckAddress()" name="Address" value="@ViewData["Address"]"  type="text" />
-            </div>
-            <div><span id="SpanAddressMsg"></span></div>
-                       
-        </tr>
-        <tr>
-            
-            <td class="tdText">
-            
-            <label>  &nbsp </label>           
-            <div > 
-                <input type="checkbox" id="CheckSwitch" name="CheckSwitch"  />
-                
-            </div> 
-
-            </td>
-            <td class="tdtitle"></td>
-            <td></td>
-            <td></td>
-        </tr>
+        <a class="button button-rounded button-flat-highlight" id="btn_close" onclick="CloseBack()" href="#">返回</a>       
         
-      </table>
+       </div> 
+       <div style="margin: 10px auto; text-align:left; width: 100%; height: auto; "> 
+        <div class="div_item_title">
+            公司信息:
+        </div>
+        <div class="div_item_content">
+            <ul>
+                <li>订&nbsp 单&nbsp 号:&nbsp&nbsp&nbsp&nbsp @ViewData["OrderNumber"]</li>
+                <li>公司名称:&nbsp&nbsp&nbsp&nbsp @ViewData["Name"]</li>
+                <li>账&nbsp&nbsp&nbsp&nbsp&nbsp 号:&nbsp&nbsp&nbsp&nbsp @ViewData["LoginKey"]</li>                
+                <li>电&nbsp&nbsp&nbsp&nbsp&nbsp 话:&nbsp&nbsp&nbsp&nbsp @ViewData["Phone"]</li>
+                <li>创&nbsp 建&nbsp 人:&nbsp&nbsp&nbsp&nbsp @ViewData["CreateorName"]</li>                
+                <li>创建时间:&nbsp&nbsp&nbsp&nbsp @ViewData["CreateDate"]</li>            
+                <li>修改时间:&nbsp&nbsp&nbsp&nbsp @ViewData["ModifyDate"]</li>
+                <li>地&nbsp&nbsp&nbsp&nbsp&nbsp 址:&nbsp&nbsp&nbsp&nbsp @ViewData["Address"]</li>
+                @*<li>是否停用:"@ViewData["Stoped"]"</li>*@
+                <li>密&nbsp&nbsp&nbsp&nbsp&nbsp 码:&nbsp&nbsp&nbsp&nbsp *** &nbsp&nbsp&nbsp&nbsp <a href="#" name="edit" id="edit" title="修改密码"><i class="fa fa-pencil-square-o"></i></a></li>            
+            </ul>
+        </div> 
+        <div class="div_item_title">
+          授权信息：
+        </div>
+        <div class="div_item_List" id="div_item_List">
+            
+            @{
+                var str = string.Empty;
+                var list = (List<weixinreportviews.Model.SS_LisenceView>)ViewData["SS_LisenceList"];
+                if (list != null && list.Count > 0)
+                {
+                    foreach (weixinreportviews.Model.SS_LisenceView item in list)
+                    {
+                       <ul>
+                       <li>订单号:@item.OrderNumber&nbsp&nbsp&nbsp&nbsp 授权有效期:@item.EffectiveDateDisplay 至 @item.ExpiryDateDisplay &nbsp&nbsp&nbsp&nbsp 授权点:@item.LisencePoint &nbsp&nbsp&nbsp 停用:@item.StopedDisplay</li>
+                       </ul>
+                    }
+                }
+                else
+                {
+                      <ul>
+                       <li>无授权信息！</li>
+                      </ul>  
+                }
+             }
+
+            @*<table class="div_item_List_table">
+                   <thead class="div_item_List_thead">
+                   <tr>
+                        <th>订单号</th>
+                        <th>授权有效时间</th>
+                        <th>授权点数</th>
+                        <th>是否停用</th>
+                   </tr>
+                   </thead>
+                   <tbody  class="div_item_List_tbody">
+                        <tr>
+                        <td>@ViewData["OrderNumber"]</td>
+                        <td>@ViewData["OrderNumber"]</td>
+                        <td>@ViewData["OrderNumber"]</td>
+                        <td>@ViewData["OrderNumber"]</td>
+                        </tr>
+                   </tbody>
+            </table>*@
+          
+        </div>             
+       
        </div>
-
-
-
-      <hr/>
+    
 
       <div>       
        <input  id="Creator"  type="hidden" value="@ViewData["Creator"]" />
        <input id="GUID" name="Id" type="hidden" value="@ViewData["Id"]" />
        <input id="AcitonId"  type="hidden" value="@ViewData["AC"]" />
        <input type="hidden" id="Stoped" name="Stoped" value="@ViewData["Stoped"]" />
+       <input id="ProductKind" value="@ViewData["ProductKind"]"  name="LoginKey"  type="hidden" />
+       <input id="Name" name="Name" value="@ViewData["Name"]" class="input-xlarge" type="hidden" />
+       <input id="OrderNumber" value="@ViewData["OrderNumber"]" name="OrderNumber" class="input-xlarge" type="hidden" />
+       <input id="LoginKey" value="@ViewData["LoginKey"]"  name="LoginKey" class="input-xlarge" type="hidden" />            
+      
+       <input id="Phone"  name="Phone" value="@ViewData["Phone"]" type="hidden" />
+       <input id="CreateorId" name="CreateorId" value="@ViewData["CreateorName"]" type="hidden" />
+       <input  id="CreateDate" name="CreateDate" value="@ViewData["CreateDate"]"  type="hidden" />
+       <input id="ModifyDate" name="ModifyDate" value="@ViewData["ModifyDate"]" type="hidden" /> 
+       <input id="Address"  name="Address" value="@ViewData["Address"]"  type="hidden" />
+         
       </div>
       
       
