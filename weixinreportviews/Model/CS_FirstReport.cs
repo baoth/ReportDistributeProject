@@ -93,11 +93,12 @@ namespace weixinreportviews.Model
         /// <summary>
         /// html文件url
         /// </summary>
-        [Ignore]
-        public string Url
+        [StringMaxLength(200, VarCharType.nvarchar)]
+        public string CreateUrl
         {
-            get { return string.Empty; }
-            
+            get;
+            set;
+
         }
         public List<QObject> CreateDeleteCommand()
         {

@@ -15,6 +15,21 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         [HttpGet]
         public ActionResult Model(string id)
         {
+            ViewData.Add("YLState", "disabled");
+            if (!string.IsNullOrEmpty(id))
+            {
+                var session = General.CreateDbSession();
+                var ent = session.Retrieve<CS_FirstReport>(
+                    "Id", Guid.Parse(id));
+                if (ent!=null) {
+                    ViewData.Add("CreateUrl",PathTools.AddWebHeadAddress(ent.CreateUrl));
+                    ViewData.Add("Id", ent.Id);
+                    ViewData.Add("ReportKey", ent.ReportKey);
+                    ViewData.Add("Title", ent.Title);
+                    ViewData.Add("eState", "disabled");
+                    ViewData.Remove("YLState");
+                }
+            }
            return View("Model");
         }
 
@@ -25,14 +40,18 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             {
                 var account = General.CreateInstance<CS_FirstReport>(Request);
                 var session = General.CreateDbSession();
+              
                 if (account.Id != Guid.Empty)
                 {
+                    account.CreateUrl = ChangeAddress(account.CreateUrl,account.Id);
                     session.Context.ModifyEntity(account.CreateQSmartObject());
                 }
                 else
                 {
                     account.Id = Guid.NewGuid();
+                    account.CreateUrl = ChangeAddress(account.CreateUrl,account.Id);
                     account.CreateDate = DateTime.Now;
+                    account.Stoped = false;
                     session.Context.InsertEntity(account.CreateQSmartObject());
                 }
                 session.Context.SaveChange();
@@ -52,18 +71,28 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             {
                 List<string> ids = id.Split(',').ToList();
                 DbSession session = General.CreateDbSession();
+                List<string> paths = new List<string>();
                 for (int i = 0; i < ids.Count; i++)
                 {
                     if (!string.IsNullOrEmpty(ids[i]))
                     {
                         var entity = new CS_FirstReport { Id = Guid.Parse(ids[i]) };
                         session.Context.DeleteEntity(entity.CreateDeleteCommand());
+                        if (!string.IsNullOrEmpty(entity.CreateUrl))
+                        {
+                            paths.Add(PathTools.GetAbsolutePath(entity.CreateUrl));
+                        }
                     }
                 }
 
                 try
                 {
                     session.Context.SaveChange();
+                    foreach (var item in paths)
+	                {
+                        System.IO.File.Delete(item);
+	                }
+                  
                     return Json(new { result = 0 });
                 }
                 catch (Exception ex)
@@ -79,8 +108,11 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         }
         public JsonResult Upload() 
         {
+
             var files = Request.Files;
-            var path =System.IO.Path.Combine(General.BaseDirector,"Upload");
+            var path =System.IO.Path.Combine(General.BaseDirector,"temp");
+            var fileKey = Guid.NewGuid();
+            var filePath = "";
             for (int i = 0; i < files.Count; i++)
             {
                 var httpFile = files[i]; ;
@@ -88,11 +120,37 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     if (!System.IO.Directory.Exists(path)) {
                         System.IO.Directory.CreateDirectory(path);
                     }
-                    httpFile.SaveAs(System.IO.Path.Combine(path,httpFile.FileName));
+                    filePath = System.IO.Path.Combine(path, httpFile.FileName);
+                    httpFile.SaveAs(filePath);
                 }
-                
+                ReportBuilderSession rbs = new ReportBuilderSession();
+                var rb = rbs.GetBuilder(fileKey, ReportBuilderEnum.Excel文件创建框架);
+                if (rb != null)
+                {
+                    try
+                    {
+                        if (!rb.Build(filePath))
+                        {
+                            return Json(new
+                            {
+                                err = 1,
+                                message = "读取数据文件出错！"
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                      
+                        return Json(new
+                        {
+                            err = 1,
+                            message = ex.Message
+                        });
+                    }
+                }
+                filePath=rb.HtmlUrl;
             }
-            return Json(new { data="http://www.baidu.com"});
+            return Json(new { data =PathTools.AddWebHeadAddress(filePath.Replace("\\","//")) });
         }
         /// <summary>
         /// 获取账户列表页面
@@ -134,7 +192,22 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 result = session.Exists<CS_FirstReport>(col, value) == true ? 0 : 1
             });
         }
-       
+        public string ChangeAddress(string path,Guid id) 
+        {
+            CustomerLoginInfo customerInfo= Session[General.LogonSessionName] as CustomerLoginInfo;
+            var tempPath = PathTools.RemoveWebHeadAddress(path).Replace("\\", "//");
+            tempPath = tempPath.Substring(2);
+            var rePathDir = PathTools.GenerateHtmlPath+"//"+customerInfo.Account.LoginKey;
+            var newPathDir = System.IO.Path.Combine(PathTools.BaseDirector, rePathDir);
+            if (!System.IO.File.Exists(newPathDir)) {
+                System.IO.Directory.CreateDirectory(newPathDir);
+            }
+            var copyPath = System.IO.Path.Combine(PathTools.BaseDirector, tempPath);
+            System.IO.File.Copy(copyPath,System.IO.Path.Combine(newPathDir,id.ToString()+".html"), true);
+            System.IO.File.Delete(copyPath);
+            return rePathDir +"//"+ id.ToString() + ".html";
+
+        }
     }
     public class FirstReportDataTablesParameter : DataTablesParameter
     {
