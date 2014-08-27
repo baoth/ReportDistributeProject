@@ -75,98 +75,78 @@
             }
 
         };
-        function CheckName(e) {
-
-            var reportKey = $("#txtGJZ").val();
-
-            if (CheckField(tableName) == false) return false;
+        function CheckName(key,callback) {
             $.ajax({
                 url: "/FReportMain/Validation",
-                data: { col: "ReportKey", value: ReportKey },
+                data: { col: "ReportKey", value: key },
                 dataType: "JSON",
                 type: "POST",
-
                 success: function (data) {
-                    var imageName = $("#imgLoginKeyMsg")[0];
-                    imageName.style.display = "block";
-
-                    if (data != null) {
-                        if (data.result == 1) {
-                            imageName.src = "../../Content/Img/imageSuccess.jpg";
-                            loginKeyValid = true;
-                            return true;
-                        }
-                        else {
-                            imageName.src = "../../Content/Img/imageError.jpg";
-                            $("#spanLoginKeyMsg").html("<font color='red'>此账号已经注册！</font>");
-
-
-                        }
+                    if (data.result == 1) {
+                        callback();
+                        return true;
                     }
-                    else {
-                        imageName.src = "../../Content/Img/imageError.jpg";
-                        $("#spanLoginKeyMsg").html("<font color='red'>校验失败！</font>");
-
-                    }
+                    //todo 处理效果后期改
+                    $("#txtGJZMsg").html("<font color='red'>关键字已经重复！</font>");
                 },
                 error: function () {
-                    var imageName = $("#imgLoginKeyMsg");
-                    imageName.style.display = "block";
-                    imageName.src = "../../Content/Img/imageError.jpg";
-                    $("#spanLoginKeyMsg").html("<font color='red'>网络原因，校验失败！</font>");
-                }
 
-            });
-            return false;
-        }
-    var PageAction = function () {
-        function GoBack() {
-            var urlaccount = '/FReportMain/Grid';
-            window.parent.ControlIFrame(urlaccount);
-
-        }
-        function Look() {debugger
-            var url = $('#txtUrl').val();
-            if (url) {
-                window.open(url);
-            }
-        }
-        function Save() {
-            var data = { Id: $('#txtGUID').val() }
-            if (!CheckField('txtGJZ') || !CheckField('txtBBMC') || !CheckField('txtUrl')) {
-                return;
-            }
-            data.ReportKey = $('#txtGJZ').val();
-            data.Title = $('#txtBBMC').val();
-            /*todo*/
-            $.ajax({
-                url: "/FReportMain/Save",
-                data: data,
-                dataType: "JSON",
-                type: "POST",
-                success: function (data) {
-                    if (data != null) {
-                        if (data.result == 0) {
-                            layer.msg("操作成功！");
-                            new PageAction().GoBack();
-                        }
-                        else {
-                            layer.msg("保存失败！");
-                        }
-                    }
-                    else {
-                        layer.msg("保存失败！");
-                    }
                 }
 
             });
         }
-        return {
-            GoBack: GoBack,
-            Save: Save,
-            Look: Look
-        }
-    };
+        var PageAction = function () {
+            function GoBack() {
+                var urlaccount = '/FReportMain/Grid';
+                window.parent.ControlIFrame(urlaccount);
+
+            }
+            function Look() {
+                debugger
+                var url = $('#txtUrl').val();
+                if (url) {
+                    window.open(url);
+                }
+            }
+            function Save() {
+                if (!CheckField('txtGJZ') || !CheckField('txtBBMC') || !CheckField('txtUrl')) {
+                    return;
+                }
+                CheckName($('#txtGJZ').val(), function () {
+                    var data = { Id: $('#txtGUID').val() }
+                    data.ReportKey = $('#txtGJZ').val();
+                    data.Title = $('#txtBBMC').val();
+                    data.CreateUrl = $('#txtUrl').val();
+                    $.ajax({
+                        url: "/FReportMain/Save",
+                        data: data,
+                        dataType: "JSON",
+                        type: "POST",
+                        success: function (data) {
+                            if (data != null) {
+                                if (data.result == 0) {
+                                    layer.msg("操作成功！");
+                                    new PageAction().GoBack();
+                                }
+                                else {
+                                    layer.msg("保存失败！");
+                                }
+                            }
+                            else {
+                                layer.msg("保存失败！");
+                            }
+                        }
+
+                    });
+                });               /*todo*/
+
+            }
+            return {
+                GoBack: GoBack,
+                Save: Save,
+                Look: Look
+            }
+        };
     $(document).ready(function () {
 
         $('#b-close,#b-save,#b-look').bind('click', function () {
@@ -226,14 +206,12 @@
              <div id="txtBBMCMsg"></div>
              </td>
             <td class="tdText" >
-            
-          
-            <div class="form-group has-success has-feedback">
-              <label class="control-label" for="inputSuccess2">关键字</label>
-              <input placeholder="请输入关键字" type="text" class="form-control" id="txtGJZ" onblur="CheckField('txtGJZ')" name="txtGJZ" value="@ViewData["ReportKey"]">
-              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+               <label ><font color="red">*</font>关键字  &nbsp </label>
+            <div>
+            <input placeholder="请输入关键字" type="text" @ViewData["eState"] class="form-control" id="txtGJZ" onblur="CheckField('txtGJZ')" name="txtGJZ" value="@ViewData["ReportKey"]">
             </div>
-            <div id="txtGJZMsg"></div>
+             <div id="txtGJZMsg"></div>
+                
             </td>
            
         </tr>
@@ -242,7 +220,7 @@
             
             <label ><font color="red">*</font>生成URL  &nbsp </label>
             <div>
-             <input disabled=disabled placeholder="" style="width:75%" maxlength="100" class="input-xlarge" id="txtUrl" value="@ViewData["ReportKey"]"  type="text" />
+             <input disabled placeholder="" style="width:75%" maxlength="100" class="input-xlarge" id="txtUrl" value="@ViewData["CreateUrl"]"  type="text" />
              
             </div>
              <div id="txtUrlMsg"></div>

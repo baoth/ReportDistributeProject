@@ -15,6 +15,23 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         [HttpGet]
         public ActionResult Model(string id)
         {
+            if (!string.IsNullOrEmpty(id))
+            {
+                var session = General.CreateDbSession();
+                var ent = session.Retrieve<CS_FirstReport>(
+                    "Id", Guid.Parse(id));
+                if (ent!=null) {
+                    ViewData.Add("CreateUrl",ent.CreateUrl);
+                    ViewData.Add("Id", ent.Id);
+                    ViewData.Add("ReportKey", ent.ReportKey);
+                    ViewData.Add("Title", ent.Title);
+                    ViewData.Add("eState", "disabled");
+                }
+            }
+            else 
+            {
+
+            }
            return View("Model");
         }
 
@@ -33,6 +50,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 {
                     account.Id = Guid.NewGuid();
                     account.CreateDate = DateTime.Now;
+                    account.Stoped = false;
                     session.Context.InsertEntity(account.CreateQSmartObject());
                 }
                 session.Context.SaveChange();
