@@ -24,6 +24,12 @@
             $("#logout").bind("click", function (e) {
                 $.LogOut(e);
             });
+            $("#companyName").bind("click", function (e) {
+                var url = $(e.target).attr("action");
+                var id = $(e.target).attr("companyId");
+                url = AddParams("Id", id, url);
+                ControlIFrame(url);
+            });
         });
         window.ControlIFrame = function (url) {
             $("#childiframe").attr("src", url);
@@ -101,6 +107,11 @@
             //                    }
             //                });
         }
+
+        function AddParams(name, val, url) {
+            var char = url.indexOf('?') >= 0 ? "&" : "?"
+            return url + char + name + "=" + val;
+        };
     </script>
     
 </head>
@@ -109,8 +120,13 @@
     <div class="manage_l">
         <div class="w_logo">  <img src="../../Content/Img/manage_01.png" /></div>
         <div class="userface"><img src="../../Content/Img/userface.png"></div>
-        <p class="username"><span class="username1">@ViewData["Name"]</span> | <span class="username2"> @* ViewData["Name"]*@
-        <a href="#" action="/Logon/LogOut" id="logout">退出</a></span></p>
+        <p class="username">
+        <span class="username2">
+        <a href="#" action="/CompanyAccount/model" companyId="@ViewData["Id"]" id="companyName">@ViewData["Name"]</a>
+        </span> | 
+        <span class="username2"> @* ViewData["Name"]*@
+        <a href="#" action="/Logon/LogOut" id="logout">退出</a>
+        </span></p>
         <div class="column">
             <ul>
                 <li class="column1 column5" controll="/FReportUserAttention/Index"><a href="#" onclick="return false;" >绑定管理</a></li>
