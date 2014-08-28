@@ -24,9 +24,18 @@ namespace weixinreportviews.Model
         {
             get { return System.Configuration.ConfigurationManager.AppSettings["RPHtml"]; }
         }
+        public static string SaveHtmlPath 
+        {
+            get { return System.IO.Path.Combine(PathTools.BaseDirector, System.Configuration.ConfigurationManager.AppSettings["RPHtml"]); }
+        }
+        public static string RPTemplatePath
+        {
+            get { return System.IO.Path.Combine(PathTools.BaseDirector, System.Configuration.ConfigurationManager.AppSettings["RPTemplate"]); }
+        }
 
         public static string AddWebHeadAddress(string path) 
         {
+            if (string.IsNullOrEmpty(path)) return "";
             return System.IO.Path.Combine(PathTools.WebRoot, path.Replace("//","/"));
         }
         public static string RemoveWebHeadAddress(string path)

@@ -87,6 +87,7 @@
     <Compile Include="Controllers\Customer\FirstReportProduct\FReportUserAttentionController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\Customer\LogonController.cs" />
+    <Compile Include="Controllers\WeixinController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -96,11 +97,9 @@
     <Compile Include="Model\General.cs" />
     <Compile Include="Model\Report\ExcelReader.cs" />
     <Compile Include="Model\Report\ReportBuilder.cs" />
-    <Compile Include="Model\Report\ReportSession.cs" />
     <Compile Include="Model\SS_CompanyAccount.cs" />
     <Compile Include="Model\SS_Lisence.cs" />
-    <Compile Include="Model\Wx\WebSession.cs" />
-    <Compile Include="Model\Wx\PathTools.cs" />
+    <Compile Include="Model\PathTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

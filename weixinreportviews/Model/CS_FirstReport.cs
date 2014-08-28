@@ -90,16 +90,23 @@ namespace weixinreportviews.Model
             set { _Stoped = value; }
         }
 
-        /// <summary>
-        /// html文件url
-        /// </summary>
-        [StringMaxLength(200, VarCharType.nvarchar)]
-        public string CreateUrl
-        {
-            get;
-            set;
+        private Guid _AccountId = Guid.Empty;
 
+        public Guid AccountId
+        {
+            get { return _AccountId; }
+            set { _AccountId = value; }
         }
+
+        [Ignore]
+        public string Url
+        {
+            get
+            {
+                return "ReportViews\\" + this.AccountId + "\\" + this.Id + ".html";
+            }
+        }
+
         public List<QObject> CreateDeleteCommand()
         {
             if (this.Id != Guid.Empty)

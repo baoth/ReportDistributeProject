@@ -6,6 +6,7 @@ using QSmart.Core.DataBase;
 using QSmart.Core.Object;
 using System.Data;
 using System.Reflection;
+using QSmart.Weixin.Core;
 
 namespace weixinreportviews.Model
 {
@@ -16,11 +17,6 @@ namespace weixinreportviews.Model
         public const string AppId = "wxadcc12090e7138b3";
         public const string AppSecret = "722dfaf58953c47ffd9ac9548c727461";
         public const string authurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxadcc12090e7138b3&redirect_uri=http%3A%2F%2Fwww.baoth.com%2fHome&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
-
-        public static string BaseDirector
-        {
-            get { return System.AppDomain.CurrentDomain.BaseDirectory; }
-        }
 
         public static DbSession CreateDbSession() { return new DbSessionInstance(); }
 
@@ -52,6 +48,7 @@ namespace weixinreportviews.Model
             for (int i = 0; i < pis.Length; i++)
             {
                 PropertyInfo pi = pis[i];
+                if (!pi.CanWrite) continue;
                 string value = string.IsNullOrEmpty(request[pi.Name]) ?
                     string.IsNullOrEmpty(request[pi.Name.ToLower()]) ?
                     string.IsNullOrEmpty(request[pi.Name.ToUpper()]) ? string.Empty : request[pi.Name.ToUpper()]
@@ -196,6 +193,15 @@ namespace weixinreportviews.Model
             else if (result.Account.Stoped) result.Error = CustomerLoginErrorEnum.账户停用;
             return result;
         }
+
+        /// <summary>
+        /// 创建微信核心部件
+        /// </summary>
+        /// <returns></returns>
+        public static WeixinCore CreateWeixinCore()
+        {
+            return new WeixinCore(General.AppId, General.AppSecret, General.Token, System.Configuration.ConfigurationManager.AppSettings);
+        }
     }
 
     /// <summary>
@@ -273,6 +279,40 @@ namespace weixinreportviews.Model
             return dt.Rows.Count > 0 ? true : false;
         }
 
+
+        public T ExistsEnt<T>(string UniqueKeyName, object UniqueKeyValue) where T : QSmartEntity
+        {
+            QSmartQuery Query = new QSmartQuery();
+            Query.Tables.Add(new QSmartQueryTable());
+            Query.Tables[0].tableName = typeof(T).Name;
+            Query.FilterConditions.Add(new QSmartQueryFilterCondition());
+            Query.FilterConditions[0].Column = new QSmartQueryColumn();
+            Query.FilterConditions[0].Column.columnName = UniqueKeyName;
+            Query.FilterConditions[0].Column.dataType = UniqueKeyValue.GetType();
+            Query.FilterConditions[0].Operator = QSmartOperatorEnum.equal;
+            Query.FilterConditions[0].Values.Add(UniqueKeyValue);
+            var results = this.Context.QueryEntity<T>(Query);
+            return results == null || results.Count == 0 ? null : results[0];
+            
+        }
+        public bool ExistsEnt<T>(string UniqueKeyName, object UniqueKeyValue,List<QSmartQueryFilterCondition> listQFilter) where T : QSmartEntity
+        {
+            QSmartQuery Query = new QSmartQuery();
+            Query.Tables.Add(new QSmartQueryTable());
+            Query.Tables[0].tableName = typeof(T).Name;
+            Query.FilterConditions.AddRange(listQFilter);
+            Query.FilterConditions.Add(new QSmartQueryFilterCondition
+            {
+                Column = new QSmartQueryColumn { columnName = UniqueKeyName, dataType = UniqueKeyValue.GetType() },
+                Operator= QSmartOperatorEnum.equal,
+                Values=new List<object>{UniqueKeyValue},
+                Connector= QSmartConnectorEnum.and
+            });
+           
+            DataTable dt = this.Context.QueryTable(Query);
+            return dt.Rows.Count > 0 ? true : false;
+
+        }
         /// <summary>
         /// 获取分页数据集合
         /// </summary>

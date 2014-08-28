@@ -11,17 +11,6 @@ namespace weixinreportviews.Model
 {
 
     /// <summary>
-    /// 报表生成器类型
-    /// </summary>
-    public enum ReportBuilderEnum
-    {
-        /// <summary>
-        /// Excel文件创建框架
-        /// </summary>
-        Excel文件创建框架,
-    }
-
-    /// <summary>
     /// html xml框架
     /// </summary>
     public class Html5Frame
@@ -144,85 +133,36 @@ namespace weixinreportviews.Model
         }
     }
 
-    public abstract class ReportBuilder 
+    public class ExcelReportBuilder
     {
-        #region 构造函数
-        protected ReportBuilder()
-        {
-            this.Id = Guid.NewGuid();
-            this.Title = string.Empty;
-            this.TemplatePath = PathTools.BaseDirector + System.Configuration.ConfigurationManager.AppSettings["RPTemplate"];
-        }
-        #endregion
-        public string Title { get; set; }
-        public Guid Id { get; set; }
+
+        private string _TemplatePath=string.Empty;
+        /// <summary>
+        /// 获取html模板完整路径
+        /// </summary>
         public string TemplatePath
         {
-            get;
-            set;
+          get { return _TemplatePath; }
         }
-        /// <summary>
-        /// 生成的html文件路径
-        /// </summary>
-        [Ignore]
-        public string HtmlFilePath
-        {
-            get
-            {
-                return System.IO.Path.Combine(PathTools.BaseDirector, PathTools.静态报表路径,
-                            this.Id + ".html");
-            }
-        }
+
+        public ExcelReportBuilder(string TemplatePath)  { this._TemplatePath=TemplatePath;}
 
         /// <summary>
-        /// html网址相对url(不带注入www.baoth.com等)
+        /// 创建html
         /// </summary>
-        [Ignore]
-        public string HtmlUrl
-        {
-            get
-            {
-                return System.IO.Path.Combine(PathTools.静态报表路径, this.Id + ".html");
-            }
-        }
-
-        /// 生成Html文件
-        /// </summary>
-        ///  <param name="frameurl">要转换文件路径</param>
-        /// <returns>true,生成成功 false,生成失败</returns>
-        public abstract bool Build(string filepath,bool isDelSource=true);
-
- 
-        /// <summary>
-        /// 删除生成的html文件
-        /// </summary>
-        /// <returns>true 成功 false 失败</returns>
-        public bool DeleteBuilded()
-        {
-            if (System.IO.File.Exists(this.HtmlFilePath)) System.IO.File.Delete(this.HtmlFilePath);
-            return true;
-        }
-
-      
-    }
-
-    public class SimpleReportBuilder : ReportBuilder
-    {
-
-        public SimpleReportBuilder() : base() { }
-        public SimpleReportBuilder(Guid id) {
-            this.Id=id;
-        }
-
-        public override bool Build(string filePath,bool isDelSource=true)
+        /// <param name="filePath">参照文件完整路径</param>
+        /// <param name="savePath">转换成html后保存的完整路径</param>
+        /// <param name="isDelSource">是否删除参照文件</param>
+        /// <returns></returns>
+        public bool Build(string filePath,string savePath,bool isDelSource=true)
         {
             string templatePath = this.TemplatePath;
             try
             {
                 Html5Frame mframe = new Html5Frame(templatePath);
-                XElement xele = mframe.GetXElementById("title");
-                if (xele != null) xele.Value = string.IsNullOrEmpty(this.Title) ? "" : this.Title;
-                xele = mframe.GetXElementById("date");
+                //XElement xele = mframe.GetXElementById("title");
+                //if (xele != null) xele.Value = string.IsNullOrEmpty(this.Title) ? "" : this.Title;
+                //xele = mframe.GetXElementById("date");
                 //if (xele != null) xele.Value = this.BuildDate==null?string.Empty:((DateTime)this.BuildDate).ToShortDateString();
 
                 XElement columns = mframe.GetXElementById("columns");
@@ -234,8 +174,8 @@ namespace weixinreportviews.Model
                     XElement div = mframe.GetXElementById("table");
                     if (div != null) div.Add(table);
                 }
-                if (System.IO.File.Exists(this.HtmlFilePath)) System.IO.File.Delete(this.HtmlFilePath);
-                mframe.Save(this.HtmlFilePath);
+                //if (System.IO.File.Exists(this.HtmlFilePath)) System.IO.File.Delete(this.HtmlFilePath);
+                mframe.Save(savePath);
                 if (isDelSource)
                 {
                     File.Delete(filePath);
