@@ -19,26 +19,63 @@
    <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
     <script src="../../Scripts/numeralInput.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
+        var passwordField = "password";
+        var phoneField = "phone";
+        var addressField = "address";
         $(document).ready(function () {
             BindEvent();
             layer.use('../../Scripts/layer.ext.js', function () {
                 layer.ext = function () {
-                    layer.prompt();
+                    layer.promptExtend(); //.prompt();
                 }
             })
         });
         function BindEvent() {
-            $("#edit").bind("click", function () {               
-                //密码文本
-                layer.prompt({ title: '修改密码' }, function (val, index, elem) {                    
-                    Save(val);
+            $("a[name='edit']").bind("click", function (e) {
+                debugger
+                var updateField = $(e.target).parent().attr("t");
+                var pType = 0;
+                var title = "提示";
+                var len = 100;
+                if (updateField == passwordField) {
+                    pType = 1;
+                    title = "修改密码";
+                    len = 50;
+                }
+                else if (updateField == addressField) {
+                    pType = 3;
+                    title = "修改地址";
+                    len = 150;
+                }
+                else if (updateField == phoneField) {
+                    title = "修改电话";
+                    len = 20;
+                }
+                //密码文本 CheckPhone fieldName == 'phone'
+                layer.promptExtend({ title: title, type: pType, length: len, fieldName: updateField }, function (val, index, elem) {
+                    Save(val, updateField);
                 })
             });
 
         }
-        function Save(password) {            
-           
-           debugger
+        function MsgPrompt(title, ptype, value) {
+            layer.prompt({ title: title, type: ptype, val: value }, function (val, index, elem) {
+                if (updateField == phoneField) {
+                    if (CheckPhone(val) == false) {
+                        MsgPrompt(title,ptype,val);
+                        return;
+                    }
+                }
+                else if (updateField == addressField) {
+
+                }
+                Save(val, updateField);
+            })
+        }
+        
+       
+
+        function Save(val, updateField) {            
             var Id = $("#GUID").val(); 
             if (Id == "" || Id == undefined) { 
                 layer.msg("无效账号！");
@@ -48,15 +85,25 @@
             var Name = $("#Name").val();
             var OrderNumber = $("#OrderNumber").val();
             var LoginKey = $("#LoginKey").val();
-            var Password = password; //$("#Password").val();
+            var Password = ""; //$("#Password").val();
+            if (updateField == passwordField) {
+                Password = val;
+            }
             var Phone = $("#Phone").val();
+            if (updateField ==phoneField) {
+                Phone = val;
+                //if (CheckPhone(Phone) == false) return;
+            }
             var Creator = $("#Creator").val();
             var CreateDate = $("#CreateDate").val();
             var Address = $("#Address").val();
-            var Stoped = $("#Stoped").val()=="true"?true:false;          
-            var data = { Name: Name, OrderNumber: OrderNumber, LoginKey: LoginKey, Address: Address, Phone: Phone, Stoped: Stoped, Password: Password, Id: Id, Creator: Creator, CreateDate: CreateDate };
+            if (updateField ==addressField) {
+                Address = val;
+            }
+            var Stoped = $("#Stoped").val()=="true"?true:false;
+            var data = { Name: Name, OrderNumber: OrderNumber, LoginKey: LoginKey, Address: Address, Phone: Phone, Stoped: Stoped, Password: Password, Id: Id, Creator: Creator, CreateDate: CreateDate, updateField:updateField };
                 $.ajax({
-                    url: "/Account/Save",
+                    url: "/CompanyAccount/Save",
                     data: data,
                     dataType: "JSON",
                     type: "POST",
@@ -84,86 +131,54 @@
           
         }
         
-//        //校验Phone
-//        function CheckPhone() {
-//            var Phone = $("#Phone").val();
+        //校验Phone
+//        function CheckPhone(val) {
+//            var Phone = val;
 //            if (Phone == "") {
-//                $("#SpanPhoneMsg").html("<font color='red'>电话不能为空！</font>");
+//                $("#divPhoneMsg").html("电话不能为空！");
 //                return false;
 //            }
 //            else {
 
 //                if (istell(Phone) == false) {
-//                    $("#SpanPhoneMsg").html("<font color='red'>电话格式不正确！<br> 格式：固定电话 0511-4405222 或 021-87888822 <br> 或者手机号码</font>");
+//                    $("#divPhoneMsg").html("<font color='red'>电话格式不正确!\n 格式：固定电话 0511-4405222 或 021-87888822 \n 或者手机号码</font>！");
+//                                      
 //                    return false;
 //                }
 //                var PhoneLen = Phone.length;
 //                if (PhoneLen > 20) {
-//                    $("#SpanPhoneMsg").html("<font color='red'>电话最长不能超过20字节！</font>");
+//                    $("#divPhoneMsg").html("<font color='red'>电话最长不能超过20字节！</font>");
 //                    return false;
 //                }
 //                else {
-//                    $("#SpanPhoneMsg").html("");
+//                    $("#divPhoneMsg").html("");
 //                }
 //            }
 
 //            return true;
 //        }
 
-//        function CheckPassword() {
-//            var Password = $("#Password").val();
-//            if (Password == "") {
-//                $("#SpanPasswordMsg").html("<font color='red'>密码不能为空!</font>");
-//                return false;
+//        function CheckPhone(val) {
+//            var Phone = val;
+//            if (Phone == "") {
+//                return "电话不能为空！";               
 //            }
 //            else {
-//                var PasswordLen = Password.length;
-//                if (PasswordLen > 50) {
-//                    $("#SpanPasswordMsg").html("<font color='red'>密码最长不能超过50字节！</font>");
-//                    return false;
-//                }
-//                else {
-//                    $("#SpanPasswordMsg").html("");
-//                }
-//            }
-//            return true;
-//        }
-//        function CheckAddress() {
-//            var Address = $("#Address").val();
-//            if (Address == "") {
-//                $("#SpanAddressMsg").html("<font color='red'>地址不能为空！</font>");
-//                return false;
-//            }
-//            else {
-//                var AddressLen = Address.length;
-//                if (AddressLen > 150) {
-//                    $("#SpanAddressMsg").html("<font color='red'>地址最长不能超过150！</font>");
-//                    return false;
-//                }
-//                else {
-//                    $("#SpanAddressMsg").html("");
-//                }
-//            }
-//        }
-//        function Check() {
 
-//            var Name = $("#Name").val();
-//            if (CheckNameData(Name) == false) {
-//                return false
-//            }
-//            var LoginKey = $("#LoginKey").val();
+//                if (istell(Phone) == false) {
+//                   return "<font color='red'>电话格式不正确!\n 格式：固定电话 0511-4405222 或 021-87888822 \n 或者手机号码</font>！";
 
-//            if (CheckLoginKeyData(LoginKey) == false) {
-//                return false;
+//                }
+//                var PhoneLen = Phone.length;
+//                if (PhoneLen > 20) {
+//                   return "<font color='red'>电话最长不能超过20字节！</font>";                   
+//                }
+//                
 //            }
-//            if (CheckPassword() == false) { return false }
 
-//            if (CheckAddress() == false) { return false }
-//            
-//            if (CheckPhone() == false) {return false; }
-//           
-//            return true;
+//            return "";
 //        }
+
 
 //        //匹配国内电话号码(0511-4405222 或 021-87888822)
 //        function istell(str) {          
@@ -214,7 +229,7 @@
         text-decoration:none;
         }
         a:hover{
-        text-decoration:none;
+        text-decoration:none;       
         }
         a:active{
         text-decoration:none;
@@ -296,13 +311,10 @@
                 <li>订&nbsp 单&nbsp 号:&nbsp&nbsp&nbsp&nbsp @ViewData["OrderNumber"]</li>
                 <li>公司名称:&nbsp&nbsp&nbsp&nbsp @ViewData["Name"]</li>
                 <li>账&nbsp&nbsp&nbsp&nbsp&nbsp 号:&nbsp&nbsp&nbsp&nbsp @ViewData["LoginKey"]</li>                
-                <li>电&nbsp&nbsp&nbsp&nbsp&nbsp 话:&nbsp&nbsp&nbsp&nbsp @ViewData["Phone"]</li>
-                <li>创&nbsp 建&nbsp 人:&nbsp&nbsp&nbsp&nbsp @ViewData["CreateorName"]</li>                
-                <li>创建时间:&nbsp&nbsp&nbsp&nbsp @ViewData["CreateDate"]</li>            
-                <li>修改时间:&nbsp&nbsp&nbsp&nbsp @ViewData["ModifyDate"]</li>
-                <li>地&nbsp&nbsp&nbsp&nbsp&nbsp 址:&nbsp&nbsp&nbsp&nbsp @ViewData["Address"]</li>
+                <li>电&nbsp&nbsp&nbsp&nbsp&nbsp 话:&nbsp&nbsp&nbsp&nbsp @ViewData["Phone"]&nbsp&nbsp&nbsp&nbsp <a href="#" name="edit" t='phone' title="修改电话"><i class="fa fa-pencil-square-o"></i></a><div id="divPhoneMsg"></div></li>                
+                <li>地&nbsp&nbsp&nbsp&nbsp&nbsp 址:&nbsp&nbsp&nbsp&nbsp @ViewData["Address"]&nbsp&nbsp&nbsp&nbsp <a href="#" name="edit" t='address' title="修改地址"><i class="fa fa-pencil-square-o"></i></a></li>
                 @*<li>是否停用:"@ViewData["Stoped"]"</li>*@
-                <li>密&nbsp&nbsp&nbsp&nbsp&nbsp 码:&nbsp&nbsp&nbsp&nbsp *** &nbsp&nbsp&nbsp&nbsp <a href="#" name="edit" id="edit" title="修改密码"><i class="fa fa-pencil-square-o"></i></a></li>            
+                <li>密&nbsp&nbsp&nbsp&nbsp&nbsp 码:&nbsp&nbsp&nbsp&nbsp ****** &nbsp&nbsp&nbsp&nbsp <a href="#" name="edit" t='password'  title="修改密码"><i class="fa fa-pencil-square-o"></i></a></li>            
             </ul>
         </div> 
         <div class="div_item_title">
@@ -374,7 +386,18 @@
          
       </div>
       
-      
+      @*<div id="msgWin">
+         <div>
+          <label>aa</label>
+          <input type='text' />
+        </div>
+        <div>
+            <a class="button button-rounded button-flat-highlight" id="btn_save" onclick="CloseBack()" href="#">确定</a>       
+            <a class="button button-rounded button-flat-highlight" id="btn_cancel" onclick="CloseBack()" href="#">取消</a>       
+        
+        </div>
+        
+      </div>*@
       
   </form>
     </div>
