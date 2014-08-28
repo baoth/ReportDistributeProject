@@ -32,6 +32,7 @@ namespace weixinreportviews.Model
 
         public static string AddWebHeadAddress(string path) 
         {
+            if (string.IsNullOrEmpty(path)) return "";
             return System.IO.Path.Combine(PathTools.WebRoot, path.Replace("//","/"));
         }
         public static string RemoveWebHeadAddress(string path)
