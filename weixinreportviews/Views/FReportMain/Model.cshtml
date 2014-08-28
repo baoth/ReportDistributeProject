@@ -60,8 +60,15 @@
              padding:2px; 
                
         }
-        
-       
+        .vaild
+        {
+            position: absolute;
+            display:block;   
+         }
+        .vaildHide
+        {
+            display:none;   
+         }
     </style>
     <script>
         function CheckField(id) {
@@ -75,30 +82,61 @@
             }
 
         };
-        function CheckName(key, callback) {
-            var url="/FReportMain/Validation",data= { col: "ReportKey", value: key };
-            if($('#txtGUID').val()!=""){
-                url="/FReportMain/ValidationEnt";
-                data.Id = $('#txtGUID').val();
-            }
-            $.ajax({
-                url:url,
-                data:data,
-                dataType: "JSON",
-                type: "POST",
-                success: function (data) {
-                    if (data.result == 1) {
-                        callback();
-                        return true;
-                    }
-                    //todo 处理效果后期改
-                    $("#txtGJZMsg").html("<font color='red'>关键字已经重复！</font>");
-                },
-                error: function () {
-
+        function CheckField1(id) {debugger
+            var key = $("#" + id).val();
+            if (key == "") {
+                var imageEle = $("#imgLoginKeyMsg");
+                imageEle.addClass("vaildHide");
+                imageEle.removeClass("vaild");
+                $("#" + id + "Msg").html("<font color='red'>该字段不能为空！</font>");
+                return false;
+            } else {
+                $("#" + id + "Msg").html('');
+                var url = "/FReportMain/Validation", data = { col: "ReportKey", value: key };
+                if ($('#txtGUID').val() != "") {
+                    url = "/FReportMain/ValidationEnt";
+                    data.Id = $('#txtGUID').val();
                 }
+                $.ajax({
+                    url: url,
+                    data: data,
+                    dataType: "JSON",
+                    type: "POST",
+                    success: function (data) {
+                        //todo 处理效果后期改
+                        // $("#txtGJZMsg").html("<font color='red'>关键字已经重复！</font>");
+                        var imageEle = $("#imgLoginKeyMsg"), imgSrc = "../../Content/Img/imageError.jpg";
+                        imageEle.removeClass("vaildHide");
+                        if (data.result == 1) {
+                            imgSrc = "../../Content/Img/imageSuccess.jpg";
+                            imageEle.addClass('vaild');
+                            imageEle.attr("src", imgSrc);
+                            return true;
+                        }
+                        else {
+                            $("#txtGJZMsg").html("<font color='red'>关键字已经存在！</font>");
+                            imageEle.addClass('vaild');
+                            imageEle.attr("src", imgSrc);
+                            return false;
+                        }
 
-            });
+                    },
+                    error: function () {
+                        var imageName = $("#imgLoginKeyMsg");
+                        imageEle.addClass('vaild');
+                        imageEle.attr("src", imgSrc);
+                        $("#txtGJZMsg").html("<font color='red'>校验失败！</font>");
+
+                    }
+
+                });
+            }
+        };
+        function CheckName(key, callback) {
+            var imageEle = $("#imgLoginKeyMsg");
+            if (imageEle.attr("src") == "../../Content/Img/imageSuccess.jpg") {
+                callback();
+            }
         }
         var PageAction = function () {
             function GoBack() {
@@ -213,7 +251,8 @@
             <td class="tdText" >
                <label ><font color="red">*</font>关键字  &nbsp </label>
             <div>
-            <input placeholder="请输入关键字" type="text" @ViewData["eState"] class="form-control" id="txtGJZ" onblur="CheckField('txtGJZ')" name="txtGJZ" value="@ViewData["ReportKey"]">
+            <input placeholder="请输入关键字" type="text" @ViewData["eState"] class="form-control" id="txtGJZ" onblur="CheckField1('txtGJZ')" name="txtGJZ" value="@ViewData["ReportKey"]">
+            <span style="padding:3px 0px 0px 0px;position:absolute"><img  id="imgLoginKeyMsg"src="" class="vaildHide"/></span>
             </div>
              <div id="txtGJZMsg"></div>
                 
