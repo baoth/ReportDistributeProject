@@ -95,18 +95,24 @@ namespace weixinreportviews.Controllers.Admin
             {
                 List<string> ids = id.Split(',').ToList();
                 DbSession session = General.CreateDbSession();
+                List<string> listPath = new List<string>();
                 for (int i = 0; i < ids.Count; i++)
                 {
                     if (!string.IsNullOrEmpty(ids[i]))
                     {
                         SS_CompanyAccount entity = new SS_CompanyAccount { Id = Guid.Parse(ids[i]) };
                         session.Context.DeleteEntity(entity.CreateDeleteCommand());
+                        listPath.Add(System.IO.Path.Combine(PathTools.SaveHtmlPath, id));
                     }
                 }
 
                 try
                 {
                     session.Context.SaveChange();
+                    foreach (var item in listPath)
+                    {
+                        System.IO.Directory.Delete(item, true);
+                    }
                     return Json(new { result = 0 });
                 }
                 catch (Exception ex)
