@@ -71,6 +71,18 @@ namespace weixinreportviews.Controllers
                 if (account.Id != Guid.Empty)
                 {
                     account.ModifyDate = DateTime.Now;
+                    var updateField = Request["updateField"];
+                    if (updateField != null)
+                    {
+                        if (updateField.ToLower()!= "password")
+                        {
+                            SS_CompanyAccount model = GetModel(account.Id);
+                            if (model != null)
+                            {
+                                account.Password = model.Password;
+                            }  
+                        }                        
+                    }
                     session.Context.ModifyEntity(account.CreateQSmartObject());
                 }
                 else
@@ -87,7 +99,22 @@ namespace weixinreportviews.Controllers
                 return Json(new { result = 1, msg = ex.Message });
             }
         }
-
+        /// <summary>
+        /// 获取实体
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private SS_CompanyAccount GetModel(Guid id)
+        {   
+                DbSession session = General.CreateDbSession();
+                SS_CompanyAccount account = session.Retrieve<SS_CompanyAccount>(
+                    "Id", id);
+                if (account != null)
+                {
+                    return account;
+                }
+                return null;
+        }
         /// <summary>
         /// 删除账户信息
         /// </summary>
