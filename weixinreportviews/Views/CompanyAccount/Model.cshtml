@@ -315,10 +315,12 @@
                 var list = (List<weixinreportviews.Model.SS_LisenceView>)ViewData["SS_LisenceList"];
                 if (list != null && list.Count > 0)
                 {
+                    int i=0;
                     foreach (weixinreportviews.Model.SS_LisenceView item in list)
                     {
+                        i++;
                        <ul>
-                       <li>订单号:@item.OrderNumber&nbsp&nbsp&nbsp&nbsp 授权有效期:@item.EffectiveDateDisplay 至 @item.ExpiryDateDisplay &nbsp&nbsp&nbsp&nbsp 授权点:@item.LisencePoint &nbsp&nbsp&nbsp 停用:@item.StopedDisplay</li>
+                       <li>@i . 订单号:@item.OrderNumber&nbsp&nbsp&nbsp&nbsp 授权有效期:@item.EffectiveDateDisplay 至 @item.ExpiryDateDisplay &nbsp&nbsp&nbsp&nbsp 授权点:@item.LisencePoint &nbsp&nbsp&nbsp 停用:@item.StopedDisplay</li>
                        </ul>
                     }
                 }
