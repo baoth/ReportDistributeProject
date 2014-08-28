@@ -138,7 +138,7 @@ namespace weixinreportviews.Model
 
         private string _TemplatePath=string.Empty;
         /// <summary>
-        /// html模板完整路径
+        /// 获取html模板完整路径
         /// </summary>
         public string TemplatePath
         {
