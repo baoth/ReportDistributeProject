@@ -301,11 +301,14 @@ namespace weixinreportviews.Model
             Query.Tables.Add(new QSmartQueryTable());
             Query.Tables[0].tableName = typeof(T).Name;
             Query.FilterConditions.AddRange(listQFilter);
-            Query.FilterConditions[0].Column = new QSmartQueryColumn();
-            Query.FilterConditions[0].Column.columnName = UniqueKeyName;
-            Query.FilterConditions[0].Column.dataType = UniqueKeyValue.GetType();
-            Query.FilterConditions[0].Operator = QSmartOperatorEnum.equal;
-            Query.FilterConditions[0].Values.Add(UniqueKeyValue);
+            Query.FilterConditions.Add(new QSmartQueryFilterCondition
+            {
+                Column = new QSmartQueryColumn { columnName = UniqueKeyName, dataType = UniqueKeyValue.GetType() },
+                Operator= QSmartOperatorEnum.equal,
+                Values=new List<object>{UniqueKeyValue},
+                Connector= QSmartConnectorEnum.and
+            });
+           
             DataTable dt = this.Context.QueryTable(Query);
             return dt.Rows.Count > 0 ? true : false;
 
