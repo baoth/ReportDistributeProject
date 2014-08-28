@@ -6,6 +6,7 @@ using QSmart.Core.DataBase;
 using QSmart.Core.Object;
 using System.Data;
 using System.Reflection;
+using QSmart.Weixin.Core;
 
 namespace weixinreportviews.Model
 {
@@ -16,11 +17,6 @@ namespace weixinreportviews.Model
         public const string AppId = "wxadcc12090e7138b3";
         public const string AppSecret = "722dfaf58953c47ffd9ac9548c727461";
         public const string authurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxadcc12090e7138b3&redirect_uri=http%3A%2F%2Fwww.baoth.com%2fHome&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
-
-        public static string BaseDirector
-        {
-            get { return System.AppDomain.CurrentDomain.BaseDirectory; }
-        }
 
         public static DbSession CreateDbSession() { return new DbSessionInstance(); }
 
@@ -195,6 +191,15 @@ namespace weixinreportviews.Model
             if (result.Account == null) result.Error = CustomerLoginErrorEnum.账户不存在;
             else if (result.Account.Stoped) result.Error = CustomerLoginErrorEnum.账户停用;
             return result;
+        }
+
+        /// <summary>
+        /// 创建微信核心部件
+        /// </summary>
+        /// <returns></returns>
+        public static WeixinCore CreateWeixinCore()
+        {
+            return new WeixinCore(General.AppId, General.AppSecret, General.Token, System.Configuration.ConfigurationManager.AppSettings);
         }
     }
 
