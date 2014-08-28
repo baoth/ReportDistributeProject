@@ -103,7 +103,7 @@ namespace weixinreportviews.Model
         {
             get
             {
-                return PathTools.AddWebHeadAddress("ReportViews\\" + this.AccountId + "\\" + this.Id + ".html");
+                return "ReportViews\\" + this.AccountId + "\\" + this.Id + ".html";
             }
         }
 
