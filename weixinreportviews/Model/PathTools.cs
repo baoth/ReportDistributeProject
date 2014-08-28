@@ -25,6 +25,11 @@ namespace weixinreportviews.Model
             get { return System.Configuration.ConfigurationManager.AppSettings["RPHtml"]; }
         }
 
+        public static string RPTemplatePath
+        {
+            get { return PathTools.BaseDirector + System.Configuration.ConfigurationManager.AppSettings["RPTemplate"]; }
+        }
+
         public static string AddWebHeadAddress(string path) 
         {
             if (string.IsNullOrEmpty(path)) return "";

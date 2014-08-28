@@ -7,6 +7,7 @@ using weixinreportviews.Model;
 using System.Reflection;
 using QSmart.Core.Object;
 using QSmart.Core.DataBase;
+using System.IO;
 
 namespace weixinreportviews.Controllers.Customer.FirstReportProduct
 {
@@ -106,51 +107,61 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         {
            return View("Upload");
         }
+        /// <summary>
+        /// 上传文件并生成html
+        /// </summary>
+        /// <returns></returns>
         public JsonResult Upload() 
         {
-
-            var files = Request.Files;
-            var path =System.IO.Path.Combine(General.BaseDirector,"temp");
-            var fileKey = Guid.NewGuid();
-            var filePath = "";
-            for (int i = 0; i < files.Count; i++)
+            //保存上传文件
+            string path = string.Empty;
+            FileInfo fi = null;
+            string fname = Guid.NewGuid().ToString();
+            try
             {
-                var httpFile = files[i]; ;
-                if (httpFile.ContentLength > 0) {
-                    if (!System.IO.Directory.Exists(path)) {
-                        System.IO.Directory.CreateDirectory(path);
-                    }
-                    filePath = System.IO.Path.Combine(path, httpFile.FileName);
-                    httpFile.SaveAs(filePath);
-                }
-                ReportBuilderSession rbs = new ReportBuilderSession();
-                var rb = rbs.GetBuilder(fileKey, ReportBuilderEnum.Excel文件创建框架);
-                if (rb != null)
+                foreach (string fid in Request.Files)
                 {
-                    try
-                    {
-                        if (!rb.Build(filePath))
-                        {
-                            return Json(new
-                            {
-                                err = 1,
-                                message = "读取数据文件出错！"
-                            });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                      
-                        return Json(new
-                        {
-                            err = 1,
-                            message = ex.Message
-                        });
-                    }
+                    if (Request.Files[fid] == null) continue;
+                    
+                    fi = new FileInfo(Request.Files[fid].FileName);
+                    path = Path.Combine(PathTools.BaseDirector,
+                        "temp",
+                        fname + fi.Extension);
+                    Request.Files[fid].SaveAs(path);
+
                 }
-                filePath=rb.HtmlUrl;
             }
-            return Json(new { data =PathTools.AddWebHeadAddress(filePath.Replace("\\","//")) });
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    err = 1,
+                    message = "文件上传失败:" + ex.Message
+                });
+            }
+
+            string htmlName = fname + ".html";
+            try
+            {
+                if (fi.Extension.ToLower() == ".xls" || fi.Extension.ToLower() == ".xlsx")
+                {
+                    ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.RPTemplatePath);
+                    erb.Build(path, Path.Combine(PathTools.BaseDirector,
+                            "temp",
+                            htmlName));
+                }
+            }
+            catch(Exception ex)
+            {
+                return Json(new
+                {
+                    err = 1,
+                    message = "生成html文件失败:" + ex.Message
+                });
+            }
+
+
+            return Json(new { data = PathTools.AddWebHeadAddress("temp\\" + htmlName) });
         }
         /// <summary>
         /// 获取账户列表页面
