@@ -81,7 +81,7 @@ layer.promptExtend = function (parme, yes, no) {
                 } else {
                     return 'text';
                 }
-            } () + '" class="xubox_prompt xubox_form" id="xubox_prompt" value="' + (parme.val || '') + '" />',
+            } () + '" class="xubox_prompt xubox_form" id="xubox_prompt" maxlength="' + (parme.length || 1000) + '" value="' + (parme.val || '') + '" />',
             yes: function (index) {
                 debugger
                 var val = log.prompt.val();
@@ -119,7 +119,7 @@ layer.promptExtend = function (parme, yes, no) {
         }
     };
     if (parme.type === 3) {
-        conf.dialog.msg = '<textarea class="xubox_prompt xubox_form xubox_formArea" id="xubox_prompt">' + (parme.val || '') + '</textarea>'
+        conf.dialog.msg = '<textarea class="xubox_prompt xubox_form xubox_formArea" maxlength="' + (parme.length || 1000) + '"  id="xubox_prompt">' + (parme.val || '') + '</textarea>'
     }
     return $.layer(conf);
 };
