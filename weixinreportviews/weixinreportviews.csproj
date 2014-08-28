@@ -37,6 +37,10 @@
     <ApplicationIcon>Content\Img\favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Cbin\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
     </Reference>
@@ -77,6 +81,7 @@
     <Compile Include="Controllers\Admin\LisenceController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\Admin\HomeController.cs" />
+    <Compile Include="Controllers\Customer\CompanyAccountController.cs" />
     <Compile Include="Controllers\Customer\FirstReportProduct\FReportHomeController.cs" />
     <Compile Include="Controllers\Customer\FirstReportProduct\FReportMainController.cs" />
     <Compile Include="Controllers\Customer\FirstReportProduct\FReportUserAttentionController.cs" />
@@ -89,11 +94,19 @@
     <Compile Include="Model\CS_FirstReport.cs" />
     <Compile Include="Model\CS_UserAttention.cs" />
     <Compile Include="Model\General.cs" />
+    <Compile Include="Model\Report\ExcelReader.cs" />
+    <Compile Include="Model\Report\ReportBuilder.cs" />
+    <Compile Include="Model\Report\ReportSession.cs" />
     <Compile Include="Model\SS_CompanyAccount.cs" />
     <Compile Include="Model\SS_Lisence.cs" />
+    <Compile Include="Model\Wx\WebSession.cs" />
+    <Compile Include="Model\Wx\PathTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Cbin\Aspose.Cells.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Cbin\QSmart.Core.dll" />
     <Content Include="Cbin\QSmart.Weixin.Core.dll" />
     <Content Include="Cbin\System.Web.Extensions.dll" />
@@ -168,7 +181,9 @@
     <Content Include="Content\Img\topborder.jpg" />
     <Content Include="Content\Img\userface.png" />
     <Content Include="Content\Css\layer.ext.css" />
+    <Content Include="Content\themes\Report\SimpleFrame.css" />
     <Content Include="Global.asax" />
+    <Content Include="ReportViews\ReportTemplete\简易框架.html" />
     <Content Include="Scripts\accountindex.js" />
     <Content Include="Scripts\dropzone.js" />
     <Content Include="Scripts\dropzone.min.js" />
@@ -193,6 +208,8 @@
     <Content Include="Scripts\Switch\main.js" />
     <Content Include="Scripts\logon.js" />
     <Content Include="Scripts\fReportMain.js" />
+    <Content Include="Scripts\zepto-1.1.4.min.js" />
+    <Content Include="Scripts\zepto.touch.js" />
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Model.cshtml" />
@@ -220,6 +237,7 @@
     <Content Include="Views\FReportMain\Upload.cshtml" />
     <Content Include="Views\FReportMain\Model.cshtml" />
     <Content Include="Views\Master\_CheckSession.cshtml" />
+    <Content Include="Views\CompanyAccount\Model.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config" />

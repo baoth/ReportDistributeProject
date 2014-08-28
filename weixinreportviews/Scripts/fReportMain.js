@@ -69,15 +69,13 @@
             window.parent.ControlIFrame(urlaccount);
         },
         CreateHtml: function () {
-            var ids = GetSelectedRowId();
-            if (ids.length != 1) {
-                return;
-            }
             debugger
-            var selectedRow = GetSingleSelectedRowData();
-            url = AddParams('id', ids[0], '/FReportMain/UploadView');
-            url = AddParams('name', selectedRow.name, url);
-            window.parent.ControlIFrame(url);
+            var o = GetSingleSelectedRowData();
+            if (o.name&&o.name.length>32) {
+                window.open('http://' + window.location.host + "/" + o.name.replace(/\/\//g, '/'));
+            } else {
+                layer.alert("预览地址不存在!");
+            }
         },
         ControlBtn: function () {
             var l = GetSelectedRowId().length;
@@ -183,7 +181,8 @@ $(document).ready(function () {
             { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
                 "mRender": function (val, isShow, row) {
-                    return '<div class="settings-button" v="' + val + '" n="' + row['Name'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                    debugger
+                    return '<div class="settings-button" v="' + val + '" n="' + row['CreateUrl'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
                 }
             }
         ]

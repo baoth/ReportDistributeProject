@@ -18,6 +18,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             {
                 var obj = (CustomerLoginInfo)Session[weixinreportviews.Model.General.LogonSessionName];
                 ViewData["Name"] = obj.Account.LoginKey;
+                ViewData["Id"] = obj.Account.Id;
             }            
             return View();
         }
