@@ -23,11 +23,10 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 var ent = session.Retrieve<CS_FirstReport>(
                     "Id", Guid.Parse(id));
                 if (ent!=null) {
-                    ViewData.Add("CreateUrl",PathTools.AddWebHeadAddress(ent.CreateUrl));
+                    ViewData.Add("CreateUrl",PathTools.AddWebHeadAddress(ent.Url));
                     ViewData.Add("Id", ent.Id);
                     ViewData.Add("ReportKey", ent.ReportKey);
                     ViewData.Add("Title", ent.Title);
-                    ViewData.Add("eState", "disabled");
                     ViewData.Remove("YLState");
                 }
             }
@@ -39,18 +38,24 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         {
             try
             {
+                var customerInfo = Session[General.LogonSessionName] as CustomerLoginInfo;
                 var account = General.CreateInstance<CS_FirstReport>(Request);
                 var session = General.CreateDbSession();
-              
+                var path = Request["CreateUrl"];
                 if (account.Id != Guid.Empty)
                 {
-                    account.CreateUrl = ChangeAddress(account.CreateUrl,account.Id);
+                    if (path.Contains("temp"))
+                    {
+                        ChangeAddress(path, account.Id, customerInfo.Account.LoginKey);
+                    }
+                    account.AccountId = customerInfo.Account.Id;
                     session.Context.ModifyEntity(account.CreateQSmartObject());
                 }
                 else
                 {
                     account.Id = Guid.NewGuid();
-                    account.CreateUrl = ChangeAddress(account.CreateUrl,account.Id);
+                    ChangeAddress(path, account.Id, customerInfo.Account.Id.ToString());
+                    account.AccountId = customerInfo.Account.Id;
                     account.CreateDate = DateTime.Now;
                     account.Stoped = false;
                     session.Context.InsertEntity(account.CreateQSmartObject());
@@ -73,15 +78,17 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 List<string> ids = id.Split(',').ToList();
                 DbSession session = General.CreateDbSession();
                 List<string> paths = new List<string>();
+                var customInfo = Session[General.LogonSessionName] as CustomerLoginInfo ;
                 for (int i = 0; i < ids.Count; i++)
                 {
                     if (!string.IsNullOrEmpty(ids[i]))
                     {
                         var entity = new CS_FirstReport { Id = Guid.Parse(ids[i]) };
                         session.Context.DeleteEntity(entity.CreateDeleteCommand());
-                        if (!string.IsNullOrEmpty(entity.CreateUrl))
+                        var filePath = PathTools.SaveHtmlPath + "\\" + customInfo.Account.Id + "\\" + entity.Id + ".html";
+                        if (System.IO.File.Exists(filePath))
                         {
-                            paths.Add(PathTools.GetAbsolutePath(entity.CreateUrl));
+                            paths.Add(filePath);
                         }
                     }
                 }
@@ -181,6 +188,14 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         public JsonResult GridDatas()
         {
             var dtp = General.CreateInstance<FirstReportDataTablesParameter>(Request);
+            var curtomInfo=Session[General.LogonSessionName] as CustomerLoginInfo;
+            if (dtp.exactFilter == null)
+            {
+                dtp.exactSearch = new string [1];
+                dtp.exactFilter = new string[1];
+            }
+            dtp.exactSearch.SetValue(curtomInfo.Account.Id.ToString(), 0);
+            dtp.exactFilter.SetValue("AccountId", 0);
             int totalcount = 0;
             DbSession session = General.CreateDbSession();
             var rows = session.PaginationRetrieve<CS_FirstReport>(dtp.iDisplayStart,
@@ -200,15 +215,39 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             DbSession session = General.CreateDbSession();
             return Json(new
             {
-                result = session.Exists<CS_FirstReport>(col, value) == true ? 0 : 1
+                result = session.Exists<CS_FirstReport>(col,value) == true ? 0 : 1
             });
         }
-        public string ChangeAddress(string path,Guid id) 
+         [HttpPost]
+        public JsonResult ValidationEnt(string col, string value,Guid id)
         {
-            CustomerLoginInfo customerInfo= Session[General.LogonSessionName] as CustomerLoginInfo;
+            var customerInfo = Session[General.LogonSessionName] as CustomerLoginInfo;
+            DbSession session = General.CreateDbSession();
+            var  result = session.ExistsEnt<CS_FirstReport>(col, value, new List<QSmartQueryFilterCondition>() { 
+                new QSmartQueryFilterCondition(){
+                     Column = new QSmartQueryColumn { columnName = "Id", dataType = typeof(Guid) },
+                    Operator = QSmartOperatorEnum.unequal,
+                    Connector = QSmartConnectorEnum.and,
+                    Values = new List<object> { id }
+                },
+                new QSmartQueryFilterCondition(){
+                     Column = new QSmartQueryColumn { columnName = "AccountId", dataType = typeof(Guid) },
+                    Operator = QSmartOperatorEnum.equal,
+                    Connector = QSmartConnectorEnum.and,
+                    Values = new List<object> { customerInfo.Account.Id }
+                },
+            });
+            return Json(new
+            {
+                result=result? 0 : 1
+            });
+        }
+        public string ChangeAddress(string path,Guid id,string companyId) 
+        {
+            
             var tempPath = PathTools.RemoveWebHeadAddress(path).Replace("\\", "//");
             tempPath = tempPath.Substring(2);
-            var rePathDir = PathTools.GenerateHtmlPath+"//"+customerInfo.Account.LoginKey;
+            var rePathDir = PathTools.GenerateHtmlPath + "//" + companyId;
             var newPathDir = System.IO.Path.Combine(PathTools.BaseDirector, rePathDir);
             if (!System.IO.File.Exists(newPathDir)) {
                 System.IO.Directory.CreateDirectory(newPathDir);
@@ -247,6 +286,16 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     result.Add(new QSmartQueryFilterCondition
                     {
                         Column = new QSmartQueryColumn { columnName = "year(" + colName + ")", dataType = typeof(int) },
+                        Operator = QSmartOperatorEnum.equal,
+                        Connector = QSmartConnectorEnum.and,
+                        Values = new List<object> { this.exactSearch[i] }
+                    });
+                }
+                else if (colName == "AccountId".ToLower())
+                {
+                    result.Add(new QSmartQueryFilterCondition
+                    {
+                        Column = new QSmartQueryColumn { columnName = colName, dataType = typeof(Guid) },
                         Operator = QSmartOperatorEnum.equal,
                         Connector = QSmartConnectorEnum.and,
                         Values = new List<object> { this.exactSearch[i] }

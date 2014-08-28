@@ -38,7 +38,7 @@ layer.prompt = function(parme, yes, no){
                 }
             }() +'" class="xubox_prompt xubox_form" id="xubox_prompt" value="'+ (parme.val || '') +'" />',
             yes: function(index){
-                var val = log.prompt.val();
+                var val = log.prompt.val();               
                 if(val === ''){
                     log.prompt.focus();
                 } else if(val.replace(/\s/g, '').length > (parme.length || 1000)) {
@@ -59,6 +59,70 @@ layer.prompt = function(parme, yes, no){
     return $.layer(conf);
 };
 
+/**
+
+系统扩展prompt
+ 
+*/
+
+layer.promptExtend = function (parme, yes, no) {
+    var log = {}, parme = parme || {}, conf = {
+        area: ['auto', 'auto'],
+        offset: [parme.top || '', ''],
+        title: parme.title || '信息',
+        dialog: {
+            btns: 2,
+            type: -1,
+            msg: '<input type="' + function () {
+                if (parme.type === 1) { //密码
+                    return 'password';
+                } else if (parme.type === 2) {
+                    return 'file';
+                } else {
+                    return 'text';
+                }
+            } () + '" class="xubox_prompt xubox_form" id="xubox_prompt" maxlength="' + (parme.length || 1000) + '" value="' + (parme.val || '') + '" />',
+            yes: function (index) {
+                debugger
+                var val = log.prompt.val();
+                //验证电话
+                if (val != "") {
+                    if (parme.fieldName) {
+                        if (parme.fieldName == 'phone') {
+                            var reg1 = /\d{3}-\d{8}|\d{4}-\d{7}/;
+                            var reg2 = /^1[35]\d{9}$/;
+                            var result = reg1.test(val);
+                            var phone = reg2.test(val);
+
+                            if (result == false && phone == false) {
+                                var errorMsg = "<font color='red'>电话格式不正确!\n 格式：固定电话 0511-4405222 或 021-87888822 \n 或者手机号码</font>！";
+                                layer.tips(errorMsg, '#xubox_prompt', 2);
+                                log.prompt.focus();
+                                return;
+                            }
+                        }
+                    }
+                }
+                if (val === '') {
+                    layer.tips('不能为空！', '#xubox_prompt', 2);
+                    log.prompt.focus();
+                } else if (val.replace(/\s/g, '').length > (parme.length || 1000)) {
+                    layer.tips('最多输入' + (parme.length || 1000) + '个字数', '#xubox_prompt', 2);
+                } else {
+                    yes && yes(val, index, log.prompt);
+                }
+
+            }, no: no
+        }, success: function () {
+            log.prompt = $('#xubox_prompt');
+            log.prompt.focus();
+        }
+    };
+    if (parme.type === 3) {
+        conf.dialog.msg = '<textarea class="xubox_prompt xubox_form xubox_formArea" maxlength="' + (parme.length || 1000) + '"  id="xubox_prompt">' + (parme.val || '') + '</textarea>'
+    }
+    return $.layer(conf);
+};
 
 /**
 

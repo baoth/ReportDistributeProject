@@ -75,10 +75,15 @@
             }
 
         };
-        function CheckName(key,callback) {
+        function CheckName(key, callback) {
+            var url="/FReportMain/Validation",data= { col: "ReportKey", value: key };
+            if($('#txtGUID').val()!=""){
+                url="/FReportMain/ValidationEnt";
+                data.Id = $('#txtGUID').val();
+            }
             $.ajax({
-                url: "/FReportMain/Validation",
-                data: { col: "ReportKey", value: key },
+                url:url,
+                data:data,
                 dataType: "JSON",
                 type: "POST",
                 success: function (data) {

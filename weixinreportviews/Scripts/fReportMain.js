@@ -181,8 +181,7 @@ $(document).ready(function () {
             { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
                 "mRender": function (val, isShow, row) {
-                    debugger
-                    return '<div class="settings-button" v="' + val + '" n="' + row['CreateUrl'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                    return '<div class="settings-button" v="' + val + '" n="' + row['Url'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
                 }
             }
         ]
