@@ -137,7 +137,9 @@
     <Content Include="Content\Css\Switch\main.css" />
     <Content Include="Content\Css\Upload\basic.css" />
     <Content Include="Content\Css\Upload\dropzone.css" />
-    <Content Include="Content\favicon.ico" />
+    <Content Include="Content\favicon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
     <Content Include="Content\Img\back_enabled_hover.png" />

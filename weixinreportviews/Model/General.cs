@@ -215,100 +215,20 @@ namespace weixinreportviews.Model
         {
             return new WeixinCore(General.AppId, General.AppSecret, General.Token, System.Configuration.ConfigurationManager.AppSettings);
         }
-
-        /// <summary>
-        /// 获取可用授权个数
-        /// </summary>
-        /// <param name="AccountId">账户Id</param>
-        /// <param name="ProductKind">产品类型</param>
-        /// <returns></returns>
-        public static int RetrieveValidLisences(Guid AccountId, ProductKindEnum ProductKind)
-        {
-            //select * from 
-            //(select count(LisencePoint) as total from SS_Lisence where EffectiveDate<=datenow
-            //and ExpiryDate>=datenow and ProductKind=productkind and AccountId=accountid and Stoped=0false) a
-            //,
-            //(select count(*) as usered from CS_BindUser where ProductKind=productkind and AccountId=accountid) b
-
-
-            QSmartQuery QueryA = new QSmartQuery();
-            QueryA.Tables.Add(new QSmartQueryTable());
-            QueryA.Tables[0].tableName = typeof(SS_Lisence).Name;
-            QueryA.CountSetting.Effective = true;
-            QueryA.CountSetting.AliasName = "total";
-            QueryA.CountSetting.CountAttributeName = "LisencePoint";
-            QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
+        
+    }
+    public static class ObjectExtend
+    {
+        public static string[] Add(this string [] a,string value){
+            var strNew = new string[a.Length+1];
+            for (int i = 0; i < a.Length; i++)
             {
-                Column = new QSmartQueryColumn { columnName = "EffectiveDate", dataType = typeof(DateTime) },
-                Operator= QSmartOperatorEnum.lessequal,
-                Values=new List<object>{DateTime.Now},
-                Connector= QSmartConnectorEnum.and
-            });
-            QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
-            {
-                Column = new QSmartQueryColumn { columnName = "ExpiryDate", dataType = typeof(DateTime) },
-                Operator = QSmartOperatorEnum.greatequal,
-                Values = new List<object> { DateTime.Now },
-                Connector = QSmartConnectorEnum.and
-            });
-            QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
-            {
-                Column = new QSmartQueryColumn { columnName = "ProductKind", dataType = typeof(ProductKindEnum) },
-                Operator = QSmartOperatorEnum.equal,
-                Values = new List<object> { ProductKind },
-                Connector = QSmartConnectorEnum.and
-            });
-            QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
-            {
-                Column = new QSmartQueryColumn { columnName = "AccountId", dataType = typeof(Guid) },
-                Operator = QSmartOperatorEnum.equal,
-                Values = new List<object> { AccountId },
-                Connector = QSmartConnectorEnum.and
-            });
-
-            QSmartQuery QueryB = new QSmartQuery();
-            QueryB.Tables.Add(new QSmartQueryTable());
-            QueryB.Tables[0].tableName = typeof(CS_BindUser).Name;
-            QueryB.CountSetting.Effective = true;
-            QueryB.CountSetting.AliasName = "usered";
-            QueryB.CountSetting.CountAttributeName = "OpenId";
-            QueryB.FilterConditions.Add(new QSmartQueryFilterCondition
-            {
-                Column = new QSmartQueryColumn { columnName = "ProductKind", dataType = typeof(ProductKindEnum) },
-                Operator = QSmartOperatorEnum.equal,
-                Values = new List<object> { ProductKind },
-                Connector = QSmartConnectorEnum.and
-            });
-            QueryB.FilterConditions.Add(new QSmartQueryFilterCondition
-            {
-                Column = new QSmartQueryColumn { columnName = "AccountId", dataType = typeof(Guid) },
-                Operator = QSmartOperatorEnum.equal,
-                Values = new List<object> { AccountId },
-                Connector = QSmartConnectorEnum.and
-            });
-
-            QSmartQuery Query = new QSmartQuery();
-            Query.Tables.Add(new QSmartQueryTable
-            {
-                aliasName = "a",
-                joinType = QSmartJoinEnum.comma,
-                tableNameCreator = QueryA
-            });
-
-            Query.Tables.Add(new QSmartQueryTable
-            {
-                aliasName = "b",
-
-                tableNameCreator = QueryB
-            });
-            DbSession session=General.CreateDbSession();
-
-            DataTable dt = session.Context.QueryTable(Query);
-
-            return ((int)dt.Rows[0][0]) - ((int)dt.Rows[0][1]);
+                strNew.SetValue(a[i], i);
+            }
+            strNew.SetValue(value, a.Length);
+            return strNew;
         }
     }
-
     /// <summary>
     /// 错误类型枚举
     /// </summary>

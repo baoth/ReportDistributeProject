@@ -41,11 +41,6 @@ namespace weixinreportviews.Model
         {
             get { return this.Stoped ? "是" : "否"; }
         }
-        [Ignore]
-        public string BuildedDisplay
-        {
-            get { return this.Builded ? "是" : "否"; }
-        }
         #endregion
 
         private string _ReportKey = string.Empty;
@@ -70,15 +65,6 @@ namespace weixinreportviews.Model
             set { _CreateDate = value; }
         }
 
-        private bool _Builded = false;
-        /// <summary>
-        /// 是否已生成Html
-        /// </summary>
-        public bool Builded
-        {
-            get { return _Builded; }
-            set { _Builded = value; }
-        }
 
         private bool _Stoped = false;
         /// <summary>

@@ -44,7 +44,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 var path = Request["CreateUrl"];
                 if (account.Id != Guid.Empty)
                 {
-                    if (path.Contains("temp"))
+                    if (path.Contains(PathTools.TempPath))
                     {
                         ChangeAddress(path, account.Id, customerInfo.Account.LoginKey);
                     }
@@ -131,7 +131,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     if (Request.Files[fid] == null) continue;
                     
                     fi = new FileInfo(Request.Files[fid].FileName);
-                    var pathDir=Path.Combine(PathTools.BaseDirector, "temp");
+                    var pathDir=Path.Combine(PathTools.BaseDirector,PathTools.TempPath);
                     if (!System.IO.Directory.Exists(pathDir)) {
                         System.IO.Directory.CreateDirectory(pathDir);
                     }
@@ -170,7 +170,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             }
 
 
-            return Json(new { data = PathTools.AddWebHeadAddress("temp\\" + htmlName) });
+            return Json(new { data = PathTools.AddWebHeadAddress(PathTools.TempPath+"\\" + htmlName) });
         }
         /// <summary>
         /// 获取账户列表页面
@@ -193,11 +193,16 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             var curtomInfo=Session[General.LogonSessionName] as CustomerLoginInfo;
             if (dtp.exactFilter == null)
             {
-                dtp.exactSearch = new string [1];
+                dtp.exactSearch = new string[1];
                 dtp.exactFilter = new string[1];
+                dtp.exactSearch.SetValue(curtomInfo.Account.Id.ToString(), 0);
+                dtp.exactFilter.SetValue("AccountId", 0);
             }
-            dtp.exactSearch.SetValue(curtomInfo.Account.Id.ToString(), 0);
-            dtp.exactFilter.SetValue("AccountId", 0);
+            else
+            {
+                dtp.exactSearch = dtp.exactSearch.Add(curtomInfo.Account.Id.ToString());
+                dtp.exactFilter = dtp.exactFilter.Add("AccountId");
+            }
             int totalcount = 0;
             DbSession session = General.CreateDbSession();
             var rows = session.PaginationRetrieve<CS_FirstReport>(dtp.iDisplayStart,

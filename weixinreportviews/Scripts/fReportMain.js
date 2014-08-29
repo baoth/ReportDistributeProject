@@ -130,7 +130,7 @@ $(document).ready(function () {
         "sPaginationType": "full_numbers",
         "oLanguage": {
             "searchDefalutText": "订单号",
-            "allFilter": 'Title', //过滤那些列
+            "allFilter": 'Title,ReportKey', //过滤那些列
             "sLengthMenu": "每页显示 _MENU_ 条记录",
             "sZeroRecords": "抱歉， 没有找到",
             "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -177,7 +177,6 @@ $(document).ready(function () {
             { "data": "Title", "sName": 'Title', "sTitle": "标题", "sWidth": 250 },
             { "data": "ReportKey", "sName": 'ReportKey', "sTitle": "关键字", "sWidth": 90 },
             { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
-            { "data": "BuildedDisplay", "sName": 'Builded', "sTitle": "生成", "sWidth": 70 }, 
             { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
                 "mRender": function (val, isShow, row) {

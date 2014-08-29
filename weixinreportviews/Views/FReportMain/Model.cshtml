@@ -82,17 +82,17 @@
             }
 
         };
-        function CheckField1(id) {debugger
+        function CheckField1(id, colName,title) {
             var key = $("#" + id).val();
             if (key == "") {
-                var imageEle = $("#imgLoginKeyMsg");
+                var imageEle = $("#"+id+"Img");
                 imageEle.addClass("vaildHide");
                 imageEle.removeClass("vaild");
                 $("#" + id + "Msg").html("<font color='red'>该字段不能为空！</font>");
                 return false;
             } else {
                 $("#" + id + "Msg").html('');
-                var url = "/FReportMain/Validation", data = { col: "ReportKey", value: key };
+                var url = "/FReportMain/Validation", data = { col: colName, value: key };
                 if ($('#txtGUID').val() != "") {
                     url = "/FReportMain/ValidationEnt";
                     data.Id = $('#txtGUID').val();
@@ -105,7 +105,7 @@
                     success: function (data) {
                         //todo 处理效果后期改
                         // $("#txtGJZMsg").html("<font color='red'>关键字已经重复！</font>");
-                        var imageEle = $("#imgLoginKeyMsg"), imgSrc = "../../Content/Img/imageError.jpg";
+                        var imageEle = $("#" + id + "Img"), imgSrc = "../../Content/Img/imageError.jpg";
                         imageEle.removeClass("vaildHide");
                         if (data.result == 1) {
                             imgSrc = "../../Content/Img/imageSuccess.jpg";
@@ -114,7 +114,7 @@
                             return true;
                         }
                         else {
-                            $("#txtGJZMsg").html("<font color='red'>关键字已经存在！</font>");
+                            $("#" + id + "Msg").html("<font color='red'>" + title + "已经存在！</font>");
                             imageEle.addClass('vaild');
                             imageEle.attr("src", imgSrc);
                             return false;
@@ -122,10 +122,10 @@
 
                     },
                     error: function () {
-                        var imageName = $("#imgLoginKeyMsg");
+                        var imageEle = $("#" + id + "Img");
                         imageEle.addClass('vaild');
                         imageEle.attr("src", imgSrc);
-                        $("#txtGJZMsg").html("<font color='red'>校验失败！</font>");
+                        $("#" + id + "Msg").html("<font color='red'>校验失败！</font>");
 
                     }
 
@@ -133,8 +133,9 @@
             }
         };
         function CheckName(key, callback) {
-            var imageEle = $("#imgLoginKeyMsg");
-            if (imageEle.attr("src") == "../../Content/Img/imageSuccess.jpg") {
+            var imageEle1 = $("#txtBBMC"), imgEle2 = $("#txtGJZ"),src="../../Content/Img/imageSuccess.jpg";
+            var src1 = imageEle1.attr("src"), src2 = imgEle2.attr("src");
+            if ((src1==undefined&&src2==undefined)||(src1==src &&src2==src)) {
                 callback();
             }
         }
@@ -151,6 +152,7 @@
                 }
             }
             function Save() {
+                
                 if (!CheckField('txtGJZ') || !CheckField('txtBBMC') || !CheckField('txtUrl')) {
                     return;
                 }
@@ -207,7 +209,7 @@
             init: function () {
 
                 this.on("success", function (file, responseText, s) {
-                    debugger
+                    
                     $('#txtUrl').val(responseText.data);
                     $('#b-look').removeClass("disabled");
                 });
@@ -243,16 +245,17 @@
              <td class="tdText">
             <label ><font color="red">*</font>报表名称  &nbsp </label>
             <div>
-             <input placeholder="请输入报表名称" maxlength="100" class="input-xlarge" id="txtBBMC" onblur="CheckField('txtBBMC')" name="txtBBMC" value="@ViewData["Title"]"  type="text" />
-             
+             <input placeholder="请输入报表名称" maxlength="100" class="input-xlarge" id="txtBBMC" onblur="CheckField1('txtBBMC','Title','报表名称')" name="txtBBMC" value="@ViewData["Title"]"  type="text" />
+
+              <span style="padding:3px 0px 0px 0px;position:absolute"><img  id="txtBBMCImg"src="" class="vaildHide"/></span>
             </div>
              <div id="txtBBMCMsg"></div>
              </td>
             <td class="tdText" >
                <label ><font color="red">*</font>关键字  &nbsp </label>
             <div>
-            <input placeholder="请输入关键字" type="text" @ViewData["eState"] class="form-control" id="txtGJZ" onblur="CheckField1('txtGJZ')" name="txtGJZ" value="@ViewData["ReportKey"]">
-            <span style="padding:3px 0px 0px 0px;position:absolute"><img  id="imgLoginKeyMsg"src="" class="vaildHide"/></span>
+            <input placeholder="请输入关键字" type="text" @ViewData["eState"] class="form-control" id="txtGJZ" onblur="CheckField1('txtGJZ','ReportKey','关键字')" name="txtGJZ" value="@ViewData["ReportKey"]">
+            <span style="padding:3px 0px 0px 0px;position:absolute"><img  id="txtGJZImg"src="" class="vaildHide"/></span>
             </div>
              <div id="txtGJZMsg"></div>
                 
