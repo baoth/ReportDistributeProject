@@ -161,6 +161,7 @@
                     data.ReportKey = $('#txtGJZ').val();
                     data.Title = $('#txtBBMC').val();
                     data.CreateUrl = $('#txtUrl').val();
+                    data.Stoped= !$("#CheckSwitch").bootstrapSwitch("state");
                     $.ajax({
                         url: "/FReportMain/Save",
                         data: data,

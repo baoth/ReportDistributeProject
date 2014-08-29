@@ -15,14 +15,24 @@
                 $(".column li").removeClass("column5");
                 var c = $(this).attr('controll');
                 $(this).addClass("column5");
-                $("#childiframe").attr("src",c);
+                $("#childiframe").attr("src", c);
             })
+            var oFrm = document.getElementById('childiframe');
+            oFrm.onload = oFrm.onreadystatechange = function () {
+                if (this.readyState && this.readyState != 'complete') return;
+                else {
+                    var src = $("#childiframe").attr("src");
+                    if (src == "/Logon/Index") {
+                        location.href = '/Logon/Index';
+                    }
+                }
+            }
         });
         window.ControlIFrame = function (url) {
 
             $("#childiframe").attr("src", url);
         };
-        window.childiframe
+      
     </script>
 
 </head>
