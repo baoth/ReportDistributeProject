@@ -131,9 +131,11 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     if (Request.Files[fid] == null) continue;
                     
                     fi = new FileInfo(Request.Files[fid].FileName);
-                    path = Path.Combine(PathTools.BaseDirector,
-                        "temp",
-                        fname + fi.Extension);
+                    var pathDir=Path.Combine(PathTools.BaseDirector, "temp");
+                    if (!System.IO.Directory.Exists(pathDir)) {
+                        System.IO.Directory.CreateDirectory(pathDir);
+                    }
+                    path = Path.Combine(pathDir, fname + fi.Extension);
                     Request.Files[fid].SaveAs(path);
 
                 }
