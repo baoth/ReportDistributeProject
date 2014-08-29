@@ -161,7 +161,18 @@ namespace weixinreportviews.Model
                 throw new Exception("不支持的类型解析");
             }
         }
+        public static CustomerLoginInfo LoginAdmin(string LoginKey, string Password) {
+            if (LoginKey == "admin" && Password == "admin")
+            {
+                return new CustomerLoginInfo()
+                {
+                    Account = new SS_CompanyAccount { LoginKey = "admin" },
 
+                    Error = CustomerLoginErrorEnum.管理账户
+                };
+            }
+            return null;
+        }
         /// <summary>
         /// 客户登陆后台管理
         /// </summary>
@@ -170,7 +181,9 @@ namespace weixinreportviews.Model
         /// <returns>信息</returns>
         public static CustomerLoginInfo Login(string LoginKey, string Password)
         {
-            CustomerLoginInfo result=new CustomerLoginInfo();
+            CustomerLoginInfo result=LoginAdmin(LoginKey, Password);
+            if ( result!= null) return result;
+            result=new CustomerLoginInfo();
             DbSession session = General.CreateDbSession();
             result.Account = session.Retrieve<SS_CompanyAccount>("LoginKey", LoginKey);
             if (result.Account == null) result.Error = CustomerLoginErrorEnum.账户不存在;
@@ -212,7 +225,8 @@ namespace weixinreportviews.Model
         成功=0,
         账户不存在=1,
         账户停用=2,
-        密码错误=3
+        密码错误=3,
+        管理账户=4,
     }
 
     /// <summary>
