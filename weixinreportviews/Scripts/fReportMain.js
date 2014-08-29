@@ -177,7 +177,6 @@ $(document).ready(function () {
             { "data": "Title", "sName": 'Title', "sTitle": "标题", "sWidth": 250 },
             { "data": "ReportKey", "sName": 'ReportKey', "sTitle": "关键字", "sWidth": 90 },
             { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
-            { "data": "BuildedDisplay", "sName": 'Builded', "sTitle": "生成", "sWidth": 70 }, 
             { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
                 "mRender": function (val, isShow, row) {

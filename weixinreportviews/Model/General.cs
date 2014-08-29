@@ -215,8 +215,20 @@ namespace weixinreportviews.Model
         {
             return new WeixinCore(General.AppId, General.AppSecret, General.Token, System.Configuration.ConfigurationManager.AppSettings);
         }
+        
     }
-
+    public static class ObjectExtend
+    {
+        public static string[] Add(this string [] a,string value){
+            var strNew = new string[a.Length+1];
+            for (int i = 0; i < a.Length; i++)
+            {
+                strNew.SetValue(a[i], i);
+            }
+            strNew.SetValue(value, a.Length);
+            return strNew;
+        }
+    }
     /// <summary>
     /// 错误类型枚举
     /// </summary>

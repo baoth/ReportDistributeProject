@@ -7,7 +7,7 @@ namespace weixinreportviews.Model
 {
     public static class PathTools
     {
-        public static string 静态报表路径
+        public static string TempPath
         {
             get { return System.Configuration.ConfigurationManager.AppSettings["RPPath"]; }
         }
