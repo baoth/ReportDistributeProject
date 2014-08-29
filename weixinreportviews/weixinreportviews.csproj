@@ -142,6 +142,8 @@
     <Content Include="Content\Img\back_enabled.png" />
     <Content Include="Content\Img\back_enabled_hover.png" />
     <Content Include="Content\Img\bg_login_banner_v51e5b3a.jpg" />
+    <Content Include="Content\Img\bg_logo1e.jpg" />
+    <Content Include="Content\Img\bg_logo1e.png" />
     <Content Include="Content\Img\bg_logo1e7c60.png" />
     <Content Include="Content\Img\border.jpg" />
     <Content Include="Content\Img\bottom.jpg" />
@@ -164,6 +166,7 @@
     <Content Include="Content\Img\layerskin\xubox_loading2.gif" />
     <Content Include="Content\Img\layerskin\xubox_loading3.gif" />
     <Content Include="Content\Img\layerskin\xubox_title0.png" />
+    <Content Include="Content\Img\logo1e.ico" />
     <Content Include="Content\Img\manage_01.png" />
     <Content Include="Content\Img\mp_qrcode1e7d69.gif" />
     <Content Include="Content\Img\page_login_old_z1fcd41.png" />
