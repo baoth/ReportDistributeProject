@@ -66,13 +66,14 @@ layer.prompt = function(parme, yes, no){
 */
 
 layer.promptExtend = function (parme, yes, no) {
+    debugger
     var log = {}, parme = parme || {}, conf = {
-        area: ['auto', 'auto'],
+        area: [parme.width || '300px', parme.height || '200px'],
         offset: [parme.top || '', ''],
         title: parme.title || '信息',
         dialog: {
             btns: 2,
-            type: -1,
+            type: -1,           
             msg: '<input type="' + function () {
                 if (parme.type === 1) { //密码
                     return 'password';
@@ -81,7 +82,7 @@ layer.promptExtend = function (parme, yes, no) {
                 } else {
                     return 'text';
                 }
-            } () + '" class="xubox_prompt xubox_form" id="xubox_prompt" maxlength="' + (parme.length || 1000) + '" value="' + (parme.val || '') + '" />',
+            } () + '" class="xubox_prompt xubox_form" id="xubox_prompt" style="width: 250px;" maxlength="' + (parme.length || 1000) + '" value="' + (parme.val || '') + '" />',
             yes: function (index) {
                 debugger
                 var val = log.prompt.val();
@@ -119,7 +120,7 @@ layer.promptExtend = function (parme, yes, no) {
         }
     };
     if (parme.type === 3) {
-        conf.dialog.msg = '<textarea class="xubox_prompt xubox_form xubox_formArea" maxlength="' + (parme.length || 1000) + '"  id="xubox_prompt">' + (parme.val || '') + '</textarea>'
+        conf.dialog.msg = '<textarea class="xubox_prompt xubox_form xubox_formArea" style="width: 250px;" maxlength="' + (parme.length || 1000) + '"  id="xubox_prompt">' + (parme.val || '') + '</textarea>'
     }
     return $.layer(conf);
 };

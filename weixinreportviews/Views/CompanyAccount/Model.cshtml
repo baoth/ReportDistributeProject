@@ -37,10 +37,13 @@
                 var pType = 0;
                 var title = "提示";
                 var len = 100;
+                var heigth = "200px";
+                var width = "300px";
                 if (updateField == passwordField) {
                     pType = 1;
                     title = "修改密码";
                     len = 50;
+                    heigth = "150px";
                 }
                 else if (updateField == addressField) {
                     pType = 3;
@@ -50,9 +53,10 @@
                 else if (updateField == phoneField) {
                     title = "修改电话";
                     len = 20;
+                    heigth = "180px";
                 }
                 //密码文本 CheckPhone fieldName == 'phone'
-                layer.promptExtend({ title: title, type: pType, length: len, fieldName: updateField }, function (val, index, elem) {
+                layer.promptExtend({ title: title, type: pType, length: len, fieldName: updateField, height: heigth, width: width }, function (val, index, elem) {
                     Save(val, updateField);
                 })
             });
@@ -298,11 +302,11 @@
 <body style="background: #f6f6f6; border:0px; margin:10px;"> @*background: #f6f6f6;*@
     <div style="text-align:center;margin: 0px auto; " class="accountinfo">
     <form  id="from" class="form-horizontal">
-       <div style="text-align:left; margin:0px auto;" >
+       @*<div style="text-align:left; margin:0px auto;" >
         <a class="button button-rounded button-flat-highlight" id="btn_close" onclick="CloseBack()" href="#">返回</a>       
         
-       </div> 
-       <div style="margin: 10px auto; text-align:left; width: 100%; height: auto; "> 
+       </div> *@
+       <div style="margin: 30px auto; text-align:left; width: 100%; height: auto; "> 
         <div class="div_item_title">
             公司信息:
         </div>
