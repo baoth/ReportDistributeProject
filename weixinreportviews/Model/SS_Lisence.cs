@@ -11,6 +11,7 @@ namespace weixinreportviews.Model
     public enum ProductKindEnum
     {
         微信第一表=0,
+        无,
     }
 
     public class SS_Lisence:QSmartEntity

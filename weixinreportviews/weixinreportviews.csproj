@@ -95,8 +95,9 @@
     <Compile Include="Model\CS_FirstReport.cs" />
     <Compile Include="Model\CS_UserAttention.cs" />
     <Compile Include="Model\General.cs" />
-    <Compile Include="Model\Report\ExcelReader.cs" />
-    <Compile Include="Model\Report\ReportBuilder.cs" />
+    <Compile Include="Model\FirstReportProduct\ExcelReader.cs" />
+    <Compile Include="Model\FirstReportProduct\ReportBuilder.cs" />
+    <Compile Include="Model\ProductGeneral.cs" />
     <Compile Include="Model\SS_CompanyAccount.cs" />
     <Compile Include="Model\SS_Lisence.cs" />
     <Compile Include="Model\PathTools.cs" />
