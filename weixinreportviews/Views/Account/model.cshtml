@@ -171,7 +171,7 @@
             var Creator = $("#Creator").val();
             var CreateDate = $("#CreateDate").val();           
             var Address = $("#Address").val();
-            var Stoped = $("#CheckSwitch").bootstrapSwitch("state");
+            var Stoped = !$("#CheckSwitch").bootstrapSwitch("state");
             
             Stoped = !Stoped;   
             var Id = $("#GUID").val();

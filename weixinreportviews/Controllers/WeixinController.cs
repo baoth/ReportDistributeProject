@@ -46,19 +46,40 @@ namespace weixinreportviews.Controllers
                     {
                         case EventType.subscribe:
                             return Content("");
+                        case EventType.click: //点击菜单
+                            if (baseinfo.EventKey.ToLower() == "firstreport") //报表菜单
+                            {
+                                var user = ProductGeneral.RetrieveUser(baseinfo.FromUserName, ProductKindEnum.微信第一表);
+                                if (user==null)
+                                {
+                                    ReplyWeixinTextMessage rtm = new ReplyWeixinTextMessage();
+                                    rtm.ToUserName = baseinfo.FromUserName;
+                                    rtm.FromUserName = baseinfo.ToUserName;
+                                    rtm.CreateTime = WeixinCoreExtension.GetTimeStamp(DateTime.Now);
+                                    rtm.Content = "系统提示：" + "您当前没有获得使用该功能授权。请联系您的管理员！";
+                                    return Content(rtm.GetReplyMessage());
+                                }
+                                var reports = ProductGeneral.RetrieveSuitableReports(user);
+                                return Content(ProductGeneral.CreateFirstReportNews(baseinfo.FromUserName,
+                                    baseinfo.ToUserName,reports));
+                            }
+                            return Content("");
+                        default:
+                            return Content("");
                     }
                 }
                 else if (baseinfo != null && !baseinfo.IsEvent)
                 {
                     switch (baseinfo.MsgType)
                     {
-                        case MsgType.text:
+                        case MsgType.text: //注册
                             var tm = (AcceptWeixinTextMessage)baseinfo.CreateAcceptMessage();
                             if (string.IsNullOrEmpty(tm.Content)) return Content("");
+                            WeixinUserInfo userinfo = wc.GetUserBaseInfo(baseinfo.FromUserName);
+                            bool result = ProductGeneral.ApplyLisence(tm.Content, userinfo);
                             return Content("");
-                        case MsgType.voice:
+                        default:
                             return Content("");
-
                     }
                 }
             }
