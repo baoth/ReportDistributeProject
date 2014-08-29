@@ -169,13 +169,13 @@ $(document).ready(function () {
             }
         },
         "aoColumns": [
-            { data: null, defaultContent: '', bSortable: false, sWidth: 5,
+            { data: null, defaultContent: '', bSortable: false, sWidth: 2,
                 "mRender": function (val, isShow, row) {
-                    return '<input style="margin-left: 7px;" type="checkbox" id="' + val + '" onClick="onDataGridCheck(this)"/>'
+                    return '<input style="margin-left: 15px;" type="checkbox" id="' + val + '" onClick="onDataGridCheck(this)"/>'
                 }
             },  
             { "data": "Title", "sName": 'Title', "sTitle": "标题", "sWidth": 250 },
-            { "data": "ReportKey", "sName": 'ReportKey', "sTitle": "关键字", "sWidth": 90 },
+            { "data": "ReportKey", "sName": 'ReportKey', "sTitle": "关键字", "sWidth": 150 },
             { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": 70 },
             { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth": 70 },
             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": 70,
