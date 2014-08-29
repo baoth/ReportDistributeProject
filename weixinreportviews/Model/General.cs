@@ -225,7 +225,7 @@ namespace weixinreportviews.Model
         public static int RetrieveValidLisence(Guid AccountId, ProductKindEnum ProductKind)
         {
             //select * from 
-            //(select Count(LisencePoint) as total from SS_Lisence where EffectiveDate<=datetimenow
+            //(select SUM(LisencePoint) as total from SS_Lisence where EffectiveDate<=datetimenow
             //and ExpiryDate>=datetimenow and AccountId=accountId and ProductKind=productkind and Stoped=false) a
             //,
             //(select count(OpendId) as usered from CS_BindUser where ProductKind=productkind and AccountId=accountid) b
@@ -233,12 +233,16 @@ namespace weixinreportviews.Model
             QSmartQuery QueryA = new QSmartQuery();
             QueryA.Tables.Add(new QSmartQueryTable());
             QueryA.Tables[0].tableName = typeof(SS_Lisence).Name;
-            QueryA.CountSetting.CountAttributeName = "LisencePoint";
-            QueryA.CountSetting.AliasName = "total";
-            QueryA.CountSetting.Effective = true;
+            
+            QSmartQueryColumn qqc=new QSmartQueryColumn();
+            qqc.columnName = "LisencePoint";
+            qqc.aliasName = "total";
+            qqc.functions.Add(new QSmartQueryFunction { Function = QSmartFunctionEnum.sum });
+            QueryA.SelectColumns.Add(qqc);
+
             QueryA.FilterConditions.Add(new QSmartQueryFilterCondition
             {
-                Column = new QSmartQueryColumn { columnName = "EffectiveDate", dataType = typeof(DateTime) },
+                Column = new QSmartQueryColumn { columnName = "EffectiveDate", dataType = typeof(DateTime)},
                 Operator= QSmartOperatorEnum.lessequal,
                 Values=new List<object>{DateTime.Now},
                 Connector= QSmartConnectorEnum.and
@@ -314,12 +318,17 @@ namespace weixinreportviews.Model
     public static class ObjectExtend
     {
         public static string[] Add(this string [] a,string value){
-            var strNew = new string[a.Length+1];
-            for (int i = 0; i < a.Length; i++)
+            var length = 0;
+            if (a != null)
+            {
+                length = a.Length;
+            }
+            var strNew = new string[length+ 1];
+            for (int i = 0; i < length; i++)
             {
                 strNew.SetValue(a[i], i);
             }
-            strNew.SetValue(value, a.Length);
+            strNew.SetValue(value, length);
             return strNew;
         }
     }

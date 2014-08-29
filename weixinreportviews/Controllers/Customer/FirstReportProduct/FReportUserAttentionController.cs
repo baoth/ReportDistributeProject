@@ -87,8 +87,18 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         public ActionResult BindUpdate() 
         {
             CS_UserAttention entity = General.CreateInstance<CS_UserAttention>(Request);
-            if (!string.IsNullOrEmpty(entity.OpenId) && entity.ProductKind != null && (entity.AccountId != null && entity.AccountId != Guid.Empty))
+            
+            if (!string.IsNullOrEmpty(entity.OpenId) && (entity.AccountId != null && entity.AccountId != Guid.Empty))
             {
+                //校验绑定信息
+                if (entity.Binded)
+                {
+                    int validLisencePoint = General.RetrieveValidLisence(entity.AccountId, entity.ProductKind);
+                    if (validLisencePoint <= 0)
+                    {
+                        return Json(new { result = 1, msg = "没有可用的授权！" });
+                    }
+                }
                 DbSession session = General.CreateDbSession();
                 if (entity.Binded) session.Context.AttachEntity(entity.CreateBindCommand());
                 else session.Context.AttachEntity(entity.CreateUnBindCommand());
@@ -107,6 +117,13 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         public JsonResult GridDatas()
         {
             FReportUserDataTablesParameter dtp = General.CreateInstance<FReportUserDataTablesParameter>(Request);
+            var CurrentUserInfo = Session[General.LogonSessionName] as CustomerLoginInfo;
+            if (CurrentUserInfo != null)
+            {
+               dtp.exactFilter=dtp.exactFilter.Add("AccountId");
+               dtp.exactSearch=dtp.exactSearch.Add(CurrentUserInfo.Account.Id.ToString());
+            }
+
             int totalcount = 0;
             DbSession session = General.CreateDbSession();
             var rows = session.PaginationRetrieve<CS_UserAttention>(dtp.iDisplayStart,
@@ -152,7 +169,17 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                             Values = new List<object> { this.exactSearch[i] }
                         });
                     }
-                   
+                    else if (colName == "AccountId".ToLower())
+                    {
+                         ////添加公司账号对应的ID，每个公司只能看到自己公司的用户
+                        result.Add(new QSmartQueryFilterCondition
+                        {
+                            Column = new QSmartQueryColumn { columnName = "AccountId", dataType = typeof(Guid) },
+                            Operator = QSmartOperatorEnum.equal,
+                            Connector = QSmartConnectorEnum.and,
+                            Values = new List<object> { this.exactSearch[i] }
+                        });                       
+                    }
                 }
                 if (subs != null)
                 {
@@ -167,8 +194,8 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                         combinitem.Connector = QSmartConnectorEnum.and;
                         result.Add(combinitem);
                     }
-                }
-
+                }               
+                
                 return result;
             }
         }

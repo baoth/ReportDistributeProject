@@ -415,8 +415,8 @@
                             success: function (data) {
                                 debugger
                                 if (data.result == 1) {
-                                    //layer.alert(data.msg, 3);
-                                    layer.msg('操作失败');
+                                    layer.alert(data.msg, 3);
+                                    //layer.msg(data.msg);
                                     switchTarget.bootstrapSwitch("state", !switchState);
                                     // layer.closeAll();
                                 }
