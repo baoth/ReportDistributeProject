@@ -7,7 +7,7 @@ using weixinreportviews.Model;
 
 namespace weixinreportviews.Controllers
 {
-    public class LogonController : BaseController
+    public class LogonController :Controller
     {
         /// <summary>
         /// 
