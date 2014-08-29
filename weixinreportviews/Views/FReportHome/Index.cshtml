@@ -29,6 +29,7 @@
                 $.LogOut(e);
             });
             $("#companyName").bind("click", function (e) {
+                $(".column li").removeClass("column5");
                 var url = $(e.target).attr("action");
                 var id = $(e.target).attr("companyId");
                 url = AddParams("Id", id, url);
