@@ -229,7 +229,15 @@
                             { "data": "OpenId", "sName": 'OpenId', "sTitle": "客户微信OpenId", "bVisible": false },
                             { "data": "ProductKind", "sName": 'ProductKind', "sTitle": "微信产品类型", "bVisible": false },
                             { "data": "AccountId", "sName": 'AccountId', "sTitle": "公司Id", "bVisible": false },
-                            { "data": "HeadImgUrl", "sName": 'HeadImgUrl', "bSortable": false, "sTitle": "照片", "sWidth": "15%" },
+                            { "data": "HeadImgUrl", "sName": 'HeadImgUrl', "bSortable": false, "sTitle": "照片", "sWidth": "15%",
+                                "mRender": function (val, isShow, row) {                                    
+                                    var imgUrl = "../../Content/Img/defaultHead.png";
+                                    if (row.HeadImgUrl) {
+                                        imgUrl = row.HeadImgUrl;
+                                    }
+                                    return '<div> <img src="' + imgUrl + '" width="100" height="100" /></div>';
+                                }
+                            },
                             { "data": "NickName", "sName": 'NickName', "sTitle": "昵称", "sWidth": "40%" },
                             { "data": "BindedDisplay", "sName": 'Binded', "bSortable": false, "sTitle": "绑定", "sWidth": "20%",
                                 "mRender": function (val, isShow, row) {
@@ -246,7 +254,7 @@
 
                                     var div = '<div  class="Operate-button" v="' + val + '">';
                                     div += '<ul class="dtOperate">';
-                                    div += '<li> <a href="#" name="refresh" id="refresh" action="Refresh" title="刷新"><i class="fa fa-refresh"></i></a> </li>';
+                                    div += '<li> <a href="#" name="refresh" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '" id="refresh" action="Refresh" title="刷新"><i class="fa fa-refresh"></i></a> </li>';
                                     div += '<li> <a href="#" name="delete" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '"  id="delete' + row.OpenId + '" accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" action="Delete" title="删除"><i class="fa fa-times"></i></a> </li>';
                                     div += '</ul>';
                                     div += '</div>';
@@ -259,7 +267,7 @@
             $('.openBtn-txt').bind('click', function () {
                 var context$ = $('#zdcontext');
                 var style = context$.attr("style") || "";
-                debugger
+                
                 if (style.indexOf("none") > -1) {
                     $('#optionid').removeClass('option1');
                     $('#zdcontext').show();
@@ -271,7 +279,7 @@
             window.filterFiled = {};
             window.keyToText = {};
             $('.mod_category_item li a').bind('click', function () {
-                debugger
+                
                 var item = $(this), text = item.html(); //this.innerText;
                 var key = item.attr('keyCode');
                 var type = item.parent().parent().attr('actionField');
@@ -332,18 +340,47 @@
         });
         //绑定事件
         function BindreDTEvent() {
-            debugger
-            $("a[name='refresh']").bind("click", function () {
-                RefreshTable();
+            
+            $("a[name='refresh']").bind("click", function (e) {
+            
+                var val = $(this).attr("v");
+                var arr = val.split(',');
+                var argData = { 'OpenId': arr[0], 'ProductKind': arr[1], 'AccountId': arr[2] };
+                $.ajaxRefreshRow(this, argData);
+               
+                // RefreshTable();
             });
             $("a[name='delete']").bind("click", function (r) {
-                debugger
+                
                 var action = $(this).attr("action");
                 var val = $(this).attr("v");
                 PageAction(val)[action]();
 
             });
 
+        }
+        //刷新单行数据
+        function RefreshRowData(e, data) {
+            
+            var tr = $(e).parent().parent().parent().parent().siblings();
+            var a = Array();
+            a.push("");
+            a.push(data.HeadImgUrl);
+            a.push(data.NickName);
+            //$($(e).parent().parent().parent().parent().siblings().eq(1).find('img')).attr('src')
+            tr.each(function (i) {
+                if (a[i] && i > 0) {
+                    
+                    var img = $(this).find('img');
+                    if (img) {
+                        img.attr('src', a[i]);
+                    }
+                    else {
+                        $(this).html(a[i]);
+                    }
+                }
+            })
+            
         }
         function RefreshTable() {
             $.refreshFilter();
@@ -370,7 +407,7 @@
 
             switchTarget.bootstrapSwitch("onSwitchChange", function (value) {
                 var msg = "确定要解绑吗？";
-                debugger
+                
                 
                 switchTarget = $(value.target);
                 var beforeState = switchTarget.attr("Binded");
@@ -413,7 +450,7 @@
                             data: argData, // { "openid": ids.join(',') },argData
                             dataType: "json",
                             success: function (data) {
-                                debugger
+                                
                                 if (data.result == 1) {
                                     layer.alert(data.msg, 3);
                                     //layer.msg(data.msg);
@@ -429,7 +466,7 @@
                                 }
                             },
                             error: function () {
-                                debugger
+                                
                                 switchTarget.bootstrapSwitch("state", !switchState);
                                 layer.msg("操作失败！");
                                 //layer.closeAll();
@@ -446,6 +483,32 @@
                 close: function (index) {
                     switchTarget.bootstrapSwitch("state", !switchState);
                 }
+            });
+        }
+        //刷新Row
+        $.ajaxRefreshRow = function (obj, argData) {
+            layer.load('处理中..', 0);
+            $.ajax({
+                type: "post",
+                url: "/FReportUserAttention/GetRowByFilter",
+                data: argData, // { "openid": ids.join(',') },argData
+                dataType: "json",
+                success: function (data) {
+                    
+                    if (data.result == 1) {
+                        layer.msg("刷新失败！");
+                        layer.closeAll();
+                    }
+                    else {
+                        RefreshRowData(obj, data);
+                        layer.closeAll();
+                    }
+                },
+                error: function () {
+                    layer.msg("刷新失败！");
+                    layer.closeAll();
+                }
+
             });
         }
     </script>
@@ -475,6 +538,7 @@
                 <li> <a  href="#" keyCode="0">未绑定</a> </li>
                 <li> <a href="#" keyCode="1">已绑定</a> </li>                
             </ul>
+           
         </div>
        
      </div>
