@@ -75,8 +75,8 @@
                     case "0":
                         i = "成功登录，正在跳转...", location.href ='/FReportHome/Index';
                         return;
-                    case "0":
-                        i = "成功登录，正在跳转...", location.href = '/FReportHome/Index';
+                    case "4":
+                        i = "成功登录，正在跳转...", location.href = '/Home/Index';
                         return;
                     default:
                         i = "未知的返回。";
