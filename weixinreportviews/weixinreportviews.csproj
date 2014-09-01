@@ -194,6 +194,7 @@
     <Content Include="Scripts\accountindex.js" />
     <Content Include="Scripts\dropzone.js" />
     <Content Include="Scripts\dropzone.min.js" />
+    <Content Include="Scripts\mobileLogon.js" />
     <Content Include="Scripts\numeralInput.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
@@ -244,6 +245,7 @@
     <Content Include="Views\FReportMain\Model.cshtml" />
     <Content Include="Views\Master\_CheckSession.cshtml" />
     <Content Include="Views\CompanyAccount\Model.cshtml" />
+    <Content Include="Views\Logon\MobileIndex.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config">
@@ -261,6 +263,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Mobile\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
