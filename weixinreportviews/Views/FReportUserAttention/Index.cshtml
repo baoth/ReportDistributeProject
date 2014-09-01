@@ -207,6 +207,7 @@
 
                 }],
                 "fnDrawCallback": function (oSettings) {
+                    $('#checkall').attr("checked", false);
                     BindGridChecked();
                     $(".settings-button").each(function () {
                         $(this).toolbar({
