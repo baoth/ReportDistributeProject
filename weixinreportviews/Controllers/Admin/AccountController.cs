@@ -102,7 +102,7 @@ namespace weixinreportviews.Controllers.Admin
                     {
                         SS_CompanyAccount entity = new SS_CompanyAccount { Id = Guid.Parse(ids[i]) };
                         session.Context.DeleteEntity(entity.CreateDeleteCommand());
-                        listPath.Add(System.IO.Path.Combine(PathTools.SaveHtmlPath, id));
+                        listPath.Add(System.IO.Path.Combine(PathTools.SaveHtmlPath, ids[i]));
                     }
                 }
 
@@ -111,6 +111,7 @@ namespace weixinreportviews.Controllers.Admin
                     session.Context.SaveChange();
                     foreach (var item in listPath)
                     {
+                        if (System.IO.Directory.Exists(item))
                         System.IO.Directory.Delete(item, true);
                     }
                     return Json(new { result = 0 });
