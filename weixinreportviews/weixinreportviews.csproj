@@ -150,6 +150,8 @@
     <Content Include="Content\Img\bg_logo1e7c60.png" />
     <Content Include="Content\Img\border.jpg" />
     <Content Include="Content\Img\bottom.jpg" />
+    <Content Include="Content\Img\DefaultHead.jpg" />
+    <Content Include="Content\Img\defaultHead.png" />
     <Content Include="Content\Img\favicon.ico" />
     <Content Include="Content\Img\forward_disabled.png" />
     <Content Include="Content\Img\forward_enabled.png" />
