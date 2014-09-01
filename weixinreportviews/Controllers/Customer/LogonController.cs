@@ -16,8 +16,14 @@ namespace weixinreportviews.Controllers
         /// <param name="password">密码</param>        
         public ActionResult Index()
         {
-           
-            return View();
+            if (General.PhoneBroswer(Request))
+            {
+                return View("MobileIndex");
+            }
+            else
+            {
+                return View();
+            }
         }
         /// <summary>
         /// 退出
@@ -46,4 +52,6 @@ namespace weixinreportviews.Controllers
         }
       
     }
+
+
 }
