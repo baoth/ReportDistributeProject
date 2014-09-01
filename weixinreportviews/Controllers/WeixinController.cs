@@ -52,12 +52,7 @@ namespace weixinreportviews.Controllers
                                 var user = ProductGeneral.RetrieveUser(baseinfo.FromUserName, ProductKindEnum.微信第一表);
                                 if (user==null)
                                 {
-                                    ReplyWeixinTextMessage rtm = new ReplyWeixinTextMessage();
-                                    rtm.ToUserName = baseinfo.FromUserName;
-                                    rtm.FromUserName = baseinfo.ToUserName;
-                                    rtm.CreateTime = WeixinCoreExtension.GetTimeStamp(DateTime.Now);
-                                    rtm.Content = "系统提示：" + "您当前没有获得使用该功能授权。请联系您的管理员！";
-                                    return Content(rtm.GetReplyMessage());
+                                    return Content(WeixinMessage(baseinfo,"系统提示：" + "您当前没有获得使用该功能授权。请联系您的管理员！"));
                                 }
                                 var reports = ProductGeneral.RetrieveSuitableReports(user);
                                 return Content(ProductGeneral.CreateFirstReportNews(baseinfo.FromUserName,
@@ -85,5 +80,16 @@ namespace weixinreportviews.Controllers
             }
             return Content("");
         }
+
+        private string WeixinMessage(WeixinMessageBaseInfo info, string msg)
+        {
+            ReplyWeixinTextMessage rtm = new ReplyWeixinTextMessage();
+            rtm.ToUserName = info.FromUserName;
+            rtm.FromUserName = info.ToUserName;
+            rtm.CreateTime = WeixinCoreExtension.GetTimeStamp(DateTime.Now);
+            rtm.Content = msg;
+            return rtm.GetReplyMessage();
+        }
+
     }
 }
