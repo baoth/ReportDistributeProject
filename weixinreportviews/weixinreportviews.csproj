@@ -119,6 +119,7 @@
     <Content Include="Content\Css\Logon\form.css" />
     <Content Include="Content\Css\Logon\logon.css" />
     <Content Include="Content\Css\Logon\ieform.css" />
+    <Content Include="Content\Css\Logon\mlogon.css" />
     <Content Include="Content\Css\select.css" />
     <Content Include="Content\Css\dataTables.editor.min.css" />
     <Content Include="Content\Css\DateTime\bootstrap-datetimepicker.css" />
