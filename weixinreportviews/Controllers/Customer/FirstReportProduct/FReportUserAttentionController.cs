@@ -138,47 +138,21 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             }, JsonRequestBehavior.AllowGet);            
         }
         [HttpPost]
-        public ActionResult GetRowByFilter()
+        public JsonResult GetRowByFilter()
         {
             CS_UserAttention entity = General.CreateInstance<CS_UserAttention>(Request);
             if (!string.IsNullOrEmpty(entity.OpenId) && (entity.AccountId != null && entity.AccountId != Guid.Empty))
             {
-                DbSession session = General.CreateDbSession();
-                QSmartQuery Query = new QSmartQuery();
-                Query.Tables.Add(new QSmartQueryTable());
-                Query.Tables[0].tableName = typeof(CS_UserAttention).Name;
-                //OpenId
-                Query.FilterConditions.Add(new QSmartQueryFilterCondition()
-                {
-                    Column = new QSmartQueryColumn() { columnName = "OpenId",dataType=typeof(string) },
-                    Operator=QSmartOperatorEnum.equal,
-                    Values=new List<object>{entity.OpenId},
-                    Connector=QSmartConnectorEnum.and
-                });
-               
-                //AccountId
-                Query.FilterConditions.Add(new QSmartQueryFilterCondition()
-                {
-                    Column = new QSmartQueryColumn() { columnName = "AccountId", dataType = typeof(Guid) },
-                    Operator = QSmartOperatorEnum.equal,
-                    Values = new List<object> { entity.AccountId },
-                    Connector = QSmartConnectorEnum.and
-                });
-                //产品类型
-                Query.FilterConditions.Add(new QSmartQueryFilterCondition()
-                {
-                    Column = new QSmartQueryColumn() { columnName = "ProductKind", dataType = typeof(ProductKindEnum) },
-                    Operator = QSmartOperatorEnum.equal,
-                    Values = new List<object> { entity.ProductKind }                   
-                });
-               
-                var results = session.Context.QueryEntity<CS_UserAttention>(Query);
-                if (results != null && results.Count > 0)
-                {
-                    var row = results[0];
-                    return Json(new { result = 0, HeadImgUrl = row.HeadImgUrl, NickName = row.NickName });
-                }
-               
+                var winCore = General.CreateWeixinCore();
+                var userInof = winCore.GetUserBaseInfo(entity.OpenId);
+
+                entity.NickName = userInof.nickname;
+                entity.HeadImgUrl = userInof.headimgurl;
+                var dbSession = General.CreateDbSession();
+                var cobj = entity.CreateQSmartObject();
+                cobj.RetainColumn(new List<string>() { "NiceName", "HeadImgUrl", "AccountId", "ProductKind", "OpenId" });
+                dbSession.Context.ModifyEntity(cobj);
+                return Json(new { result = 0, HeadImgUrl = entity.HeadImgUrl, NickName = entity.NickName });
             }
             return Json(new { result = 1 });
         }

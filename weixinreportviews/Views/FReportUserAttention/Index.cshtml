@@ -7,12 +7,20 @@
 <html>
 <head>
     <title></title>  
-    
+       <style>
+      *{padding: 0px;margin: 0px; font-size: 13px;font-family:"微软雅黑","SimSun","Arial Narrow";color: #444;}
+   </style>
     <link href="../../Content/Css/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"
         type="text/css" />   
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
-    <link href="../../Content/Css/jquery.dataTables.css?r=7" rel="stylesheet" type="text/css" />
-    <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+
+    @*开关按钮引用start *@
+     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <link href="../../Content/Css/Switch/bootstrap-switch.css?r=1" rel="stylesheet" type="text/css" /> 
+    <script src="../../Scripts/Switch/bootstrap-switch.js" type="text/javascript"></script>
+    
+    <link href="../../Content/Css/jquery.dataTables.css?r=7" rel="stylesheet" type="text/css" />  
+  
     <script src="../../Scripts/jquery.dataTables.js?r=6" type="text/javascript"></script>
     <link href="../../Content/Css/dataTables.editor.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/jquery.toolbars.css" rel="stylesheet" type="text/css" />
@@ -23,13 +31,9 @@
     <script src="../../Scripts/jquery.toolbar.js" type="text/javascript"></script>
     <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
 
-    @*开关按钮引用start *@
-    <link href="../../Content/Css/Switch/bootstrap-switch.css" rel="stylesheet" type="text/css" /> 
-   @* <script src="../../Scripts/Switch/jquery.min.js" type="text/javascript"></script> *@
-    <script src="../../Scripts/Switch/bootstrap-switch.js" type="text/javascript"></script>   
+    
     @*  开关按钮 end*@
      <style>
-      *{padding: 0px;margin: 0px; font-size: 13px;font-family:"微软雅黑","SimSun","Arial Narrow";}
        .Operate-button ul {
         margin:0;
         padding:0;
@@ -243,7 +247,7 @@
                                 "mRender": function (val, isShow, row) {
                                     var div = '<div class="Operate-button" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '">';
                                     div += '<ul class="dtOperate">';
-                                    div += '<li><input type="checkbox" name="CheckSwitch" Binded="' + row.Binded + '"  accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" id="CheckSwitch' + val + '" name="CheckSwitch"  /></li>';
+                                    div += '<li><input type="checkbox" name="CheckSwitch" Binded="' + row.Binded + '"  accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" id="CheckSwitch' + val + '"   /></li>';
                                     div += '</ul>';
                                     div += '</div>';
                                     return div;
