@@ -236,16 +236,16 @@
                             { "data": "OpenId", "sName": 'OpenId', "sTitle": "客户微信OpenId", "bVisible": false },
                             { "data": "ProductKind", "sName": 'ProductKind', "sTitle": "微信产品类型", "bVisible": false },
                             { "data": "AccountId", "sName": 'AccountId', "sTitle": "公司Id", "bVisible": false },
-                            { "data": "HeadImgUrl", "sName": 'HeadImgUrl', "bSortable": false, "sTitle": "照片", "sWidth": "15%",
+                            { "data": "HeadImgUrl", "sName": 'HeadImgUrl', "bSortable": false, "sTitle": "照片", "sWidth": "7%",
                                 "mRender": function (val, isShow, row) {                                    
                                     var imgUrl = "../../Content/Img/defaultHead.png";
                                     if (row.HeadImgUrl) {
                                         imgUrl = row.HeadImgUrl;
                                     }
-                                    return '<div> <img src="' + imgUrl + '" width="100" height="100" /></div>';
+                                    return '<div> <img src="' + imgUrl + '" width="60px" height="60px" /></div>';
                                 }
                             },
-                            { "data": "NickName", "sName": 'NickName', "sTitle": "昵称", "sWidth": "40%" },
+                            { "data": "NickName", "sName": 'NickName', "sTitle": "昵称", "sWidth": "48%" },
                             { "data": "BindedDisplay", "sName": 'Binded', "bSortable": false, "sTitle": "绑定", "sWidth": "20%",
                                 "mRender": function (val, isShow, row) {
                                     var div = '<div class="Operate-button" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '">';
