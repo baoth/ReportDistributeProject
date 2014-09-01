@@ -75,9 +75,10 @@
                     selectids.push(id);
                     return selectids;
                 }
+                
                 var selectedDom = $('#example tbody tr.selected');
                 $.each(selectedDom, function () {
-                    var id = $(this).find('td div').attr('v');
+                    var id = $(this).find('td .Operate-button').attr('v');
                     selectids.push(id);
                 });
                 return selectids;
@@ -165,6 +166,7 @@
 
                     val = "";
                 }
+                
                 PageAction(val)[action]();
             });
 
@@ -257,7 +259,7 @@
                             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": "20%",
                                 "mRender": function (val, isShow, row) {
 
-                                    var div = '<div  class="Operate-button" v="' + val + '">';
+                                    var div = '<div  class="Operate-button" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '">';
                                     div += '<ul class="dtOperate">';
                                     div += '<li> <a href="#" name="refresh" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '" id="refresh" action="Refresh" title="刷新"><i class="fa fa-refresh"></i></a> </li>';
                                     div += '<li> <a href="#" name="delete" v="' + row.OpenId + ',' + row.ProductKind + ',' + row.AccountId + '"  id="delete' + row.OpenId + '" accountId="' + row.AccountId + '" productKind="' + row.ProductKind + '"  OpenId="' + row.OpenId + '" action="Delete" title="删除"><i class="fa fa-times"></i></a> </li>';
