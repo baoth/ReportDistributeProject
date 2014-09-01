@@ -127,7 +127,7 @@ namespace weixinreportviews.Model
                 ArticleItem item = new ArticleItem();
                 item.Title = rp.Title;
                 item.Description = rp.Title;
-                item.Url = string.Format("http://{0}{1}", PathTools.WebRoot, rp.Url);
+                item.Url = string.Format("{0}/{1}", PathTools.WebRoot, rp.Url);
                 rnm.Articles.Add(item);
             }
             ArticleItem itemhistory = new ArticleItem();
