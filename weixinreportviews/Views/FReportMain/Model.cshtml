@@ -149,7 +149,7 @@
                 debugger
                 var url = $('#txtUrl').val();
                 if (url) {
-                    window.open(url);
+                    window.open(url+"?r="+10*Math.random());
                 }
                 else {
                     $("#txtUrlMsg").html("<font color='red'>无上传文件，请上传文件后再预览！</font>");
