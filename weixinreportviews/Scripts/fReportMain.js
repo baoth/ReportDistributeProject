@@ -71,10 +71,10 @@
         CreateHtml: function () {
             debugger
             var o = GetSingleSelectedRowData();
-            if (o.name&&o.name.length>32) {
-                window.open('http://' + window.location.host + "/" + o.name.replace(/\/\//g, '/'));
+            if (o.name && o.name.length > 32) {               
+               window.open('http://' + window.location.host + "/" + o.name.replace(/\\/g, '/'));
             } else {
-                layer.alert("预览地址不存在!");
+                layer.alertEx("预览地址不存在!", "300px", "150px");               
             }
         },
         ControlBtn: function () {

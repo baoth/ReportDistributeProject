@@ -53,12 +53,20 @@ window.layer = {
     alert: function(msg, icon, fn, yes){
         var isfn = (typeof fn === 'function'), conf = {
             dialog: {msg: msg, type: icon, yes: isfn ? fn : yes},
-            area: ['auto', 'auto']
+            area: ['auto', 'auto']/*auto*/
+        };
+        isfn || (conf.title = fn);
+        return $.layer(conf);
+    },
+    //扩展alertEx
+    alertEx: function (msg,width,height,icon, fn, yes) {
+        var isfn = (typeof fn === 'function'), conf = {
+            dialog: { msg: msg, type: icon, yes: isfn ? fn : yes },
+            area: [width, height]
         };
         isfn || (conf.title = fn);
         return $.layer(conf);
     }, 
-    
     confirm: function(msg, yes, fn, no){ 
         var isfn = (typeof fn === 'function'), conf = {
             dialog: {msg: msg, type: 4, btns: 2, yes: yes, no: isfn ? fn : no}
