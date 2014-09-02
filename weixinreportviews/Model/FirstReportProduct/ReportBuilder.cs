@@ -210,4 +210,48 @@ namespace weixinreportviews.Model
 
 
     }
+    /// <summary>
+    /// word 转换成HTML
+    /// </summary>
+    public class WordReportBuilder
+    {
+
+        private string _TemplatePath = string.Empty;
+        /// <summary>
+        /// 获取html模板完整路径
+        /// </summary>
+        public string TemplatePath
+        {
+            get { return _TemplatePath; }
+        }
+
+        public WordReportBuilder(string TemplatePath) { this._TemplatePath = TemplatePath; }
+        private Aspose.Words.Document oDoc; 
+        /// <summary>
+        /// 创建html
+        /// </summary>
+        /// <param name="filePath">参照文件完整路径</param>
+        /// <param name="savePath">转换成html后保存的完整路径</param>
+        /// <param name="isDelSource">是否删除参照文件</param>
+        /// <returns></returns>
+        public bool Build(string filePath, string savePath, bool isDelSource = true)
+        {
+            string templatePath = this.TemplatePath;
+            try
+            {
+                oDoc = new Aspose.Words.Document(filePath);
+                oDoc.Save(savePath,Aspose.Words.SaveFormat.Html);
+                if (isDelSource)
+                {
+                    File.Delete(filePath);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+    }
 }

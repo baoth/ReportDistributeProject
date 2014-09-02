@@ -41,6 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Cbin\Aspose.Cells.dll</HintPath>
     </Reference>
+    <Reference Include="Aspose.Words, Version=11.3.0.0, Culture=neutral, PublicKeyToken=47d5d0e1ef9d080b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Cbin\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
     </Reference>
@@ -107,6 +111,7 @@
     <Content Include="Cbin\Aspose.Cells.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Cbin\Aspose.Words.dll" />
     <Content Include="Cbin\QSmart.Core.dll" />
     <Content Include="Cbin\QSmart.Weixin.Core.dll" />
     <Content Include="Cbin\System.Web.Extensions.dll" />
