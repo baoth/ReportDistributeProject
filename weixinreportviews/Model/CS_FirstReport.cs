@@ -92,12 +92,12 @@ namespace weixinreportviews.Model
                 string url = string.Empty;
                 var pathUrl = "ReportViews\\" + this.AccountId + "\\" + this.Id + ".html";
                 var newPathUrl = "ReportViews\\" + this.AccountId + "\\" + this.Id+ "\\" + this.Id + ".html";
-                var newPathDir = System.IO.Path.Combine(PathTools.BaseDirector, newPathUrl);
-                if (System.IO.File.Exists(newPathDir))
+                var basePath = PathTools.BaseDirector;
+                if (System.IO.File.Exists(System.IO.Path.Combine(basePath,newPathUrl)))
                 {
                     url = newPathUrl;
                 }
-                else if (System.IO.File.Exists(pathUrl))
+                else if (System.IO.File.Exists(System.IO.Path.Combine(basePath,pathUrl)))
                 {
                     url = pathUrl;
                 }
