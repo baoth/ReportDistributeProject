@@ -89,7 +89,19 @@ namespace weixinreportviews.Model
         {
             get
             {
-                return "ReportViews\\" + this.AccountId + "\\" + this.Id + ".html";
+                string url = string.Empty;
+                var pathUrl = "ReportViews\\" + this.AccountId + "\\" + this.Id + ".html";
+                var newPathUrl = "ReportViews\\" + this.AccountId + "\\" + this.Id+ "\\" + this.Id + ".html";
+                var newPathDir = System.IO.Path.Combine(PathTools.BaseDirector, newPathUrl);
+                if (System.IO.File.Exists(newPathDir))
+                {
+                    url = newPathUrl;
+                }
+                else if (System.IO.File.Exists(pathUrl))
+                {
+                    url = pathUrl;
+                }
+                return url;
             }
         }
 

@@ -22,7 +22,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 var session = General.CreateDbSession();
                 var ent = session.Retrieve<CS_FirstReport>("Id", Guid.Parse(id));
                 if (ent!=null) {
-                    ViewData.Add("CreateUrl",PathTools.AddWebHeadAddress(ent.Url));
+                    ViewData.Add("CreateUrl", PathTools.AddWebHeadAddress(ent.Url).Replace("\\", "/"));
                     ViewData.Add("Id", ent.Id);
                     ViewData.Add("ReportKey", ent.ReportKey);
                     ViewData.Add("Title", ent.Title);
@@ -38,26 +38,26 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             try
             {
                 var customerInfo = Session[General.LogonSessionName] as CustomerLoginInfo;
-                var account = General.CreateInstance<CS_FirstReport>(Request);
+                var ent = General.CreateInstance<CS_FirstReport>(Request);
                 var session = General.CreateDbSession();
                 var path = Request["CreateUrl"];
-                if (account.Id != Guid.Empty)
+                if (ent.Id != Guid.Empty)
                 {
                     if (path.Contains(PathTools.TempPath))
                     {
-                        ChangeAddress(path, account.Id, customerInfo.Account.LoginKey);
+                        ChangeAddress(path, ent.Id, customerInfo.Account.Id.ToString());
                     }
-                    account.AccountId = customerInfo.Account.Id;
-                    session.Context.ModifyEntity(account.CreateQSmartObject());
+                    ent.AccountId = customerInfo.Account.Id;
+                    session.Context.ModifyEntity(ent.CreateQSmartObject());
                 }
                 else
                 {
-                    account.Id = Guid.NewGuid();
-                    ChangeAddress(path, account.Id, customerInfo.Account.Id.ToString());
-                    account.AccountId = customerInfo.Account.Id;
-                    account.CreateDate = DateTime.Now;
-                    account.Stoped = false;
-                    session.Context.InsertEntity(account.CreateQSmartObject());
+                    ent.Id = Guid.NewGuid();
+                    ChangeAddress(path, ent.Id, customerInfo.Account.Id.ToString());
+                    ent.AccountId = customerInfo.Account.Id;
+                    ent.CreateDate = DateTime.Now;
+                    ent.Stoped = false;
+                    session.Context.InsertEntity(ent.CreateQSmartObject());
                 }
                 session.Context.SaveChange();
                 return Json(new { result = 0 });
@@ -149,6 +149,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             }
 
             string htmlName = fname + ".html";
+            string tempFullPath = string.Empty;
             try
             {
                 if (fi.Extension.ToLower() == ".xls" || fi.Extension.ToLower() == ".xlsx")
@@ -157,6 +158,19 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     erb.Build(path, Path.Combine(PathTools.BaseDirector,
                             "temp",
                             htmlName));
+
+                    tempFullPath = Path.Combine(PathTools.TempPath,htmlName);
+                }
+                else if (fi.Extension.ToLower() == ".doc" || fi.Extension.ToLower()==".docx")
+                {
+                    htmlName = "w" + htmlName;
+                    WordReportBuilder erb = new WordReportBuilder(PathTools.RPTemplatePath);
+                    string savePath=Path.Combine(PathTools.BaseDirector,
+                            "temp/" + "w"+fname,
+                            htmlName);
+                    erb.Build(path,savePath);
+
+                    tempFullPath = Path.Combine(PathTools.TempPath,"w"+fname, htmlName);
                 }
             }
             catch(Exception ex)
@@ -169,7 +183,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             }
 
 
-            return Json(new { data = PathTools.AddWebHeadAddress(PathTools.TempPath+"\\" + htmlName) });
+            return Json(new { data = PathTools.AddWebHeadAddress(tempFullPath) });
         }
         /// <summary>
         /// 获取账户列表页面
@@ -248,21 +262,119 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 result=result? 0 : 1
             });
         }
-        public string ChangeAddress(string path,Guid id,string companyId) 
-        {
+        //public string ChangeAddress(string path,Guid id,string companyId) 
+        //{
             
-            var tempPath = PathTools.RemoveWebHeadAddress(path).Replace("\\", "//");
-            tempPath = tempPath.Substring(2);
-            var rePathDir = PathTools.GenerateHtmlPath + "//" + companyId;
-            var newPathDir = System.IO.Path.Combine(PathTools.BaseDirector, rePathDir);
-            if (!System.IO.File.Exists(newPathDir)) {
-                System.IO.Directory.CreateDirectory(newPathDir);
-            }
-            var copyPath = System.IO.Path.Combine(PathTools.BaseDirector, tempPath);
-            System.IO.File.Copy(copyPath,System.IO.Path.Combine(newPathDir,id.ToString()+".html"), true);
-            System.IO.File.Delete(copyPath);
-            return rePathDir +"//"+ id.ToString() + ".html";
+        //    var tempPath = PathTools.RemoveWebHeadAddress(path).Replace("\\", "//");
+        //    tempPath = tempPath.Substring(2);
+        //    var rePathDir = PathTools.GenerateHtmlPath + "//" + companyId;
+        //    var newPathDir = System.IO.Path.Combine(PathTools.BaseDirector, rePathDir);
+        //    if (!System.IO.File.Exists(newPathDir)) {
+        //        System.IO.Directory.CreateDirectory(newPathDir);
+        //    }
+        //    var copyPath = System.IO.Path.Combine(PathTools.BaseDirector, tempPath);
+        //    System.IO.File.Copy(copyPath,System.IO.Path.Combine(newPathDir,id.ToString()+".html"), true);
+        //    System.IO.File.Delete(copyPath);
 
+        //    //公司下的文件
+        //    List<string> fileNameList=new List<string> ();
+        //    DirectoryInfo dInfo = new DirectoryInfo(newPathDir);
+        //    GetAllFileNameById(dInfo, id.ToString(), ref fileNameList);
+
+
+        //    return rePathDir +"//"+ id.ToString() + ".html";
+
+        //}
+
+         public string ChangeAddress(string path, Guid id, string companyId)
+         {
+             var fullPathDir = string.Empty;
+             var tempPath = PathTools.RemoveWebHeadAddress(path).Replace("\\", "//");
+            tempPath = tempPath.Substring(1);
+             var rePathDir = PathTools.GenerateHtmlPath + "//" + companyId;
+             var newPathDir = System.IO.Path.Combine(PathTools.BaseDirector, rePathDir);
+             //if (!System.IO.File.Exists(newPathDir))
+             if(!System.IO.Directory.Exists(newPathDir))
+             {
+                 System.IO.Directory.CreateDirectory(newPathDir);
+             }
+             var tempFullFileName = tempPath.Substring(tempPath.LastIndexOf('/')+1);
+             var tempType = tempFullFileName.Substring(0, 1);
+             var tempFileName = tempFullFileName.Substring(0, tempFullFileName.LastIndexOf("."));  
+             
+             if (tempType == "w" && tempFileName.Length > 36)//word 转换
+             {
+                 var copyPath = System.IO.Path.Combine(PathTools.BaseDirector, tempPath.Substring(0, tempPath.LastIndexOf('/'))).Replace("/", "\\");//.Substring(0, tempPath.LastIndexOf('/') - 1).Replace("/","\\"), tempFileName
+                 var toPath=System.IO.Path.Combine(newPathDir, id.ToString());
+                 var saveFileName = id.ToString() + ".html";
+                 CopyFolder(copyPath,toPath,saveFileName);
+                // System.IO.Directory.Delete(copyPath);
+                 DirectoryInfo di = new DirectoryInfo(copyPath);
+                 di.Delete(true);
+                 fullPathDir = System.IO.Path.Combine(toPath,saveFileName);
+             }
+             else
+             {
+                 var copyPath = System.IO.Path.Combine(PathTools.BaseDirector, tempPath);
+                 System.IO.File.Copy(copyPath, System.IO.Path.Combine(newPathDir, id.ToString() + ".html"), true);
+                 System.IO.File.Delete(copyPath);
+                 fullPathDir = System.IO.Path.Combine(newPathDir, id.ToString() + ".html");
+             }
+
+             return fullPathDir;
+
+         }
+        /// <summary>
+        /// 复制文件夹
+        /// </summary>
+        /// <param name="fromPath"></param>
+        /// <param name="toPath"></param>
+        /// <param name="saveFileName"></param>
+         private static void CopyFolder(string fromPath, string toPath,string saveFileName)
+         {
+             if (!Directory.Exists(toPath))
+                 Directory.CreateDirectory(toPath);
+
+             // 子文件夹
+             foreach (string sub in Directory.GetDirectories(fromPath))
+                 CopyFolder(sub + "\\", toPath + Path.GetFileName(sub) + "\\",saveFileName);
+
+             // 文件
+             foreach (string file in Directory.GetFiles(fromPath))
+             {                 
+                 var fileName = Path.GetFileName(file);
+                 string extension = GetExtension(fileName);
+                 if (extension == ".html")
+                 {                    
+                     System.IO.File.Copy(file,Path.Combine(toPath,saveFileName), true);
+                    // System.IO.File.Delete(copyPath);
+                 }
+                 else
+                 {
+                     System.IO.File.Copy(file, Path.Combine(toPath, Path.GetFileName(file)), true);
+                     //System.IO.File.Delete(file);
+                 }
+             }
+               
+         }
+
+         private static string GetExtension(string fileName)
+         {
+             return fileName.Substring(fileName.LastIndexOf('.'));
+         }
+      
+        public void GetAllFileNameById(DirectoryInfo dd,string id,ref List<string> fileNameList)
+        {
+            FileInfo[] allfile = dd.GetFiles(id+".*");
+            foreach (FileInfo tt in allfile)
+            {
+                fileNameList.Add(tt.Name);
+            }
+            DirectoryInfo[] direct = dd.GetDirectories();
+            foreach (DirectoryInfo dirTemp in direct)
+            {
+                GetAllFileNameById(dirTemp, id, ref fileNameList);
+            }
         }
     }
     public class FirstReportDataTablesParameter : DataTablesParameter
