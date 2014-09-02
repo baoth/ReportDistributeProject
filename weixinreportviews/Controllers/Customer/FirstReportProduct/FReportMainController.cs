@@ -20,8 +20,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             if (!string.IsNullOrEmpty(id))
             {
                 var session = General.CreateDbSession();
-                var ent = session.Retrieve<CS_FirstReport>(
-                    "Id", Guid.Parse(id));
+                var ent = session.Retrieve<CS_FirstReport>("Id", Guid.Parse(id));
                 if (ent!=null) {
                     ViewData.Add("CreateUrl", PathTools.AddWebHeadAddress(ent.Url).Replace("\\", "/"));
                     ViewData.Add("Id", ent.Id);
