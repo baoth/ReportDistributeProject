@@ -9,9 +9,6 @@
             case !!inputs.password:
                 s.trigger("Warning", [l, "你还没有输入密码！"]);
                 break;
-            case !!inputs.verify || !!c.data("isHide"):
-                s.trigger("Warning", [h, "你还没有输入验证码！"]), r();
-                break;
             default:
                 e = !0;
         }
@@ -60,7 +57,6 @@
             }, function (t) {
                 debugger
                 var n = t.error + "", i;
-                u.hasClass("checkbox_checked") ? WXM.Helpers.setCookie("remember_acct", e.account, 30) : WXM.Helpers.setCookie("remember_acct", "EXPIRED", -1);
                 switch (n) {
 
                     case "2":
