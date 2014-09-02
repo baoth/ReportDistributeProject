@@ -146,13 +146,18 @@
 
             }
             function Look() {
+                debugger
                 var url = $('#txtUrl').val();
                 if (url) {
                     window.open(url);
                 }
+                else {
+                    $("#txtUrlMsg").html("<font color='red'>无上传文件，请上传文件后再预览！</font>");
+                }
+
             }
             function Save() {
-                
+
                 if (!CheckField('txtGJZ') || !CheckField('txtBBMC') || !CheckField('txtUrl')) {
                     return;
                 }
@@ -161,7 +166,7 @@
                     data.ReportKey = $('#txtGJZ').val();
                     data.Title = $('#txtBBMC').val();
                     data.CreateUrl = $('#txtUrl').val();
-                    data.Stoped= !$("#CheckSwitch").bootstrapSwitch("state");
+                    data.Stoped = !$("#CheckSwitch").bootstrapSwitch("state");
                     $.ajax({
                         url: "/FReportMain/Save",
                         data: data,
@@ -192,41 +197,42 @@
                 Look: Look
             }
         };
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        $('#b-close,#b-save,#b-look').bind('click', function () {
-            if ($(this).hasClass('disabled')) return;
-            var action = $(this).attr('action');
-            new PageAction()[action]();
-        });
-        $(".dropzone").dropzone({
-            url: "/FReportMain/Upload",
-            addRemoveLinks: true,
-            dictRemoveLinks: "x",
-            dictCancelUpload: "x",
-            maxFiles: 1,
-            maxFilesize: 5,
-            acceptedFiles: ".xls",
-            init: function () {
+            $('#b-close,#b-save,#b-look').bind('click', function () {
+                if ($(this).hasClass('disabled')) return;
+                var action = $(this).attr('action');
+                new PageAction()[action]();
+            });
+            $(".dropzone").dropzone({
+                url: "/FReportMain/Upload",
+                addRemoveLinks: true,
+                dictRemoveLinks: "x",
+                dictCancelUpload: "x",
+                maxFiles: 1,
+                maxFilesize: 5,
+                acceptedFiles: ".xls,.doc,.docx",
+                init: function () {
 
-                this.on("success", function (file, responseText, s) {
-                    
-                    $('#txtUrl').val(responseText.data);
-                    $('#b-look').removeClass("disabled");
-                });
-                this.on("removedfile", function (file) {
-                    $('#txtUrl').val('');
-                    $('#b-look').addClass("disabled");
-                });
-            }
-        });
-        $("#CheckSwitch").bootstrapSwitch({
-            onText: '启用',
-            offText: '停用',
-            state: $('#txtStop').val() != '1'
-        });
+                    this.on("success", function (file, responseText, s) {
 
-    })
+                        $('#txtUrl').val(responseText.data.replace(/\\/g, '/'));
+                        $("#txtUrlMsg").html();
+                        $('#b-look').removeClass("disabled");
+                    });
+                    this.on("removedfile", function (file) {
+                        $('#txtUrl').val('');
+                        $('#b-look').addClass("disabled");
+                    });
+                }
+            });
+            $("#CheckSwitch").bootstrapSwitch({
+                onText: '启用',
+                offText: '停用',
+                state: $('#txtStop').val() != '1'
+            });
+
+        })
     </script>
 </head>
 <body style="background: #f6f6f6; border:0px; margin:10px;"> @*background: #f6f6f6;*@
