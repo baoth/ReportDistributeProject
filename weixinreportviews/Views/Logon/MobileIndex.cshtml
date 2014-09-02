@@ -4,44 +4,12 @@
 
 <!DOCTYPE html>
 <head>  
-<link rel="icon" href="../../Content/Img/logo1e.ico" type="image/x-icon" />
-<link rel="shortcut icon" href="../../Content/Img/logo1e.ico" type="image/x-icon" /> 
-
 <meta http-equiv="content-type" content="text/html;charset=utf-8">  
+<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
  <link href="../../Content/Css/Logon/mlogon.css" rel="stylesheet" type="text/css" />
  <title>公众平台登录</title>  
- <script type="text/javascript">
-     window.loadStartTime = +new Date();
-  </script>
  </head>
  <body>
-
-   @* <div id="banner">  
-        <div class="wrapper">    
-            <div class="login-panel">            
-            <h3>登录</h3>      
-            <div class="login-mod">  
-            <div class="login-err-panel dn" id="err_area">   <span class="vm" id="err_tips"></span>  </div>     
-              
-            <form class="login-form" id="login-form">    
-                <div class="login-un">      
-                <span class="icon-wrapper"><i class="icon_login un"></i></span>      
-                <input type="text" id="account" placeholder="企业账号">   
-             </div>    
-             <div class="login-pwd">      
-                <span class="icon-wrapper"><i class="icon_login pwd"></i></span>      
-                <input type="password" id="password" placeholder="密码">    </div>  
-            </form>  
-        <div class="login-code-panel dn" id="verify_area" style="display: none;">   
-         <input type="text" id="verify">    <span class="icon-wrapper"><img id="imgVerify" src=""></span>    
-         <a class="login-change-code" href="javascript:;" id="changeimg_link">换一张</a>  </div>  
-         <div class="login-help-panel">    <a id="rememberPwd" class="login-remember-pwd" href="javascript:;">
-         <i id="rememberPwdIcon" class="icon_login checkbox"></i>记住帐号</a>   
-          </div> 
-           <div class="login-btn-panel">    <a class="login-btn" title="点击登录" href="javascript:;" id="login_button">登录</a> 
-            </div>  </div>    </div>  
-        </div>
-     </div>*@
      <div class="wrapper login-panel">            
             <h3>登录</h3>      
             <div class="login-mod">  
@@ -69,34 +37,34 @@
              var loginForm = jQ("#login-form"),
         account$ = jQ("#account");
 
-             var cookie_acct = WXM.Helpers.getCookie("remember_acct");
-             if (cookie_acct === undefined) {
-                 jQ("#rememberPwdIcon").removeClass("checkbox_checked");
-             } else if (cookie_acct.length) {
-                 account$.attr("value", WXM.Helpers.getCookie("remember_acct"));
-             }
+            // var cookie_acct = WXM.Helpers.getCookie("remember_acct");
+            // if (cookie_acct === undefined) {
+           //      jQ("#rememberPwdIcon").removeClass("checkbox_checked");
+           //  } else if (cookie_acct.length) {
+                 //account$.attr("value", WXM.Helpers.getCookie("remember_acct"));
+          //   }
 
-             account$
-        .focus(function () {
+
+        account$.focus(function () {
             loginForm.addClass("login_on_un");
         })
         .blur(function () {
             loginForm.removeClass("login_on_un");
         });
-             jQ("#password")
-        .focus(function () {
+
+        jQ("#password").focus(function () {
             loginForm.addClass("login_on_pwd");
-        })
-        .blur(function () {
+        }).blur(function () {
             loginForm.removeClass("login_on_pwd");
         });
-             jQ("#rememberPwd").click(function () {
-                 var icon = jQ("#rememberPwdIcon");
-                 if (icon.hasClass("checkbox_checked")) {
-                     icon.removeClass("checkbox_checked");
-                 } else {
-                     icon.addClass("checkbox_checked");
-                 }
+        
+        jQ("#rememberPwd").click(function () {
+            var icon = jQ("#rememberPwdIcon");
+            if (icon.hasClass("checkbox_checked")) {
+                icon.removeClass("checkbox_checked");
+            } else {
+                icon.addClass("checkbox_checked");
+            }
              });
 
 
@@ -120,7 +88,7 @@
 
              });
 
-             WXM.Event.notify('WXM:init:finish');
+//             WXM.Event.notify('WXM:init:finish');
              setTimeout(function () {
                  account$.focus();
              }, 10);
