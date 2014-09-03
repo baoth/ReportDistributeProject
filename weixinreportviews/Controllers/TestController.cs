@@ -60,5 +60,9 @@ namespace weixinreportviews.Controllers
             else
                 return false;
         }
+        public ActionResult TestF() 
+        {
+            return View("Filter");
+        }
     }
 }

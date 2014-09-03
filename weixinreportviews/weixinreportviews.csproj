@@ -160,6 +160,7 @@
     <Content Include="Content\Img\DefaultHead.jpg" />
     <Content Include="Content\Img\defaultHead.png" />
     <Content Include="Content\Img\favicon.ico" />
+    <Content Include="Content\Img\filter_35155954.png" />
     <Content Include="Content\Img\forward_disabled.png" />
     <Content Include="Content\Img\forward_enabled.png" />
     <Content Include="Content\Img\forward_enabled_hover.png" />
@@ -257,6 +258,7 @@
     <Content Include="Views\FReportHome\MobileIndex.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
+    <Content Include="Content\Css\f.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -269,6 +271,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Test\Filter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
