@@ -159,6 +159,7 @@
     <Content Include="Content\Img\DefaultHead.jpg" />
     <Content Include="Content\Img\defaultHead.png" />
     <Content Include="Content\Img\favicon.ico" />
+    <Content Include="Content\Img\filter_35155954.png" />
     <Content Include="Content\Img\forward_disabled.png" />
     <Content Include="Content\Img\forward_enabled.png" />
     <Content Include="Content\Img\forward_enabled_hover.png" />
@@ -254,6 +255,7 @@
     <Content Include="Views\Logon\MobileIndex.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
+    <Content Include="Content\Css\f.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
