@@ -1,0 +1,146 @@
+﻿@{
+    Layout = "../Master/_CheckSession.cshtml";
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+<title>contentlist</title>
+<link href="../../Content/Css/PicContentList.css" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/zepto-1.1.4.min.js" type="text/javascript"></script>
+<script src="../../Scripts/zepto.touch.js" type="text/javascript"></script>
+<script src="../../Scripts/PicContentList.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        PicContentList.showtxt = false;
+        PicContentList.idAliasName = "OpenId";
+        PicContentList.filterAliasName = "NickName";
+        PicContentList.imgurlAliasName = "HeadImgUrl";
+        PicContentList.markAliasName = "Binded";
+
+        FlowToolBar.bindclick(function (id) {
+            if (id == "bind") {
+                PicContentList.bind(PicContentList.selectedId);
+            }
+            else if (id == "unbind") {
+                PicContentList.unbind(PicContentList.selectedId);
+            }
+            else if (id == "delete") {
+                PicContentList.removeen(PicContentList.selectedId);
+            }
+            else if (id == "refresh") {
+                PicContentList.refresh(PicContentList.selectedId);
+            }
+        });
+
+        var dataoperator = {
+            ajaxdata: {
+                iDisplayStart: 0,
+                iDisplayLength: 12,
+                allSortCol: "AttentionDate",
+                allDir: "desc",
+                sSearch: "",
+                allFilter: "",
+                exactFilter: "",
+                exactSearch: "",
+                sEcho: 0
+            },
+            totalcount: 0,
+            load: function () {
+                this.ajaxdata.iDisplayLength = 12;
+                this.ajaxdata.iDisplayStart = 0;
+                this.ajaxfunc(0);
+            },
+            append: function () {
+                this.ajaxdata.iDisplayStart = this.ajaxdata.iDisplayStart + this.ajaxdata.iDisplayLength;
+                if (this.totalcount <= this.ajaxdata.iDisplayStart) {
+                    this.ajaxdata.iDisplayStart = this.ajaxdata.iDisplayStart - this.ajaxdata.iDisplayLength;
+                    return;
+                }
+                this.ajaxfunc(1);
+            },
+            ajaxfunc: function (type) {
+                $.ajax({
+                    type: "POST",
+                    url: "../FReportUserAttention/GridDatas",
+                    data: dataoperator.ajaxdata,
+                    dataType: "json",
+                    success: function (data) {
+                        dataoperator.totalcount = data.iTotalRecords;
+                        if (type == 0) {
+                            PicContentList.load(data.aaData);
+                        }
+                        else {
+                            PicContentList.append(data.aaData);
+                        }
+                    }
+                });
+            }
+        };
+
+//        $(document).bind('click',function (e) {
+//            FlowToolBar.hide();
+//        });
+        $(document).tap(function (e) {
+            FlowToolBar.hide();
+        });
+        $(document).swipe(function (e) {
+            FlowToolBar.hide();
+        });
+
+        dataoperator.load();
+
+//        $(".refresh-btn").bind('click',function (e) {
+//            dataoperator.append();
+//        });
+
+        $(".refresh-btn").tap(function (e) {
+            dataoperator.append();
+        });
+    });
+</script>
+</head>
+<body>
+    <div class="contentList picList">
+        <div class="column-bd clear">
+            <ul class="cfix">
+            </ul>
+        </div>
+    </div>
+
+    <div class="layer-pop-content" style="display:none;">
+        <ul class="content-box">
+            <li class="content-box-item box-item-left" id="bind">
+                <div class="box-pic">
+                    <i class="box-site-icons"></i>
+                </div>
+                <div class="box-txt">绑定</div>
+            </li>
+            <li class="content-box-item box-item-left" id="unbind">
+                <div class="box-pic">
+                    <i class="box-site-icons"></i>
+                </div>
+                <div class="box-txt">解绑</div>
+            </li>
+            <li class="content-box-item box-item-middle" id="refresh">
+                <div class="box-pic">
+                    <i class="box-site-icons"></i>
+                </div>
+                <div class="box-txt">刷新</div>
+            </li>
+            <li class="content-box-item box-item-right" id="delete">
+                <div class="box-pic">
+                    <i class="box-site-icons"></i>
+                </div>
+                <div class="box-txt">删除</div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="refresh-btn">更多
+    </div>
+
+</body>
+</html>
