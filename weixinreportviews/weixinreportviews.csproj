@@ -157,7 +157,6 @@
     <Content Include="Content\Img\bg_logo1e7c60.png" />
     <Content Include="Content\Img\border.jpg" />
     <Content Include="Content\Img\bottom.jpg" />
-    <Content Include="Content\Img\DefaultHead.jpg" />
     <Content Include="Content\Img\defaultHead.png" />
     <Content Include="Content\Img\favicon.ico" />
     <Content Include="Content\Img\filter_35155954.png" />
@@ -192,6 +191,7 @@
     <Content Include="Content\Img\sort_desc_disabled.png" />
     <Content Include="Content\Img\spritemap%402x.png" />
     <Content Include="Content\Img\spritemap.png" />
+    <Content Include="Content\Img\sprite_mark.png" />
     <Content Include="Content\Img\titleMsg.jpg" />
     <Content Include="Content\Img\topborder.jpg" />
     <Content Include="Content\Img\userface.png" />
