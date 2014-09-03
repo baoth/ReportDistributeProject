@@ -66,10 +66,7 @@
     visibility: hidden
 }
 
- .bd-filter .bd-filter-header .bd-other-channels .bd-split {
-    margin: 5px;
-    color: #a7a9ac
-}
+
 
  .bd-filter .bd-filter-content {
     background: #fdfdfd;
@@ -85,7 +82,7 @@
  .bd-filter .bd-filter-content .bd-filter-section {
     position: relative;
     *zoom: 1;
-    padding-left: 48px;
+    padding-left: 78px;
     padding-right: 10px
 }
 
@@ -104,7 +101,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 41px;
+    width: 71px;
     text-align: right;
     display: -moz-inline-box;
     -moz-box-orient: vertical;
@@ -200,3 +197,39 @@
         font-variant: normal;
         font-weight: normal;
     }
+.bd-channel-link
+{
+   text-decoration:none;    
+}
+
+/*ËÑË÷¿ò*/
+.searchcontain {
+border: 1px solid #638EAE;
+z-index: 800;
+background-color: #fff;
+position: absolute;
+zoom: 1;
+}
+.searchcontain .search-text {
+background-color: #fff;
+width: 150px;
+height: 22px;
+position: relative;
+outline: none;
+border: none;
+vertical-align: middle;
+padding: 1px;
+margin: 0px;
+cursor: auto;
+display: inline-block;
+border-radius: 0;
+}
+.searchcontain .searchIcon {
+display: block;
+background: url('../../Content/Img/search3.png') no-repeat;
+width: 24px;
+height: 24px;
+line-height: 24px;
+vertical-align: middle;
+float: right;
+}
