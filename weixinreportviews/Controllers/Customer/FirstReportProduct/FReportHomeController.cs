@@ -20,6 +20,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 ViewData["Name"] = obj.Account.LoginKey;
                 ViewData["Id"] = obj.Account.Id;
             }
+            return View("MobileIndex");
             if (General.PhoneBroswer(Request))
             {
                 return View("MobileIndex");

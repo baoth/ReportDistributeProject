@@ -127,7 +127,7 @@
 {
 	position: absolute;
 	top: 0;
-	right: 0;
+	left: 0;
 	font-size: 0;
 }
 .show-pic .site-piclist_icons .site-icons {
@@ -141,8 +141,8 @@
 {
 	width: 42px;
 	height: 42px;
-	background-position: -180px -530px;
-	background: url(../Img/DefaultHead.jpg) no-repeat;
+	background-position:42px 42px;
+	background: url(../Img/sprite_mark.png) no-repeat;
 }
 
 
