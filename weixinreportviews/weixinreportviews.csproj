@@ -125,6 +125,7 @@
     <Content Include="Content\Css\Logon\logon.css" />
     <Content Include="Content\Css\Logon\ieform.css" />
     <Content Include="Content\Css\Logon\mlogon.css" />
+    <Content Include="Content\Css\PicContentList.css" />
     <Content Include="Content\Css\select.css" />
     <Content Include="Content\Css\dataTables.editor.min.css" />
     <Content Include="Content\Css\DateTime\bootstrap-datetimepicker.css" />
@@ -213,6 +214,7 @@
     <Content Include="Scripts\layer.ext.js" />
     <Content Include="Scripts\layer.js" />
     <Content Include="Scripts\layer.min.js" />
+    <Content Include="Scripts\PicContentList.js" />
     <Content Include="Scripts\Switch\bootstrap-switch.js" />
     <Content Include="Scripts\Switch\bootstrap-switch.min.js" />
     <Content Include="Scripts\Switch\bootstrap.min.js" />
@@ -252,6 +254,7 @@
     <Content Include="Views\Master\_CheckSession.cshtml" />
     <Content Include="Views\CompanyAccount\Model.cshtml" />
     <Content Include="Views\Logon\MobileIndex.cshtml" />
+    <Content Include="Views\FReportHome\MobileIndex.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Web.config">
