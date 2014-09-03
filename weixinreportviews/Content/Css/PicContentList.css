@@ -142,7 +142,7 @@
 	width: 42px;
 	height: 42px;
 	background-position: -180px -530px;
-	background: url(http://www.qiyipic.com/common/fix/site/site-icons-v10.png?20140724) no-repeat;
+	background: url(../Img/DefaultHead.jpg) no-repeat;
 }
 
 
@@ -214,7 +214,10 @@
 	color: #fff;
 	text-align:center;
 }
-
+.layer-pop-content .box-item-hide
+{
+	display:none;
+}
 
 
 .refresh-btn
