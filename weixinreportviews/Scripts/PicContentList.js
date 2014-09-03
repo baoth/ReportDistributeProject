@@ -13,9 +13,9 @@
         $(".layer-pop-content .content-box li").tap(function () {
             func($(this).attr('id'));
         });
-//        $(".layer-pop-content .content-box li").bind('click',function () {
-//            func($(this).attr('id'));
-//        });
+        $(".layer-pop-content .content-box li").bind('click',function () {
+            func($(this).attr('id'));
+        });
     },
     hideitem:function(id){
         $(".layer-pop-content li").removeClass("box-item-hide");
@@ -103,20 +103,20 @@ var PicContentList = {
         }
 
         //绑定事件
-//        $(".cfix li").bind('dblclick', function () {
+        $(".cfix li").bind('dblclick', function () {
 
-//            PicContentList.selectedId = $(this).attr("id");
-//            PicContentList.dblclick();
-//            var mid = PicContentList.selectedId;
-//            var a = PicContentList.marked(mid, 0);
-//            if (a == true) {
-//                FlowToolBar.hideitem("bind");
-//            }
-//            else {
-//                FlowToolBar.hideitem("unbind");
-//            }
-//            FlowToolBar.show();
-//        });
+            PicContentList.selectedId = $(this).attr("id");
+            PicContentList.dblclick();
+            var mid = PicContentList.selectedId;
+            var a = PicContentList.marked(mid, 0);
+            if (a == true) {
+                FlowToolBar.hideitem("bind");
+            }
+            else {
+                FlowToolBar.hideitem("unbind");
+            }
+            FlowToolBar.show();
+        });
         $(".cfix li").doubleTap(function () {
 
             PicContentList.selectedId = $(this).attr("id");
