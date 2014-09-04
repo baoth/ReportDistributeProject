@@ -52,10 +52,11 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         [HttpPost]
         public JsonResult Delete(string id)
         {
-
+            //"openid,productkind,accountid#openid,productkind,accountid"
             if (!string.IsNullOrEmpty(id))
             {
                 List<string> ids = id.Split('#').ToList();
+                var uinfo = Session[General.LogonSessionName] as CustomerLoginInfo;
                 DbSession session = General.CreateDbSession();
                 for (int i = 0; i < ids.Count; i++)
                 {
@@ -64,8 +65,8 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                         var arr = ids[i].Split(',') ;
                         CS_UserAttention entity = new CS_UserAttention {
                             OpenId = arr[0],
-                            ProductKind=(ProductKindEnum)int.Parse(arr[1]),
-                            AccountId=Guid.Parse(arr[2])
+                            ProductKind= ProductKindEnum.微信第一表,
+                            AccountId = uinfo.Account.Id
                         };
                         session.Context.DeleteEntity(entity.CreateDeleteCommand());
                     }
@@ -88,8 +89,11 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         {
             CS_UserAttention entity = General.CreateInstance<CS_UserAttention>(Request);
             
-            if (!string.IsNullOrEmpty(entity.OpenId) && (entity.AccountId != null && entity.AccountId != Guid.Empty))
+            if (!string.IsNullOrEmpty(entity.OpenId))
             {
+                entity.ProductKind = ProductKindEnum.微信第一表;
+                var uinfo = Session[General.LogonSessionName] as CustomerLoginInfo;
+                entity.AccountId = uinfo.Account.Id;
                 //校验绑定信息
                 if (entity.Binded)
                 {
@@ -141,8 +145,11 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         public JsonResult GetRowByFilter()
         {
             CS_UserAttention entity = General.CreateInstance<CS_UserAttention>(Request);
-            if (!string.IsNullOrEmpty(entity.OpenId) && (entity.AccountId != null && entity.AccountId != Guid.Empty))
+            if (!string.IsNullOrEmpty(entity.OpenId))
             {
+                entity.ProductKind = ProductKindEnum.微信第一表;
+                var uinfo = Session[General.LogonSessionName] as CustomerLoginInfo;
+                entity.AccountId = uinfo.Account.Id;
                 var winCore = General.CreateWeixinCore();
                 var userInof = winCore.GetUserBaseInfo(entity.OpenId);
 
@@ -152,6 +159,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 var cobj = entity.CreateQSmartObject();
                 cobj.RetainColumn(new List<string>() { "NiceName", "HeadImgUrl", "AccountId", "ProductKind", "OpenId" });
                 dbSession.Context.ModifyEntity(cobj);
+                dbSession.Context.SaveChange();
                 return Json(new { result = 0, HeadImgUrl = entity.HeadImgUrl, NickName = entity.NickName });
             }
             return Json(new { result = 1 });

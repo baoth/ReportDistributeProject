@@ -1,0 +1,235 @@
+  .bd-filter{
+    font: 12px \5B8B\4F53,arial
+}
+
+ .bd-filter a {
+    font: 12px \5B8B\4F53,arial;
+    color: #558bd9
+}
+
+ .bd-filter a:visited {
+    color: #558bd9
+}
+
+ .bd-filter a:focus {
+    color: #558bd9
+}
+
+ .bd-filter a:hover {
+    color: red
+}
+
+ .bd-filter a:active {
+    color: #558bd9
+}
+
+ .bd-filter .bd-filter-header {
+    *zoom: 1;
+    padding-top: 4px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #558bd9
+}
+
+ .bd-filter .bd-filter-header:after {
+    content: "\0020";
+    display: block;
+    height: 0;
+    clear: both;
+    overflow: hidden;
+    visibility: hidden
+}
+
+ .bd-filter .bd-filter-header .bd-channel-title {
+    color: #444;
+    font: 18px \5fae\8f6f\96c5\9ed1,\5B8B\4F53;
+    font-weight: bold;
+    height: 20px;
+    line-height: 20px;
+    float: left;
+    padding-left: 4px
+}
+
+ .bd-filter .bd-filter-header .bd-other-channels {
+    float: right;
+    height: 14px;
+    line-height: 14px;
+    padding-top: 6px;
+    *zoom: 1
+}
+
+ .bd-filter .bd-filter-header .bd-other-channels:after {
+    content: "\0020";
+    display: block;
+    height: 0;
+    clear: both;
+    overflow: hidden;
+    visibility: hidden
+}
+
+
+
+ .bd-filter .bd-filter-content {
+    background: #fdfdfd;
+    border: 1px solid #e5e5e5;
+    -webkit-box-shadow: 0 0 1px #f4f4f4;
+    -moz-box-shadow: 0 0 1px #f4f4f4;
+    box-shadow: 0 0 1px #f4f4f4;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    padding: 8px 0
+}
+
+ .bd-filter .bd-filter-content .bd-filter-section {
+    position: relative;
+    *zoom: 1;
+    padding-left: 78px;
+    padding-right: 10px
+}
+
+ .bd-filter .bd-filter-content .bd-filter-section:after {
+    content: "\0020";
+    display: block;
+    height: 0;
+    clear: both;
+    overflow: hidden;
+    visibility: hidden
+}
+
+ .bd-filter .bd-filter-content .bd-filter-title {
+    height: 22px;
+    line-height: 22px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 71px;
+    text-align: right;
+    display: -moz-inline-box;
+    -moz-box-orient: vertical;
+    display: inline-block;
+    vertical-align: middle;
+    *vertical-align: auto;
+    *zoom: 1;
+    *display: inline;
+    color: #444
+}
+
+ .bd-filter .bd-filter-content .bd-filter-list {
+    line-height: 22px
+}
+
+ .bd-filter .bd-filter-content .bd-filter-list a {
+    padding-left: 8px;
+    display: -moz-inline-box;
+    -moz-box-orient: vertical;
+    display: inline-block;
+    vertical-align: middle;
+    *vertical-align: auto;
+    *zoom: 1;
+    *display: inline;
+    text-decoration: none;
+    margin-bottom: 5px;
+    background: url(../Img/filter_35155954.png) 0 100px no-repeat scroll;
+    font: 12px \5B8B\4F53,arial;
+    line-height: 22px;
+    height: 22px;
+    color: #444
+}
+
+ .bd-filter .bd-filter-content .bd-filter-list a span {
+    display: inline-block;
+    padding-right: 8px;
+    line-height: 22px;
+    height: 22px;
+    cursor: pointer;
+    background: url(../Img/filter_35155954.png) 0 100px no-repeat scroll
+}
+
+ .bd-filter .bd-filter-content .bd-filter-list a.hover, .bd-filter .bd-filter-content .bd-filter-list a:hover {
+    color: #558bd9;
+    background-position: left 0
+}
+
+ .bd-filter .bd-filter-content .bd-filter-list a.hover span, .bd-filter .bd-filter-content .bd-filter-list a:hover span {
+    background-position: right -53px
+}
+
+ .bd-filter .bd-filter-content .bd-filter-list a.filter-sel-active {
+    color: #fff;
+    background-position: left -26px
+}
+
+ .bd-filter .bd-filter-content .bd-filter-list a.filter-sel-active span {
+    background-position: right -79px
+}
+
+ .bd-filter .bd-filter-content .bd-filter-list a.filter-sel-active:hover {
+    color: #fff;
+    background-position: left -26px
+}
+
+ .bd-filter .bd-filter-content .bd-filter-list a.filter-sel-active:hover span {
+    background-position: right -79px
+}
+
+ .bd-filter .bd-filter-bottom {
+    margin-top: 10px;
+    position: relative;
+    z-index: 99;
+    *zoom: 1
+}
+
+ .bd-filter .bd-filter-bottom:after {
+    content: "\0020";
+    display: block;
+    height: 0;
+    clear: both;
+    overflow: hidden;
+    visibility: hidden
+}
+ h3
+    {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-family: ËÎÌå, arial;
+        font-size: 12px;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: normal;
+    }
+.bd-channel-link
+{
+   text-decoration:none;    
+}
+
+/*ËÑË÷¿ò*/
+.searchcontain {
+border: 1px solid #638EAE;
+z-index: 800;
+background-color: #fff;
+position: absolute;
+zoom: 1;
+}
+.searchcontain .search-text {
+background-color: #fff;
+width: 150px;
+height: 22px;
+position: relative;
+outline: none;
+border: none;
+vertical-align: middle;
+padding: 1px;
+margin: 0px;
+cursor: auto;
+display: inline-block;
+border-radius: 0;
+}
+.searchcontain .searchIcon {
+display: block;
+background: url('../../Content/Img/search3.png') no-repeat;
+width: 24px;
+height: 24px;
+line-height: 24px;
+vertical-align: middle;
+float: right;
+}

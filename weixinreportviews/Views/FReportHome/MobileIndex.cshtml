@@ -1,0 +1,258 @@
+﻿@{
+    Layout = "../Master/_CheckSession.cshtml";
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+<title>contentlist</title>
+<link href="../../Content/Css/PicContentList.css" rel="stylesheet" type="text/css" />
+ <link href="../../Content/Css/f.css" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/zepto-1.1.4.min.js" type="text/javascript"></script>
+<script src="../../Scripts/zepto.touch.js" type="text/javascript"></script>
+<script src="../../Scripts/PicContentList.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        PicContentList.showtxt = false;
+        PicContentList.idAliasName = "OpenId";
+        PicContentList.filterAliasName = "NickName";
+        PicContentList.imgurlAliasName = "HeadImgUrl";
+        PicContentList.markAliasName = "Binded";
+
+        FlowToolBar.bindclick(function (id) {
+            if (id == "bind") {
+                PicContentList.bind(PicContentList.selectedId);
+            }
+            else if (id == "unbind") {
+                PicContentList.unbind(PicContentList.selectedId);
+            }
+            else if (id == "delete") {
+                PicContentList.removeen(PicContentList.selectedId);
+            }
+            else if (id == "refresh") {
+                PicContentList.refresh(PicContentList.selectedId);
+            }
+        });
+
+        var dataoperator = {
+            ajaxdata: {
+                iDisplayStart: 0,
+                iDisplayLength: 12,
+                allSortCol: "AttentionDate",
+                allDir: "desc",
+                sSearch: "",
+                allFilter: "NickName",
+                exactFilter: "",
+                exactSearch: "",
+                sEcho: 0
+            },
+            totalcount: 0,
+            load: function () {
+                this.ajaxdata.iDisplayLength = 12;
+                this.ajaxdata.iDisplayStart = 0;
+                this.ajaxfunc(0);
+            },
+            append: function () {
+                this.ajaxdata.iDisplayStart = this.ajaxdata.iDisplayStart + this.ajaxdata.iDisplayLength;
+                if (this.totalcount <= this.ajaxdata.iDisplayStart) {
+                    this.ajaxdata.iDisplayStart = this.ajaxdata.iDisplayStart - this.ajaxdata.iDisplayLength;
+                    return;
+                }
+                this.ajaxfunc(1);
+            },
+            ajaxfunc: function (type) {
+                $.ajax({
+                    type: "POST",
+                    url: "../FReportUserAttention/GridDatas",
+                    data: dataoperator.ajaxdata,
+                    dataType: "json",
+                    success: function (data) {
+                        dataoperator.totalcount = data.iTotalRecords;
+                        if (type == 0) {
+                            PicContentList.load(data.aaData);
+                        }
+                        else {
+                            PicContentList.append(data.aaData);
+                        }
+                    }
+                });
+            }
+        };
+
+//        $(document).bind('click', function (e) {
+//            FlowToolBar.hide();
+//        });
+        $(document).tap(function (e) {
+            FlowToolBar.hide();
+        });
+        $(document).swipe(function (e) {
+            FlowToolBar.hide();
+        });
+
+        dataoperator.load();
+
+//        $(".refresh-btn").bind('click', function (e) {
+//            dataoperator.append();
+//        });
+
+        $(".refresh-btn").tap(function (e) {
+            dataoperator.append();
+        });
+        window.dataoperator = dataoperator;
+    });
+</script>
+</head>
+<body>
+      <div id="bd-filter" class="bd-filter">
+             <div class="bd-filter-header ">
+                <div class="searchcontain">
+                   <input value="" autocomplete="on" data-role="none" class="search-text" id="txt-search"><a href="#" title="搜索" id="cbtn-search" class="searchIcon"></a>
+                </div>
+                <div class="bd-other-channels">
+	                 	<a class="bd-channel-link" id="bd-channel-link1" title="筛选" href="#" >筛选</a>
+			    </div>
+             </div>
+             <div class="bd-filter-content" id="bd-filter-condition">
+                <div class="bd-filter-section">
+                    <h3 class="bd-filter-title">绑定状态:</h3>
+                    <div class="bd-filter-list filter-group">
+                        <a data-key="Binded" data-val="-1" class="filter-sel filter-sel-active" href="#" title="全部"><span>全部</span></a>
+                        <a data-key="Binded" data-val="0" class="filter-sel " href="#" title="未绑定"><span>未绑定</span></a>
+                        <a data-key="Binded" data-val="1" class="filter-sel " href="#" title="已绑定"><span>已绑定</span></a>
+                     
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="contentList picList">
+        <div class="column-bd clear">
+            <ul class="cfix">
+            </ul>
+        </div>
+    </div>
+
+    <div class="layer-pop-content" style="display:none;">
+        <ul class="content-box">
+            <li class="content-box-item box-item-left" id="bind">
+                <div class="box-pic">
+                    <i class="box-site-icons"></i>
+                </div>
+                <div class="box-txt">绑定</div>
+            </li>
+            <li class="content-box-item box-item-left" id="unbind">
+                <div class="box-pic">
+                    <i class="box-site-icons"></i>
+                </div>
+                <div class="box-txt">解绑</div>
+            </li>
+            <li class="content-box-item box-item-middle" id="refresh">
+                <div class="box-pic">
+                    <i class="box-site-icons"></i>
+                </div>
+                <div class="box-txt">刷新</div>
+            </li>
+            <li class="content-box-item box-item-right" id="delete">
+                <div class="box-pic">
+                    <i class="box-site-icons"></i>
+                </div>
+                <div class="box-txt">删除</div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="refresh-btn">更多
+    </div>
+       <script>
+
+           (function () {
+               /*筛选隐藏不隐藏*/
+               $('.bd-other-channels').bind('click', function () {
+                   var context$ = $('#bd-filter-condition');
+                   var isShow = context$.attr('show');
+                   if (isShow == '0') {
+                       context$.attr('show', '1');
+                       context$.show();
+                   } else {
+                       context$.attr('show', '0');
+                       context$.hide();
+
+                   }
+               });
+               var filterR = function () {
+                   var keyToText = {},
+                        keyToVal = {};
+                   function GetKeyToPro(o) {
+                       var keys = [], texts = [];
+                       for (var i in o) {
+                           if (o[i] == '-1') continue;
+                           keys.push(i);
+                           texts.push(o[i]);
+                       }
+                       return [keys.join(','), texts.join(',')]
+                   }
+                   this.setText = function (key, text) {
+                       keyToText[key] = text;
+                   }
+                   this.setVal = function (key, val) {
+                       keyToVal[key] = val;
+                   }
+                   this.getVal = function () {
+                       return GetKeyToPro(keyToText);
+                   }
+                   this.getText = function () {
+                       return GetKeyToPro(keyToVal);
+                   }
+               }
+               var fliterRO = new filterR();
+               /*bind a 时间*/
+               $('.bd-filter-section div a').bind('click', function () {
+                   function allChangeItem(items) {
+                       $.each(items, function () {
+                           $(this).removeClass("filter-sel-active");
+                       });
+                   }
+                   var item = $(this), text = this.innerText;
+                   var key = item.attr('data-key');
+                   var val = item.attr('data-val');
+
+                   allChangeItem(item.parent().children());
+                   $(this).addClass("filter-sel-active");
+
+                   fliterRO.setText(key, val);
+                   fliterRO.setVal(key, text);
+                   $(this).trigger('CallText', fliterRO.getText());
+                   $(this).trigger('CallVal', fliterRO.getVal());
+               });
+
+               /*接收事件 显示值*/
+               $('.bd-filter-section div a').bind('CallText', function (e, keyArrStr, textStrArr) {
+                   console.log('被点击的字段是：' + keyArrStr);
+                   console.log('d对应的显示值是：' + textStrArr);
+               });
+             
+               /*接收事件 根据点击产生查询等*/
+               $('.bd-filter-section div a').bind('CallVal', function (e, keyArrStr, valStrArr) {
+                debugger
+                   var dataoperator = window.dataoperator;
+                   //                   console.log('被点击的字段是：' + keyArrStr);
+                   //                   console.log('d对应的后台值是：' + valStrArr);
+                   dataoperator.ajaxdata.sSearch = $('#txt-search').val() || '';
+                   dataoperator.ajaxdata.exactFilter = keyArrStr;
+                   dataoperator.ajaxdata.exactSearch = valStrArr;
+                   dataoperator.load();
+               });
+               /*单击*/
+               $('#cbtn-search').bind('click', function () {
+                  debugger
+                  var val = $('#txt-search').val() || '';
+                   var dataoperator = window.dataoperator;
+                   dataoperator.ajaxdata.sSearch = val;
+                   dataoperator.load();
+               });
+           })();
+        
+    </script>
+</body>
+</html>

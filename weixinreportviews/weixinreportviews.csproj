@@ -125,6 +125,7 @@
     <Content Include="Content\Css\Logon\logon.css" />
     <Content Include="Content\Css\Logon\ieform.css" />
     <Content Include="Content\Css\Logon\mlogon.css" />
+    <Content Include="Content\Css\PicContentList.css" />
     <Content Include="Content\Css\select.css" />
     <Content Include="Content\Css\dataTables.editor.min.css" />
     <Content Include="Content\Css\DateTime\bootstrap-datetimepicker.css" />
@@ -156,9 +157,9 @@
     <Content Include="Content\Img\bg_logo1e7c60.png" />
     <Content Include="Content\Img\border.jpg" />
     <Content Include="Content\Img\bottom.jpg" />
-    <Content Include="Content\Img\DefaultHead.jpg" />
     <Content Include="Content\Img\defaultHead.png" />
     <Content Include="Content\Img\favicon.ico" />
+    <Content Include="Content\Img\filter_35155954.png" />
     <Content Include="Content\Img\forward_disabled.png" />
     <Content Include="Content\Img\forward_enabled.png" />
     <Content Include="Content\Img\forward_enabled_hover.png" />
@@ -190,6 +191,7 @@
     <Content Include="Content\Img\sort_desc_disabled.png" />
     <Content Include="Content\Img\spritemap%402x.png" />
     <Content Include="Content\Img\spritemap.png" />
+    <Content Include="Content\Img\sprite_mark.png" />
     <Content Include="Content\Img\titleMsg.jpg" />
     <Content Include="Content\Img\topborder.jpg" />
     <Content Include="Content\Img\userface.png" />
@@ -213,6 +215,7 @@
     <Content Include="Scripts\layer.ext.js" />
     <Content Include="Scripts\layer.js" />
     <Content Include="Scripts\layer.min.js" />
+    <Content Include="Scripts\PicContentList.js" />
     <Content Include="Scripts\Switch\bootstrap-switch.js" />
     <Content Include="Scripts\Switch\bootstrap-switch.min.js" />
     <Content Include="Scripts\Switch\bootstrap.min.js" />
@@ -252,8 +255,10 @@
     <Content Include="Views\Master\_CheckSession.cshtml" />
     <Content Include="Views\CompanyAccount\Model.cshtml" />
     <Content Include="Views\Logon\MobileIndex.cshtml" />
+    <Content Include="Views\FReportHome\MobileIndex.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
+    <Content Include="Content\Css\f.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
