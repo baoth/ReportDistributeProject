@@ -175,7 +175,8 @@ namespace weixinreportviews.Model
                     if (div != null) div.Add(table);
                 }
                 //if (System.IO.File.Exists(this.HtmlFilePath)) System.IO.File.Delete(this.HtmlFilePath);
-                mframe.Save(savePath);
+                mframe.Save(savePath);              
+
                 if (isDelSource)
                 {
                     File.Delete(filePath);
@@ -239,8 +240,27 @@ namespace weixinreportviews.Model
             string templatePath = this.TemplatePath;
             try
             {
+                Html5Frame mframe = new Html5Frame(templatePath);//模板文件
+
                 oDoc = new Aspose.Words.Document(filePath);
                 oDoc.Save(savePath,Aspose.Words.SaveFormat.Html);
+
+                Html5Frame wordframe = new Html5Frame(savePath);
+                XElement bodyContent = (XElement)wordframe.body.FirstNode;
+                //XElement body=wordframe.body;
+
+                if (bodyContent != null)
+                {
+                    XElement div = mframe.GetXElementById("table");
+                    if (div != null) div.Add(bodyContent);
+                }
+                //删除word 转换的HTML
+                if (File.Exists(savePath))
+                {
+                    File.Delete(savePath);
+                }
+                //word 转换后的HTML
+                mframe.Save(savePath);
                 if (isDelSource)
                 {
                     File.Delete(filePath);
