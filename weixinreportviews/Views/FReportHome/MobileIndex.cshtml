@@ -76,14 +76,15 @@
                         else {
                             PicContentList.append(data.aaData);
                         }
+                        $('#imgLoad').trigger('loaded');
                     }
                 });
             }
         };
 
-//        $(document).bind('click', function (e) {
-//            FlowToolBar.hide();
-//        });
+        //        $(document).bind('click', function (e) {
+        //            FlowToolBar.hide();
+        //        });
         $(document).tap(function (e) {
             FlowToolBar.hide();
         });
@@ -93,9 +94,9 @@
 
         dataoperator.load();
 
-//        $(".refresh-btn").bind('click', function (e) {
-//            dataoperator.append();
-//        });
+        //        $(".refresh-btn").bind('click', function (e) {
+        //            dataoperator.append();
+        //        });
 
         $(".refresh-btn").tap(function (e) {
             dataoperator.append();
@@ -161,11 +162,12 @@
             </li>
         </ul>
     </div>
-
-    <div class="refresh-btn">更多
+    <div class="refresh-btn" style="text-align:center;">
+        <img id="imgLoad" class="ehide" width=30px height=30px src="../../Content/Img/load1.gif" style=" margin:0 auto;" />
+        <span class="eshow">更多</span>
     </div>
        <script>
-
+            
            (function () {
                /*筛选隐藏不隐藏*/
                $('.bd-other-channels').bind('click', function () {
@@ -231,10 +233,10 @@
                    console.log('被点击的字段是：' + keyArrStr);
                    console.log('d对应的显示值是：' + textStrArr);
                });
-             
+
                /*接收事件 根据点击产生查询等*/
                $('.bd-filter-section div a').bind('CallVal', function (e, keyArrStr, valStrArr) {
-                debugger
+
                    var dataoperator = window.dataoperator;
                    //                   console.log('被点击的字段是：' + keyArrStr);
                    //                   console.log('d对应的后台值是：' + valStrArr);
@@ -245,11 +247,23 @@
                });
                /*单击*/
                $('#cbtn-search').bind('click', function () {
-                  debugger
-                  var val = $('#txt-search').val() || '';
+
+                   var val = $('#txt-search').val() || '';
                    var dataoperator = window.dataoperator;
                    dataoperator.ajaxdata.sSearch = val;
                    dataoperator.load();
+               });
+               /*显示加载Load Img*/
+               $('.refresh-btn').bind('click', function () {
+                   var img = $('#imgLoad');
+                   img.removeClass('ehide');
+                   img.addClass('eshow');
+                   var dataoperator = window.dataoperator;
+                   dataoperator.load();
+               }).bind('loaded', function () {debugger
+                    var img = $('#imgLoad');
+                    img.removeClass('eshow');
+                    img.addClass('ehide');
                });
            })();
         
