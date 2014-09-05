@@ -55,7 +55,7 @@
                 loginkey: e.account,
                 password: e.password
             }, function (t) {
-                debugger
+                
                 var n = t.error + "", i;
                 switch (n) {
 
@@ -93,7 +93,7 @@
         }
     };
     return a.click(function () {
-        debugger
+        
         m.showVerifyImg();
     }), d.click(m.submit), f.focus(), m;
 };

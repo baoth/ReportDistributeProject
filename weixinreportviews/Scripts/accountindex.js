@@ -74,7 +74,7 @@
             if (ids.length != 1) {
                 return;
             }
-            debugger
+            
             var selectedRow = GetSingleSelectedRowData();
             url = AddParams('id', ids[0], urllisence);
             url = AddParams('name', selectedRow.name, url);
