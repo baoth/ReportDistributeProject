@@ -203,6 +203,7 @@
     <Content Include="Scripts\accountindex.js" />
     <Content Include="Scripts\dropzone.js" />
     <Content Include="Scripts\dropzone.min.js" />
+    <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\mobileLogon.js" />
     <Content Include="Scripts\numeralInput.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />

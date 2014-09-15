@@ -18,7 +18,7 @@
     <link href="../../Content/Css/dataTables.editor.min.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/jquery.toolbars.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/bootstrap.icons.css" rel="stylesheet" type="text/css" />
-            <link href="../../Content/Css/fliter.css?r=4" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/fliter.css?r=4" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery.toolbar.js" type="text/javascript"></script>
     <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
     <script src="../../Scripts/fReportMain.js?r=3" type="text/javascript"></script>
@@ -107,11 +107,11 @@
 <body style=" min-height: 100%;margin:10px;">
    <div style="width:800px;height:50px;" >
         <a href="#" id="b-add"  action="Add" class=" button button-rounded button-flat-primary">新增</a>
-        <a href="#" id="b-edit" action="Edit"  class="disabled button button-rounded button-flat-action">编辑</a>
+        <a href="#" id="b-edit" action="Edit"  class="disabled button button-rounded button-flat-action" style="display:none;">编辑</a>
         <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
         <a href="#" id="b-auth" action="CreateHtml" class="disabled button button-rounded button-flat-caution">预览</a>
    </div>
-         <div id="optionid" class="option cfix">
+  <div id="optionid" class="option cfix" style="display:none;">
 		<div class="mod-tit cfix mod_sear_bar">
 			<div class="r"><a class="openBtn-txt" href="#"><em class="vm-inline">过滤</em><i class="site-icons ico-explain-b"></i></a></div>
 			<p>
@@ -121,7 +121,7 @@
 			
 		</div>
 	  </div>
-      <div id="zdcontext" class="mod_sear_menu mb30">
+  <div id="zdcontext" class="mod_sear_menu mb30" style="display:none;">
                                                                                            
     
         <div class="mod_sear_list">
@@ -150,7 +150,6 @@
             <th style="width:10px"> <input  type="checkbox" id="checkall" name="checkall" /></th>
             <th>OrderNumber</th>
             <th>Name</th>
-            <th>LoginKey</th>
             <th>CreateDateDisplay</th>
             <th>Id</th>
         </tr>

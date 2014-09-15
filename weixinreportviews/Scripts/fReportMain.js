@@ -175,7 +175,6 @@ $(document).ready(function () {
                 }
             },  
             { "data": "Title", "sName": 'Title', "sTitle": "标题", "sWidth":"40%" },
-            { "data": "ReportKey", "sName": 'ReportKey', "sTitle": "关键字", "sWidth": "25%" },
             { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": "10%" },
             { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth":"11%" },
             { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": "13%",

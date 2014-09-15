@@ -24,7 +24,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 if (ent!=null) {
                     ViewData.Add("CreateUrl", PathTools.AddWebHeadAddress(ent.Url).Replace("\\", "/"));
                     ViewData.Add("Id", ent.Id);
-                    ViewData.Add("ReportKey", ent.ReportKey);
+                    
                     ViewData.Add("Title", ent.Title);
                     ViewData.Remove("YLState");
                 }
@@ -41,11 +41,12 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 var ent = General.CreateInstance<CS_FirstReport>(Request);
                 var session = General.CreateDbSession();
                 var path = Request["CreateUrl"];
+                var logo = Request["Logo"];
                 if (ent.Id != Guid.Empty)
                 {
                     if (path.Contains(PathTools.TempPath))
                     {
-                        ChangeAddress(path, ent.Id, customerInfo.Account.Id.ToString());
+                        ChangeAddress(path, ent.Id, customerInfo.Account.Id.ToString(),logo);
                     }
                     ent.AccountId = customerInfo.Account.Id;
                     session.Context.ModifyEntity(ent.CreateQSmartObject());
@@ -53,7 +54,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 else
                 {
                     ent.Id = Guid.NewGuid();
-                    ChangeAddress(path, ent.Id, customerInfo.Account.Id.ToString());
+                    ChangeAddress(path, ent.Id, customerInfo.Account.Id.ToString(),logo);
                     ent.AccountId = customerInfo.Account.Id;
                     ent.CreateDate = DateTime.Now;
                     ent.Stoped = false;
@@ -186,6 +187,46 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             return Json(new { data = PathTools.AddWebHeadAddress(tempFullPath) });
         }
         /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult Upload2()
+        {
+            //保存上传文件
+            string path = string.Empty;
+            FileInfo fi = null;
+            string fname = Guid.NewGuid().ToString();
+            string fullname=string.Empty;
+            try
+            {
+                foreach (string fid in Request.Files)
+                {
+                    if (Request.Files[fid] == null) continue;
+
+                    fi = new FileInfo(Request.Files[fid].FileName);
+                    var pathDir = Path.Combine(PathTools.BaseDirector, PathTools.TempPath);
+                    if (!System.IO.Directory.Exists(pathDir))
+                    {
+                        System.IO.Directory.CreateDirectory(pathDir);
+                    }
+                    path = Path.Combine(pathDir, fname + "logo" + fi.Extension);
+                    fullname=fname + "logo" + fi.Extension;
+                    Request.Files[fid].SaveAs(path);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    err = 1,
+                    message = "文件上传失败:" + ex.Message
+                });
+            }
+
+            return Json(new { err = 0, name = fullname});
+        }
+        /// <summary>
         /// 获取账户列表页面
         /// </summary>
         /// <returns></returns>
@@ -286,7 +327,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
 
         //}
 
-         public string ChangeAddress(string path, Guid id, string companyId)
+         public string ChangeAddress(string path, Guid id, string companyId,string logo)
          {
              var fullPathDir = string.Empty;
              var tempPath = PathTools.RemoveWebHeadAddress(path).Replace("\\", "//");
@@ -298,6 +339,19 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
              {
                  System.IO.Directory.CreateDirectory(newPathDir);
              }
+             
+             //logo迁移
+             if (!string.IsNullOrEmpty(logo))
+             {
+                 var copypath = System.IO.Path.Combine(PathTools.BaseDirector, PathTools.TempPath,logo);
+                 if (System.IO.File.Exists(copypath))
+                 {
+                     var toPath = System.IO.Path.Combine(newPathDir, id.ToString() + "logo.jpg");
+                     System.IO.File.Copy(copypath, toPath, true);
+                     System.IO.File.Delete(copypath);
+                 }
+             }
+             
              var tempFullFileName = tempPath.Substring(tempPath.LastIndexOf('/')+1);
              var tempType = tempFullFileName.Substring(0, 1);
              var tempFileName = tempFullFileName.Substring(0, tempFullFileName.LastIndexOf("."));  
@@ -320,6 +374,8 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                  System.IO.File.Delete(copyPath);
                  fullPathDir = System.IO.Path.Combine(newPathDir, id.ToString() + ".html");
              }
+
+
 
              return fullPathDir;
 
