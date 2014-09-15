@@ -347,7 +347,7 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
         if (span) {
           span.textContent = this.options.dictFallbackMessage;
         }
-        debugger
+        
         return this.element.appendChild(this.getFallbackForm());
       },
       resize: function(file) {
@@ -749,7 +749,7 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
           return _this.emit("complete", file);
         };
       })(this));
-      this.on("complete", (function(_this) {debugger
+      this.on("complete", (function(_this) {
         return function(file) {
           if (_this.getUploadingFiles().length === 0 && _this.getQueuedFiles().length === 0) {
             return setTimeout((function() {
