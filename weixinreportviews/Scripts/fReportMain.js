@@ -131,7 +131,7 @@ $(document).ready(function () {
         "sPaginationType": "full_numbers",
         "oLanguage": {
             "searchDefalutText": "订单号",
-            "allFilter": 'Title,ReportKey', //过滤那些列
+            "allFilter": 'Title', //过滤那些列
             "sLengthMenu": "每页显示 _MENU_ 条记录",
             "sZeroRecords": "抱歉， 没有找到",
             "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -177,8 +177,8 @@ $(document).ready(function () {
             },  
             { "data": "Title", "sName": 'Title', "sTitle": "标题", "sWidth":"40%" },
             { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": "10%" },
-            { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth":"11%" },
-            { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": "13%",
+            { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth":"11%","bVisible":false },
+            { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": "13%","bVisible":false,
                 "mRender": function (val, isShow, row) {
                     return '<div class="settings-button" v="' + val + '" n="' + row['Url'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
                 }
