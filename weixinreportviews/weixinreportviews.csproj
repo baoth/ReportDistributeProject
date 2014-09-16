@@ -34,7 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Content\Img\favicon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aspose.Cells, Version=8.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
@@ -145,9 +146,6 @@
     <Content Include="Content\Css\Switch\main.css" />
     <Content Include="Content\Css\Upload\basic.css" />
     <Content Include="Content\Css\Upload\dropzone.css" />
-    <Content Include="Content\favicon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\Img\load1.gif" />
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
@@ -159,7 +157,6 @@
     <Content Include="Content\Img\border.jpg" />
     <Content Include="Content\Img\bottom.jpg" />
     <Content Include="Content\Img\defaultHead.png" />
-    <Content Include="Content\Img\favicon.ico" />
     <Content Include="Content\Img\filter_35155954.png" />
     <Content Include="Content\Img\forward_disabled.png" />
     <Content Include="Content\Img\forward_enabled.png" />
