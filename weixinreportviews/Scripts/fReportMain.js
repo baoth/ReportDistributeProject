@@ -14,7 +14,7 @@
         return { id: selectedDom.attr('v'), name: selectedDom.attr('n') };
     }
     function GetSelectedRowId() {
-
+        debugger
         var selectids = [];
 
         if (id != undefined && id != "") {
@@ -30,7 +30,6 @@
     }
     return {
         Delete: function () {
-
             var ids = GetSelectedRowId();
             if (ids.length == 0) {
                 return;
@@ -50,6 +49,9 @@
                             layer.closeAll();
                             $("#example").dataTable().fnDraw();
                         }
+                    },
+                    error: function (data) {
+                        alert(data);
                     }
                 });
             });
@@ -71,11 +73,11 @@
         CreateHtml: function () {
 
             var o = GetSingleSelectedRowData();
-            
-            if (o.name && o.name.length > 32) {               
-               window.open('http://' + window.location.host + "/" + o.name.replace(/\\/g, '/'));
+
+            if (o.name && o.name.length > 32) {
+                window.open('http://' + window.location.host + "/" + o.name.replace(/\\/g, '/'));
             } else {
-                layer.alertEx("预览地址不存在!", "300px", "150px");               
+                layer.alertEx("预览地址不存在!", "300px", "150px");
             }
         },
         ControlBtn: function () {
@@ -176,11 +178,12 @@ $(document).ready(function () {
                 }
             },  
             { "data": "Title", "sName": 'Title', "sTitle": "标题", "sWidth":"40%" },
-            { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": "10%" },
+            { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": "59%" },
             { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth":"11%","bVisible":false },
-            { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": "13%","bVisible":false,
+            { "data": "Id", "sTitle": "", "bSortable": false, "sWidth": "0%",
                 "mRender": function (val, isShow, row) {
-                    return '<div class="settings-button" v="' + val + '" n="' + row['Url'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                    //return '<div class="settings-button" v="' + val + '" n="' + row['Url'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                    return '<div style="width:0px;" class="settings-button" v="' + val + '" n="' + row['Url'] + '"></div>';
                 }
             }
         ]

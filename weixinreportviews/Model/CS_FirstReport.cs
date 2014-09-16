@@ -111,8 +111,8 @@ namespace weixinreportviews.Model
             get
             {
                 string url = string.Empty;
-                var pathUrl = "ReportViews\\" + this.AccountId + "\\" + this.Id + "logo.jpg";
-                if (System.IO.File.Exists(pathUrl)) url = pathUrl;
+                var pathUrl = "ReportViews\\" + this.AccountId.ToString() + "\\" + this.Id.ToString() + "logo.jpg";
+                if (System.IO.File.Exists(System.IO.Path.Combine(PathTools.BaseDirector, pathUrl))) url = pathUrl;
                 return url;
             }
         }

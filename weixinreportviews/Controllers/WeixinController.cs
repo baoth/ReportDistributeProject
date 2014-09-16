@@ -40,6 +40,7 @@ namespace weixinreportviews.Controllers
             {
                 XDocument doc = XDocument.Load(Request.InputStream);
                 WeixinMessageBaseInfo baseinfo = WeixinMessageBaseInfo.Create(doc);
+
                 if (baseinfo != null && baseinfo.IsEvent)
                 {
                     switch (baseinfo.EventType)
@@ -72,7 +73,14 @@ namespace weixinreportviews.Controllers
                             if (string.IsNullOrEmpty(tm.Content)) return Content("");
                             WeixinUserInfo userinfo = wc.GetUserBaseInfo(baseinfo.FromUserName);
                             bool result = ProductGeneral.ApplyLisence(tm.Content, userinfo);
-                            return Content("");
+                            if (result)
+                            {
+                                return Content(WeixinMessage(baseinfo, "系统提示：请求已提交,请等待审核!"));
+                            }
+                            else
+                            {
+                                return Content(WeixinMessage(baseinfo, "系统提示：请求提交被拒绝，请联系系统管理员!"));
+                            }
                         default:
                             return Content("");
                     }
