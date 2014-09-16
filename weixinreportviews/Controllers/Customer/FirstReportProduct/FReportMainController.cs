@@ -182,8 +182,6 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     message = "生成html文件失败:" + ex.Message
                 });
             }
-
-
             return Json(new { data = PathTools.AddWebHeadAddress(tempFullPath) });
         }
         /// <summary>

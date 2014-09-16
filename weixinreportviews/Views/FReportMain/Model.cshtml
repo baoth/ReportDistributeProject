@@ -168,8 +168,14 @@
             }
             function Look() {
                 var url = $('#txtUrl').val();
+                var hostval = window.location.host;
                 if (url) {
-                    window.open(url+"?r="+10*Math.random());
+                    if (hostval.indexOf('localhost') == 0) {
+                        window.open(url + "?r=" + 10 * Math.random());
+                    }
+                    else {
+                        window.open("http://" + url + "?r=" + 10 * Math.random());
+                    }
                 }
                 else {
                     $("#txtUrlMsg").html("<font color='red'>无上传文件，请上传文件后再预览！</font>");
