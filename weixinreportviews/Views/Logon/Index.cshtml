@@ -48,7 +48,7 @@
          <div class="login-help-panel">    <a id="rememberPwd" class="login-remember-pwd" href="javascript:;">
          <i id="rememberPwdIcon" class="icon_login checkbox"></i>记住帐号</a>   
           </div> 
-           <div class="login-btn-panel">    <a class="login-btn" title="点击登录" href="javascript:;" id="login_button">登录</a> 
+           <div class="login-btn-panel">    <a class="login-btn" title="点击登录" href="javascript:;" id="login_button" style="width:100%">登录</a> 
             </div>  </div>    </div>    <dl class="qrcode-panel" style="font-size:12px">      <dt>
                 <img src="../../Content/Img/mp_qrcode1e7d69.gif" /> </dt>      <dd>        扫描并关注<br>正信元公众平台      </dd>    </dl>  </div></div>
   <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
@@ -133,7 +133,7 @@
      <script>
         (function (jQ) {
             var loginForm = jQ("#login-form"),
-        account$ = jQ("#account");
+            account$ = jQ("#account");
 
             var cookie_acct = WXM.Helpers.getCookie("remember_acct");
             if (cookie_acct === undefined) {

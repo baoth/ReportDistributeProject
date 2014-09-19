@@ -231,6 +231,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
         [HttpGet]
         public ActionResult Grid()
         {
+            System.Diagnostics.Trace.WriteLine("Grid");
             return View("Index");
         }
 
