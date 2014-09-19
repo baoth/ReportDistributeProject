@@ -224,6 +224,8 @@
     <Content Include="Scripts\logon.js" />
     <Content Include="Scripts\fReportMain.js" />
     <Content Include="Scripts\zepto-1.1.4.min.js" />
+    <Content Include="Scripts\zepto.cookie.js" />
+    <Content Include="Scripts\zepto.cookie.min.js" />
     <Content Include="Scripts\zepto.touch.js" />
     <Content Include="Views\Master\_Layout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
