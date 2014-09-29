@@ -80,7 +80,7 @@
 <div class="manage">
     <div class="manage_l">
         <div class="w_logo">  <img src="../../Content/Img/manage_01.png" /></div>
-        <div class="userface"><img src="../../Content/Img/userface.png"></div>
+        <div class="userface" style="display:none;"><img src="../../Content/Img/userface.png"></div>
         <p class="username">
         <span class="username2">
         <a href="#" action="/CompanyAccount/model" companyId="@ViewData["Id"]" id="companyName">@ViewData["Name"]</a>
@@ -90,13 +90,13 @@
         </span></p>
         <div class="column">
             <ul>
-                <li class="column1 column5" controll="/FReportUserAttention/Index"><a href="#" onclick="return false;" >绑定管理</a></li>
-                <li class="column2 "  controll="/FReportMain/Grid"><a href="#"  onclick="return false;">报表管理</a></li>
+                <li class="column1 column5" controll="/FReportMain/Grid"><a href="#" onclick="return false;" >报表发布</a></li>
+                <li class="column2 "  controll="/FReportUserAttention/Index"><a href="#"  onclick="return false;">绑定管理</a></li>
             </ul>
         </div>
     </div>
  <!--   <div class="manage_r">-->
-    <iframe id="childiframe" src="/FReportUserAttention/Index"  class="manage_r" style="border:0px;"></iframe>
+    <iframe id="childiframe" src="/FReportMain/Grid"  class="manage_r" style="border:0px;"></iframe>
 <!--</div>-->
 </div>
 

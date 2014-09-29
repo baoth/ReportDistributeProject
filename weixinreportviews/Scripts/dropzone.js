@@ -309,7 +309,7 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
       autoQueue: true,
       addRemoveLinks: false,
       previewsContainer: null,
-      dictDefaultMessage: "拖文件都这里上传",
+      dictDefaultMessage: "拖拽(点击)上传",
       dictFallbackMessage: "你的浏览器不支持拖拽文件上传.",
       dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
       dictFileTooBig: "你选择的太大({{filesize}}MiB). 支持最大文件: {{maxFilesize}}MiB.",
@@ -347,7 +347,7 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
         if (span) {
           span.textContent = this.options.dictFallbackMessage;
         }
-        debugger
+        
         return this.element.appendChild(this.getFallbackForm());
       },
       resize: function(file) {
@@ -749,7 +749,7 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
           return _this.emit("complete", file);
         };
       })(this));
-      this.on("complete", (function(_this) {debugger
+      this.on("complete", (function(_this) {
         return function(file) {
           if (_this.getUploadingFiles().length === 0 && _this.getQueuedFiles().length === 0) {
             return setTimeout((function() {

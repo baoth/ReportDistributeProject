@@ -24,7 +24,7 @@ namespace weixinreportviews.Model
         /// <summary>
         /// 报表名称
         /// </summary>
-        [StringMaxLength(20, VarCharType.nvarchar)]
+        [StringMaxLength(30, VarCharType.nvarchar)]
         public string Title
         {
             get { return _Title; }
@@ -43,17 +43,17 @@ namespace weixinreportviews.Model
         }
         #endregion
 
-        private string _ReportKey = string.Empty;
-        /// <summary>
-        /// 关键字
-        /// </summary>
-        [StringMaxLength(20, VarCharType.nvarchar)]
-        [Unique]
-        public string ReportKey
-        {
-            get { return _ReportKey; }
-            set { _ReportKey = value; }
-        }
+        //private string _ReportKey = string.Empty;
+        ///// <summary>
+        ///// 关键字
+        ///// </summary>
+        //[StringMaxLength(20, VarCharType.nvarchar)]
+        //[Unique]
+        //public string ReportKey
+        //{
+        //    get { return _ReportKey; }
+        //    set { _ReportKey = value; }
+        //}
 
         private DateTime _CreateDate = DateTime.Now;
         /// <summary>
@@ -101,6 +101,18 @@ namespace weixinreportviews.Model
                 {
                     url = pathUrl;
                 }
+                return url;
+            }
+        }
+
+        [Ignore]
+        public string PicUrl
+        {
+            get
+            {
+                string url = string.Empty;
+                var pathUrl = "ReportViews\\" + this.AccountId.ToString() + "\\" + this.Id.ToString() + "logo.jpg";
+                if (System.IO.File.Exists(System.IO.Path.Combine(PathTools.BaseDirector, pathUrl))) url = pathUrl;
                 return url;
             }
         }

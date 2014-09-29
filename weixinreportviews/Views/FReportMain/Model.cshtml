@@ -10,18 +10,18 @@
     <style>
         *{padding: 0px;margin: 0px; font-size: 13px;font-family:"微软雅黑","SimSun","Arial Narrow";}
     </style>
-       <link href="../../Content/Css/Switch/bootstrap-switch.css" rel="stylesheet" type="text/css" /> 
-     <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/Switch/bootstrap-switch.css" rel="stylesheet" type="text/css" /> 
+    <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />   
-        <link href="../../Content/Css/Upload/basic.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/Upload/basic.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/Upload/dropzone.css?r=32" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>        
-        <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
-           <script src="../../Scripts/dropzone.js?r=2" type="text/javascript"></script>
-
+    <script src="../../Scripts/layer.js?r=2" type="text/javascript"></script>
+    <script src="../../Scripts/dropzone.js?r=2" type="text/javascript"></script>
+    <script src="../../Scripts/jquery.form.js" type="text/javascript"></script>
            
     <script src="../../Scripts/Switch/bootstrap-switch.js" type="text/javascript"></script>   
-       <style type="text/css">
+    <style type="text/css">
         table
         {
             width:100%;
@@ -138,7 +138,28 @@
             if ((src1==undefined&&src2==undefined)||(src1==src &&src2==src)) {
                 callback();
             }
-        }
+        };
+        function logoupload(src) {
+            var form = $("form[id=ifrom]");
+            if (src == "" || undefined) return;
+            var options = {
+                url: '/FReportMain/Upload2',
+                type: 'post',
+                dataType: 'json',
+                success: function (data) {
+                    var m = eval("(" + data + ")");
+                    if (m.err == 0) {
+                        var ele = $("#logo");
+                        ele.attr("src", "../temp/" + m.name);
+                        $("#txtLogo").val(m.name);
+                    }
+                    else {
+                        alert(m.message);
+                    }
+                }
+            }
+            form.ajaxSubmit(options);
+        };
         var PageAction = function () {
             function GoBack() {
                 var urlaccount = '/FReportMain/Grid';
@@ -146,10 +167,15 @@
 
             }
             function Look() {
-                debugger
                 var url = $('#txtUrl').val();
+                var hostval = window.location.host;
                 if (url) {
-                    window.open(url+"?r="+10*Math.random());
+                    if (hostval.indexOf('localhost') == 0) {
+                        window.open(url + "?r=" + 10 * Math.random());
+                    }
+                    else {
+                        window.open("http://" + url + "?r=" + 10 * Math.random());
+                    }
                 }
                 else {
                     $("#txtUrlMsg").html("<font color='red'>无上传文件，请上传文件后再预览！</font>");
@@ -166,6 +192,7 @@
                     data.ReportKey = $('#txtGJZ').val();
                     data.Title = $('#txtBBMC').val();
                     data.CreateUrl = $('#txtUrl').val();
+                    data.Logo = $('#txtLogo').val();
                     data.Stoped = !$("#CheckSwitch").bootstrapSwitch("state");
                     $.ajax({
                         url: "/FReportMain/Save",
@@ -211,7 +238,7 @@
                 dictCancelUpload: "x",
                 maxFiles: 1,
                 maxFilesize: 5,
-                acceptedFiles: ".xls,.doc,.docx",
+                acceptedFiles: ".xls,.xlsx,.doc,.docx",
                 init: function () {
 
                     this.on("success", function (file, responseText, s) {
@@ -239,59 +266,62 @@
        <div style="margin: 0px auto; width: 100%; height: auto; "> @*background: url(../../Content/Img/border.jpg)*@
         <table width="100%">
         <tr>
-             <div style="text-align:left; margin:0px auto;" >
-        <a class="button button-rounded button-flat-highlight" id="b-close" action="GoBack" href="#">返回</a>
-        <a class="button button-rounded button-flat-action" id="b-save" action="Save" href="#">保存</a>
-        <a class="button button-rounded button-flat-caution  @ViewData["YLState"]" id="b-look" action="Look" href="#">预览</a>
-       </div> 
+            <div style="text-align:left; margin:0px auto;" >
+                <a class="button button-rounded button-flat-highlight" id="b-close" action="GoBack" href="#">返回</a>
+                <a class="button button-rounded button-flat-action" id="b-save" action="Save" href="#">保存</a>
+                <a class="button button-rounded button-flat-caution  @ViewData["YLState"]" id="b-look" action="Look" href="#">预览</a>
+            </div> 
         </tr>
          
                
 
         <tr>
-             <td class="tdText">
-            <label ><font color="red">*</font>报表名称  &nbsp </label>
-            <div>
-             <input placeholder="请输入报表名称" maxlength="100" class="input-xlarge" id="txtBBMC" onblur="CheckField1('txtBBMC','Title','报表名称')" name="txtBBMC" value="@ViewData["Title"]"  type="text" />
+            <td class="tdText">
+                <label ><font color="red">*</font>报表名称  &nbsp </label>
+                <div>
+                 <input placeholder="请输入报表名称" maxlength="30" class="input-xlarge" id="txtBBMC" onblur="CheckField1('txtBBMC','Title','报表名称')" name="txtBBMC" value="@ViewData["Title"]"  type="text" />
 
-              <span style="padding:3px 0px 0px 0px;position:absolute"><img  id="txtBBMCImg"src="" class="vaildHide"/></span>
-            </div>
-             <div id="txtBBMCMsg"></div>
-             </td>
+                  <span style="padding:3px 0px 0px 0px;position:absolute"><img  id="txtBBMCImg"src="" class="vaildHide"/></span>
+                </div>
+                 <div id="txtBBMCMsg"></div>
+            </td>
             <td class="tdText" >
-               <label ><font color="red">*</font>关键字  &nbsp </label>
-            <div>
-            <input placeholder="请输入关键字" type="text" @ViewData["eState"] class="form-control" id="txtGJZ" onblur="CheckField1('txtGJZ','ReportKey','关键字')" name="txtGJZ" value="@ViewData["ReportKey"]">
-            <span style="padding:3px 0px 0px 0px;position:absolute"><img  id="txtGJZImg"src="" class="vaildHide"/></span>
-            </div>
-             <div id="txtGJZMsg"></div>
+                @*<label> &nbsp </label>           
+                <div > 
+                 <input id="CheckSwitch" type="checkbox" />
+                </div> *@
+                @*<label style="display:none;"><font color="red">*</font>关键字  &nbsp </label>
+                <div style="display:none;">
+                <input placeholder="请输入关键字" type="text" @ViewData["eState"] class="form-control" id="txtGJZ" onblur="CheckField1('txtGJZ','ReportKey','关键字')" name="txtGJZ" value="@ViewData["ReportKey"]">
+                <span style="padding:3px 0px 0px 0px;position:absolute"><img  id="txtGJZImg"src="" class="vaildHide"/></span>
+                </div>
+                <div id="txtGJZMsg" style="display:none;"></div>*@
                 
             </td>
            
         </tr>
-          <tr>
-             <td class="tdText" colspan="2">
-            
-            <label ><font color="red">*</font>生成URL  &nbsp </label>
-            <div>
-             <input disabled placeholder="" style="width:75%" maxlength="100" class="input-xlarge" id="txtUrl" value="@ViewData["CreateUrl"]"  type="text" />
-             
-            </div>
-             <div id="txtUrlMsg"></div>
+        <tr>
+            <td class="tdText" colspan="2">
+                <label>图片  &nbsp </label>
+                <div style="width:100px;height:100px;background-color:White;overflow:hidden">
+                    <img id="logo" src="" style="width:100px;height:100px;"/>
+                    <input style="display:none;" id="txtLogo" type="text" />
+                </div>
+                <form id="ifrom"  enctype="multipart/form-data" method="post" style="border:none;">
+                    <input name="img" type="file" accept=".jpg" style="border:none;width:70px;" onchange="logoupload(this.value)">
+                </form>
+                
             </td>
         </tr>
-                 <tr>
-            
-            <td class="tdText">
-            
-            <label> &nbsp </label>           
-            <div > 
-             <input id="CheckSwitch" type="checkbox" />
-            </div> 
-
+        <tr>
+            <td class="tdText" colspan="2">
+                <label style="display:none;"><font color="red">*</font>生成URL  &nbsp </label>
+                <div style="display:none;">
+                    <input disabled placeholder="" style="width:75%" maxlength="100" class="input-xlarge" id="txtUrl" value="@ViewData["CreateUrl"]"  type="text" />
+                </div>
+                
             </td>
         </tr>
-     
       </table>
        </div>
        <div  class="dropzone" ></div>
