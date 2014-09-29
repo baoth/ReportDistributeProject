@@ -62,7 +62,7 @@
                 var n = t.error + "", i;
                 u.hasClass("checkbox_checked") ? WXM.Helpers.setCookie("remember_acct", e.account, 30) : WXM.Helpers.setCookie("remember_acct", "EXPIRED", -1);
                 switch (n) {
-                
+
                     case "2":
                         i = "帐号停用。";
                         break;
