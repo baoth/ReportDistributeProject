@@ -70,8 +70,7 @@
         Add: function () {
             window.parent.ControlIFrame(urlaccount);
         },
-        CreateHtml: function () {
-
+        CreateHtml: function () {        
             var o = GetSingleSelectedRowData();
             debugger
             if (o.name && o.name.length > 32) {

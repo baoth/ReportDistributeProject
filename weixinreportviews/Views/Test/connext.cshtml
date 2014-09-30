@@ -15,6 +15,24 @@
             $('.manage_nav li a').bind('click', function () {
                 window.parent.ControlIFrame(false);
             })
+
+            $("#btn_test").bind("click", function () {
+                alert(1);
+                debugger
+                //string signature, string timestamp, string nonce, string echostr
+                var url = "/Weixin/Index";
+                var data = { "signature": "", "timestamp": "", "nonce": "", "echostr": "" };
+                $.ajax({
+                    url:url,
+                    data: data,
+                    dataType: "JSON",
+                    type: "POST",
+                    success: function (data) {
+                        alert(data);
+                    }
+
+                });
+            });
         });
         
     </script>
@@ -28,7 +46,7 @@
     </style>
 </head>
 <body>
-
+    <input type="button" id="btn_test"  value="测试"/>
     <div class="manage_r">
         <div class="manage_rr">
             <div class="manage_nav">
