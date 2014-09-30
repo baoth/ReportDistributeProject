@@ -119,6 +119,7 @@
     <Content Include="Content\Css\bootstrap-theme.css" />
     <Content Include="Content\Css\bootstrap.css" />
     <Content Include="Content\Css\bootstrap.icons.css" />
+    <Content Include="Content\Css\bootstrap.min.css" />
     <Content Include="Content\Css\button.css" />
     <Content Include="Content\Css\font-awesome\4.1.0\css\font-awesome-ie7.min.css" />
     <Content Include="Content\Css\font-awesome\4.1.0\css\font-awesome.min.css" />
@@ -257,6 +258,7 @@
     <Content Include="Views\CompanyAccount\Model.cshtml" />
     <Content Include="Views\Logon\MobileIndex.cshtml" />
     <Content Include="Views\FReportHome\MobileIndex.cshtml" />
+    <Content Include="Views\Lisence\Copy of model.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Content\Css\f.css" />
