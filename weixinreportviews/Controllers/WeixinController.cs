@@ -31,6 +31,7 @@ namespace weixinreportviews.Controllers
         [ActionName("Index")]
         public ActionResult PostIndex(string signature, string timestamp, string nonce, string echostr)
         {
+           
             WeixinCore wc = General.CreateWeixinCore();
             if (!wc.Check(signature, timestamp, nonce, General.Token))
             {

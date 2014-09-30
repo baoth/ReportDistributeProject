@@ -85,7 +85,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     {
                         var entity = new CS_FirstReport { Id = Guid.Parse(ids[i]) };
                         session.Context.DeleteEntity(entity.CreateDeleteCommand());
-                        var filePath = PathTools.SaveHtmlPath + "\\" + customInfo.Account.Id + "\\" + entity.Id + ".html";
+                        var filePath = PathTools.SaveHtmlPath + "\\" + customInfo.Account.Id.ToString().Replace("-", "") + "\\" + entity.Id.ToString().Replace("-", "") + ".html";
                         if (System.IO.File.Exists(filePath))
                         {
                             paths.Add(filePath);
@@ -123,7 +123,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             //保存上传文件
             string path = string.Empty;
             FileInfo fi = null;
-            string fname = Guid.NewGuid().ToString();
+            string fname = Guid.NewGuid().ToString().Replace("-","");
             try
             {
                 foreach (string fid in Request.Files)
@@ -193,7 +193,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             //保存上传文件
             string path = string.Empty;
             FileInfo fi = null;
-            string fname = Guid.NewGuid().ToString();
+            string fname = Guid.NewGuid().ToString().Replace("-","");
             string fullname=string.Empty;
             try
             {
@@ -331,7 +331,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
              var fullPathDir = string.Empty;
              var tempPath = PathTools.RemoveWebHeadAddress(path).Replace("\\", "//");
             tempPath = tempPath.Substring(1);
-             var rePathDir = PathTools.GenerateHtmlPath + "//" + companyId;
+             var rePathDir = PathTools.GenerateHtmlPath + "//" + companyId.Replace("-","");
              var newPathDir = System.IO.Path.Combine(PathTools.BaseDirector, rePathDir);
              //if (!System.IO.File.Exists(newPathDir))
              if(!System.IO.Directory.Exists(newPathDir))
@@ -345,7 +345,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                  var copypath = System.IO.Path.Combine(PathTools.BaseDirector, PathTools.TempPath,logo);
                  if (System.IO.File.Exists(copypath))
                  {
-                     var toPath = System.IO.Path.Combine(newPathDir, id.ToString() + "logo.jpg");
+                     var toPath = System.IO.Path.Combine(newPathDir, id.ToString().Replace("-","") + "logo.jpg");
                      System.IO.File.Copy(copypath, toPath, true);
                      System.IO.File.Delete(copypath);
                  }
@@ -355,11 +355,11 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
              var tempType = tempFullFileName.Substring(0, 1);
              var tempFileName = tempFullFileName.Substring(0, tempFullFileName.LastIndexOf("."));  
              
-             if (tempType == "w" && tempFileName.Length > 36)//word 转换
+             if (tempType == "w" && tempFileName.Length > 32)//word 转换
              {
                  var copyPath = System.IO.Path.Combine(PathTools.BaseDirector, tempPath.Substring(0, tempPath.LastIndexOf('/'))).Replace("/", "\\");//.Substring(0, tempPath.LastIndexOf('/') - 1).Replace("/","\\"), tempFileName
-                 var toPath=System.IO.Path.Combine(newPathDir, id.ToString());
-                 var saveFileName = id.ToString() + ".html";
+                 var toPath=System.IO.Path.Combine(newPathDir, id.ToString().Replace("-",""));
+                 var saveFileName = id.ToString().Replace("-", "") + ".html";
                  CopyFolder(copyPath,toPath,saveFileName);
                 // System.IO.Directory.Delete(copyPath);
                  DirectoryInfo di = new DirectoryInfo(copyPath);
@@ -369,9 +369,9 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
              else
              {
                  var copyPath = System.IO.Path.Combine(PathTools.BaseDirector, tempPath);
-                 System.IO.File.Copy(copyPath, System.IO.Path.Combine(newPathDir, id.ToString() + ".html"), true);
+                 System.IO.File.Copy(copyPath, System.IO.Path.Combine(newPathDir, id.ToString().Replace("-","") + ".html"), true);
                  System.IO.File.Delete(copyPath);
-                 fullPathDir = System.IO.Path.Combine(newPathDir, id.ToString() + ".html");
+                 fullPathDir = System.IO.Path.Combine(newPathDir, id.ToString().Replace("-","") + ".html");
              }
 
 

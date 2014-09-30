@@ -34,8 +34,12 @@ using QSmart.Core.DataBase;
                         var objvalue = pis[i].GetValue(lisence, null);
                         if (pis[i].PropertyType == typeof(DateTime) || pis[i].PropertyType == typeof(Nullable<DateTime>))
                         {
-                            var objvalue1 = (DateTime)objvalue;
-                            var value1 = objvalue == null ? "" : objvalue1.ToShortDateString();
+                            var value1 = string.Empty;
+                            if (objvalue != null)
+                            {
+                                var objvalue1 = (DateTime)objvalue;
+                                value1 = objvalue == null ? "" : objvalue1.ToShortDateString();
+                            }
                             ViewData.Add(pis[i].Name, value1);
                         }
                         else

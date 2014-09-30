@@ -39,16 +39,16 @@
             SetDefault(Id);
             $("#btn_save").bind("click", Save);
             $("#btn_signIn").bind("click", Save);
-            /*验证数字*/
-            $('#Phone').bind('keydown', function () {
-                var e = $(this).event || window.event;
-                var code = parseInt(e.keyCode);
-                if (code >= 96 && code <= 105 || code >= 48 && code <= 57 || code == 8 || code == 110 || code == 190) {
-                    return true;
-                } else {
-                    return false;
-                }  
-            })
+//            /*验证数字*/
+//            $('#Phone').bind('keydown', function () {
+//                var e = $(this).event || window.event;
+//                var code = parseInt(e.keyCode);
+//                if (code >= 96 && code <= 105 || code >= 48 && code <= 57 || code == 8 || code == 110 || code == 190) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }  
+//            })
 
         });
         var nameValid = false;
@@ -142,7 +142,7 @@
         }
 
         function Save() {
-            
+           debugger
             //检查
             if (Check() == false) return;
             var Id = $("#GUID").val(); //""表示新增  有值 表示修改  
@@ -171,7 +171,7 @@
             var Creator = $("#Creator").val();
             var CreateDate = $("#CreateDate").val();           
             var Address = $("#Address").val();
-            var Stoped = !$("#CheckSwitch").bootstrapSwitch("state");
+            var Stoped =$("#CheckSwitch").bootstrapSwitch("state");
             
             Stoped = !Stoped;   
             var Id = $("#GUID").val();
@@ -204,7 +204,7 @@
                 $("#Name").attr("disabled", "disabled");
                 $("#LoginKey").attr("disabled", "disabled");
             }
-            $("#Phone").numeral();
+           // $("#Phone").numeral();
             //开关           
             $("#CheckSwitch").bootstrapSwitch("onText", "启用");
             $("#CheckSwitch").bootstrapSwitch("offText", "停用");
@@ -272,8 +272,8 @@
         function CheckPhone() {
             var Phone = $("#Phone").val();
             if (Phone == "") {
-                $("#SpanPhoneMsg").html("<font color='red'>电话不能为空！</font>");
-                return false;
+                // $("#SpanPhoneMsg").html("<font color='red'>电话不能为空！</font>");
+                return true;
             }
             else {
 
@@ -544,7 +544,7 @@
            
             <td class="tdText" >
             
-            <label><font color="red">*</font>电话  &nbsp </label>
+            <label>电话  &nbsp </label>
             <div> 
             <input placeholder="请输入电话" maxlength="15" class="input-xlarge" id="Phone" onblur="CheckPhone()" name="Phone" value="@ViewData["Phone"]" type="text" />
             </div>
@@ -639,8 +639,6 @@
        </div>
 
 
-
-      <hr/>
 
       <div>       
        <input  id="Creator"  type="hidden" value="@ViewData["Creator"]" />
