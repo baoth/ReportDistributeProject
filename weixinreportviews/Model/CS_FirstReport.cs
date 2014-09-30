@@ -93,13 +93,13 @@ namespace weixinreportviews.Model
                 var pathUrl = "ReportViews\\" + this.AccountId + "\\" + this.Id + ".html";
                 var newPathUrl = "ReportViews\\" + this.AccountId + "\\" + this.Id+ "\\" + this.Id + ".html";
                 var basePath = PathTools.BaseDirector;
-                if (System.IO.File.Exists(System.IO.Path.Combine(basePath,newPathUrl)))
+                if (System.IO.File.Exists(System.IO.Path.Combine(basePath,newPathUrl.Replace("-",""))))
                 {
-                    url = newPathUrl;
+                    url = newPathUrl.Replace("-","");
                 }
-                else if (System.IO.File.Exists(System.IO.Path.Combine(basePath,pathUrl)))
+                else if (System.IO.File.Exists(System.IO.Path.Combine(basePath,pathUrl.Replace("-",""))))
                 {
-                    url = pathUrl;
+                    url = pathUrl.Replace("-", "");
                 }
                 return url;
             }

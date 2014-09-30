@@ -313,7 +313,7 @@ namespace weixinreportviews.Model
             });
             DbSession session = General.CreateDbSession();
             DataTable dt = session.Context.QueryTable(Query);
-            return ((int)dt.Rows[0][0]) - ((int)dt.Rows[0][1]);
+            return Convert.ToInt32(dt.Rows[0][0]) - Convert.ToInt32(dt.Rows[0][1]);
         }
 
         /// <summary>
