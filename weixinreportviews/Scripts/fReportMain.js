@@ -73,7 +73,7 @@
         CreateHtml: function () {
 
             var o = GetSingleSelectedRowData();
-
+            debugger
             if (o.name && o.name.length > 32) {
                 window.open('http://' + window.location.host + "/" + o.name.replace(/\\/g, '/'));
             } else {
