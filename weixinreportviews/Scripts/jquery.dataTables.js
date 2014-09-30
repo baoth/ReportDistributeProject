@@ -3833,7 +3833,6 @@
         /* Convert any user input sizes into pixel sizes */
         for (i = 0; i < visibleColumns.length; i++) {
             column = columns[visibleColumns[i]];
-
             if (column.sWidth !== null) {
                 column.sWidth = _fnConvertToWidth(column.sWidthOrig, tableContainer);
 

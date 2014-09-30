@@ -14,7 +14,7 @@
         return { id: selectedDom.attr('v'), name: selectedDom.attr('n') };
     }
     function GetSelectedRowId() {
-
+        debugger
         var selectids = [];
 
         if (id != undefined && id != "") {
@@ -30,7 +30,6 @@
     }
     return {
         Delete: function () {
-
             var ids = GetSelectedRowId();
             if (ids.length == 0) {
                 return;
@@ -50,6 +49,9 @@
                             layer.closeAll();
                             $("#example").dataTable().fnDraw();
                         }
+                    },
+                    error: function (data) {
+                        alert(data);
                     }
                 });
             });
@@ -69,12 +71,13 @@
             window.parent.ControlIFrame(urlaccount);
         },
         CreateHtml: function () {
-            debugger
+
             var o = GetSingleSelectedRowData();
-            if (o.name && o.name.length > 32) {               
-               window.open('http://' + window.location.host + "/" + o.name.replace(/\\/g, '/'));
+
+            if (o.name && o.name.length > 32) {
+                window.open('http://' + window.location.host + "/" + o.name.replace(/\\/g, '/'));
             } else {
-                layer.alertEx("预览地址不存在!", "300px", "150px");               
+                layer.alertEx("预览地址不存在!", "300px", "150px");
             }
         },
         ControlBtn: function () {
@@ -130,7 +133,7 @@ $(document).ready(function () {
         "sPaginationType": "full_numbers",
         "oLanguage": {
             "searchDefalutText": "订单号",
-            "allFilter": 'Title,ReportKey', //过滤那些列
+            "allFilter": 'Title', //过滤那些列
             "sLengthMenu": "每页显示 _MENU_ 条记录",
             "sZeroRecords": "抱歉， 没有找到",
             "sInfo": "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -175,12 +178,12 @@ $(document).ready(function () {
                 }
             },  
             { "data": "Title", "sName": 'Title', "sTitle": "标题", "sWidth":"40%" },
-            { "data": "ReportKey", "sName": 'ReportKey', "sTitle": "关键字", "sWidth": "25%" },
-            { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": "10%" },
-            { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth":"11%" },
-            { "data": "Id", "sTitle": "操作", "bSortable": false, "sWidth": "13%",
+            { "data": "CreateDateDisplay", "sName": 'CreateDate', "sTitle": "创建日期", "sWidth": "59%" },
+            { "data": "StopedDisplay", "sName": 'Stoped', "sTitle": "停用", "bSortable": false, "sWidth":"11%","bVisible":false },
+            { "data": "Id", "sTitle": "", "bSortable": false, "sWidth": "0%",
                 "mRender": function (val, isShow, row) {
-                    return '<div class="settings-button" v="' + val + '" n="' + row['Url'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                    //return '<div class="settings-button" v="' + val + '" n="' + row['Url'] + '"><img src="../../Content/Img/icon-cog-small.png" /></div>';
+                    return '<div style="width:0px;" class="settings-button" v="' + val + '" n="' + row['Url'] + '"></div>';
                 }
             }
         ]

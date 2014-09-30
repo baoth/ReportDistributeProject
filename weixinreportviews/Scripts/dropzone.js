@@ -309,7 +309,7 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
       autoQueue: true,
       addRemoveLinks: false,
       previewsContainer: null,
-      dictDefaultMessage: "拖文件都这里上传",
+      dictDefaultMessage: "拖拽(点击)上传",
       dictFallbackMessage: "你的浏览器不支持拖拽文件上传.",
       dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
       dictFileTooBig: "你选择的太大({{filesize}}MiB). 支持最大文件: {{maxFilesize}}MiB.",
