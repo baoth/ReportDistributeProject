@@ -258,7 +258,6 @@
     <Content Include="Views\CompanyAccount\Model.cshtml" />
     <Content Include="Views\Logon\MobileIndex.cshtml" />
     <Content Include="Views\FReportHome\MobileIndex.cshtml" />
-    <Content Include="Views\Lisence\Copy of model.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Content\Css\f.css" />
