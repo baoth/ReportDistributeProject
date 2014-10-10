@@ -147,6 +147,7 @@
     <Content Include="Content\Css\Switch\main.css" />
     <Content Include="Content\Css\Upload\basic.css" />
     <Content Include="Content\Css\Upload\dropzone.css" />
+    <Content Include="Content\Img\bg_login_banner.png" />
     <Content Include="Content\Img\load1.gif" />
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
