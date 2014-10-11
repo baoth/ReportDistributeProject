@@ -22,8 +22,18 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.menu_item').bind('click', function () {
+
                 var c = $(this).attr('ctarget');
+                var t = $(this).attr('ctitle');
+
                 $("#childiframe").attr("src", c);
+                $("#main_hd_title").html(t);
+                $('.menu_item').each(function () {
+                    $(this).removeClass('selected');
+                });
+                $(this).addClass('selected');
+                
+                $('body,html').animate({ scrollTop: 0 }, 1); //页面置顶
             })
             $("#logout").bind("click", function (e) {
                 $.LogOut(e);
@@ -35,7 +45,13 @@
                 url = AddParams("Id", id, url);
                 ControlIFrame(url);
             });
+
+            $("#init_page").trigger("click");
+            
         });
+        window.init_page = function () {
+            $("#init_page").trigger("click")
+        };
         window.ControlIFrame = function (url) {
             $("#childiframe").attr("src", url);
         };
@@ -112,17 +128,17 @@
                                 <i class="icon_menu" style="background:url(../Content/Img/icon_menu_statistics.png) no-repeat;"></i>报表        
                             </dt> 
 
-				            <dd class="menu_item" ctarget="/FReportMain/Model"><a href="#" onclick="return false;">新表发布</a></dd>
-					        <dd class="menu_item" ctarget="/FReportMain/Grid"><a href="#" onclick="return false;">报表管理</a></dd>
+				            <dd class="menu_item" ctarget="/FReportMain/Model" ctitle="新表发布"><a href="#" onclick="return false;">新表发布</a></dd>
+					        <dd class="menu_item" ctarget="/FReportMain/Grid" ctitle="报表管理" id="init_page"><a href="#" onclick="return false;">报表管理</a></dd>
 		                </dl>
                         <dl class="menu">
                             <dt class="menu_title">
                                 <i class="icon_menu" style="background:url(../Content/Img/icon_menu_setup.png) no-repeat;"></i>设置        
                             </dt> 
-				            <dd class="menu_item" ctarget="/FReportUserAttention/Index"><a href="#" onclick="return false;">人员绑定</a></dd>
+				            <dd class="menu_item" ctarget="/FReportUserAttention/Index" ctitle="人员绑定"><a href="#" onclick="return false;">人员绑定</a></dd>
 		                </dl>
                         <dl class="menu">
-                            <dd  class="menu_item clickable">
+                            <dd  class="menu_item clickable" ctitle="账户信息">
                                 <a href="#" action="/CompanyAccount/model" companyId="@ViewData["Id"]" id="companyName">       
                                     <i class="icon_menu" style="background:url(../Content/Img/icon_menu_developer.png) no-repeat;"></i>
                                     账户信息
@@ -132,7 +148,18 @@
                     </div>
                 </div>
                 <div class="col_main">
-                    <iframe id="childiframe" src="/FReportMain/Grid"  class="manage_r" style="border:0px;width:100%;height:100%"></iframe>
+                    <div class="main_hd">
+                        <h2 id="main_hd_title">信息</h2>
+                        <div class="title_tab" id="topTab">
+                            <ul class="tab_navs title_tab" data-index="0">
+                                @*<li data-index="0" class="tab_nav first js_top  selected" data-id="dev"><a href="#">配置项</a></li>
+                                <li data-index="1" class="tab_nav  js_top " data-id="group-alert"><a href="#">接口报警</a></li>*@
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="main_hd">
+                        <iframe id="childiframe" src=""  class="manage_r" style="border:0px;width:100%;height:100%"></iframe>
+                    </div>
                 </div>
              </div>
         </div>

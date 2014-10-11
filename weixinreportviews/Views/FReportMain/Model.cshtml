@@ -162,8 +162,13 @@
         };
         var PageAction = function () {
             function GoBack() {
-                var urlaccount = '/FReportMain/Grid';
-                window.parent.ControlIFrame(urlaccount);
+                if (window.parent.init_page != undefined) {
+                    window.parent.init_page();
+                }
+                else {
+                    var urlaccount = '/FReportMain/Grid';
+                    window.parent.ControlIFrame(urlaccount);
+                }
 
             }
             function Look() {
