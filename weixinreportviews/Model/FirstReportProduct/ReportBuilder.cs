@@ -133,7 +133,7 @@ namespace weixinreportviews.Model
         }
     }
 
-    public class ExcelReportBuilder
+    public class ExcelReportBuilderEx
     {
 
         private string _TemplatePath=string.Empty;
@@ -145,7 +145,7 @@ namespace weixinreportviews.Model
           get { return _TemplatePath; }
         }
 
-        public ExcelReportBuilder(string TemplatePath)  { this._TemplatePath=TemplatePath;}
+        public ExcelReportBuilderEx(string TemplatePath)  { this._TemplatePath=TemplatePath;}
 
         /// <summary>
         /// 创建html
@@ -164,9 +164,10 @@ namespace weixinreportviews.Model
                 //if (xele != null) xele.Value = string.IsNullOrEmpty(this.Title) ? "" : this.Title;
                 //xele = mframe.GetXElementById("date");
                 //if (xele != null) xele.Value = this.BuildDate==null?string.Empty:((DateTime)this.BuildDate).ToShortDateString();
-
+                
                 XElement columns = mframe.GetXElementById("columns");
-
+                var wbook=new Aspose.Cells.Workbook(filePath);
+                
                 ExcelReader reader = new ExcelReader(filePath);
                 XElement table = reader.Table();
                 if (table != null)
@@ -245,22 +246,96 @@ namespace weixinreportviews.Model
                 oDoc = new Aspose.Words.Document(filePath);
                 oDoc.Save(savePath,Aspose.Words.SaveFormat.Html);
 
-                Html5Frame wordframe = new Html5Frame(savePath);
-                XElement bodyContent = (XElement)wordframe.body.FirstNode;
-                //XElement body=wordframe.body;
+                try
+                {
+                    Html5Frame wordframe = new Html5Frame(savePath);
+                    XElement bodyContent = (XElement)wordframe.body.FirstNode;
+                    //XElement body=wordframe.body;
 
-                if (bodyContent != null)
-                {
-                    XElement div = mframe.GetXElementById("table");
-                    if (div != null) div.Add(bodyContent);
+                    if (bodyContent != null)
+                    {
+                        XElement div = mframe.GetXElementById("table");
+                        if (div != null) div.Add(bodyContent);
+                    }
+                    //删除word 转换的HTML
+                    if (File.Exists(savePath))
+                    {
+                        File.Delete(savePath);
+                    }
+                    //word 转换后的HTML
+                    mframe.Save(savePath);
                 }
-                //删除word 转换的HTML
-                if (File.Exists(savePath))
+                catch { }
+                if (isDelSource)
                 {
-                    File.Delete(savePath);
+                    File.Delete(filePath);
                 }
-                //word 转换后的HTML
-                mframe.Save(savePath);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+    }
+
+    /// <summary>
+    /// excel 转换成HTML
+    /// </summary>
+    public class ExcelReportBuilder
+    {
+
+        private string _TemplatePath = string.Empty;
+        /// <summary>
+        /// 获取html模板完整路径
+        /// </summary>
+        public string TemplatePath
+        {
+            get { return _TemplatePath; }
+        }
+
+        public ExcelReportBuilder(string TemplatePath) { this._TemplatePath = TemplatePath; }
+        private Aspose.Cells.Workbook oBook;
+        /// <summary>
+        /// 创建html
+        /// </summary>
+        /// <param name="filePath">参照文件完整路径</param>
+        /// <param name="savePath">转换成html后保存的完整路径</param>
+        /// <param name="isDelSource">是否删除参照文件</param>
+        /// <returns></returns>
+        public bool Build(string filePath, string savePath, bool isDelSource = true)
+        {
+            string templatePath = this.TemplatePath;
+            try
+            {
+                Html5Frame mframe = new Html5Frame(templatePath);//模板文件
+
+                
+
+                oBook = new Aspose.Cells.Workbook(filePath);
+                oBook.Save(savePath, Aspose.Cells.SaveFormat.Html);
+                try
+                {
+                    Html5Frame excelframe = new Html5Frame(savePath);
+                    XElement bodyContent = (XElement)excelframe.body.FirstNode;
+                    //XElement body=wordframe.body;
+
+                    if (bodyContent != null)
+                    {
+                        XElement div = mframe.GetXElementById("table");
+                        if (div != null) div.Add(bodyContent);
+                    }
+                    if (File.Exists(savePath))
+                    {
+                        File.Delete(savePath);
+                    }
+                    mframe.Save(savePath);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine(ex.Message);
+                }
                 if (isDelSource)
                 {
                     File.Delete(filePath);

@@ -153,14 +153,25 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             string tempFullPath = string.Empty;
             try
             {
+                //if (fi.Extension.ToLower() == ".xls" || fi.Extension.ToLower() == ".xlsx")
+                //{
+                //    ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.RPTemplatePath);
+                //    erb.Build(path, Path.Combine(PathTools.BaseDirector,
+                //            "temp",
+                //            htmlName));
+
+                //    tempFullPath = Path.Combine(PathTools.TempPath,htmlName);
+                //}
                 if (fi.Extension.ToLower() == ".xls" || fi.Extension.ToLower() == ".xlsx")
                 {
+                    htmlName = "x" + htmlName;
                     ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.RPTemplatePath);
-                    erb.Build(path, Path.Combine(PathTools.BaseDirector,
-                            "temp",
-                            htmlName));
+                    string savePath = Path.Combine(PathTools.BaseDirector,
+                            "temp/" + "x" + fname,
+                            htmlName);
+                    erb.Build(path, savePath);
 
-                    tempFullPath = Path.Combine(PathTools.TempPath,htmlName);
+                    tempFullPath = Path.Combine(PathTools.TempPath, "x" + fname, htmlName);
                 }
                 else if (fi.Extension.ToLower() == ".doc" || fi.Extension.ToLower()==".docx")
                 {
@@ -355,7 +366,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
              var tempType = tempFullFileName.Substring(0, 1);
              var tempFileName = tempFullFileName.Substring(0, tempFullFileName.LastIndexOf("."));  
              
-             if (tempType == "w" && tempFileName.Length > 32)//word 转换
+             if ((tempType=="x" || tempType == "w") && tempFileName.Length > 32)//word excel 转换
              {
                  var copyPath = System.IO.Path.Combine(PathTools.BaseDirector, tempPath.Substring(0, tempPath.LastIndexOf('/'))).Replace("/", "\\");//.Substring(0, tempPath.LastIndexOf('/') - 1).Replace("/","\\"), tempFileName
                  var toPath=System.IO.Path.Combine(newPathDir, id.ToString().Replace("-",""));
@@ -392,7 +403,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
 
              // 子文件夹
              foreach (string sub in Directory.GetDirectories(fromPath))
-                 CopyFolder(sub + "\\", toPath + Path.GetFileName(sub) + "\\",saveFileName);
+                 CopyFolder(sub + "\\", toPath + "\\" + Path.GetFileName(sub) + "\\",saveFileName);
 
              // 文件
              foreach (string file in Directory.GetFiles(fromPath))
@@ -402,12 +413,10 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                  if (extension == ".html")
                  {                    
                      System.IO.File.Copy(file,Path.Combine(toPath,saveFileName), true);
-                    // System.IO.File.Delete(copyPath);
                  }
                  else
                  {
                      System.IO.File.Copy(file, Path.Combine(toPath, Path.GetFileName(file)), true);
-                     //System.IO.File.Delete(file);
                  }
              }
                
