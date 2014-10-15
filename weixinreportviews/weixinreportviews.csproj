@@ -185,6 +185,11 @@
     <Content Include="Content\Img\layerskin\xubox_title0.png" />
     <Content Include="Content\Img\logo1e.ico" />
     <Content Include="Content\Img\manage_01.png" />
+    <Content Include="Content\Img\mobilelogon\baidu_logo_24_056405eb.png" />
+    <Content Include="Content\Img\mobilelogon\input_icons_24_915272c4.png" />
+    <Content Include="Content\Img\mobilelogon\input_icons_48_7ea84398.png" />
+    <Content Include="Content\Img\mobilelogon\pass_login_icons_51c6a837.png" />
+    <Content Include="Content\Img\mobilelogon\pass_login_icons_retina_bd1d5228.png" />
     <Content Include="Content\Img\mp_qrcode1e7d69.gif" />
     <Content Include="Content\Img\page_login_old_z1fcd41.png" />
     <Content Include="Content\Img\search.png" />

@@ -3,109 +3,448 @@
 }
 
 <!DOCTYPE html>
-<head>  
-<meta http-equiv="content-type" content="text/html;charset=utf-8">  
-<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
- <link href="../../Content/Css/Logon/mlogon.css" rel="stylesheet" type="text/css" />
- <script>
-    （function(){
-        var n='a1';
-        n++;
-        alert(n);
-    })()
- </script>
- <title>公众平台登录</title>  
- </head>
- <body>
-     <div class="wrapper login-panel">            
-            <h3>登录</h3>      
-            <div class="login-mod">  
-            <div class="login-err-panel dn" id="err_area">   <span class="vm" id="err_tips"></span>  </div>     
-              
-            <form class="login-form" id="login-form">    
-                <div class="login-un">      
-                    <span class="icon-wrapper"><i class="icon_login un"></i></span>      
-                    <input type="text" id="account" placeholder="企业账号">   
-                 </div>    
-             <div class="login-pwd">      
-                <span class="icon-wrapper"><i class="icon_login pwd"></i></span>      
-                <input type="password" id="password" placeholder="密码">    </div>  
-            </form>  
-  
-         <div class="login-help-panel">    <a id="rememberPwd" class="login-remember-pwd" href="javascript:;">
-         <i id="rememberPwdIcon" class="icon_login checkbox"></i>记住帐号</a>   
-          </div> 
-           <div class="login-btn-panel">    <a class="login-btn" title="点击登录" href="javascript:;" id="login_button">登录</a> 
-            </div>  </div>    </div>
-     <script src="../../Scripts/zepto-1.1.4.min.js" type="text/javascript"></script>
-     <script src="../../Scripts/mobileLogon.js" type="text/javascript"></script>
-     <script>
-         (function (jQ) {
-             var loginForm = jQ("#login-form"),
-                account$ = jQ("#account");
-
-            // var cookie_acct = WXM.Helpers.getCookie("remember_acct");
-            // if (cookie_acct === undefined) {
-           //      jQ("#rememberPwdIcon").removeClass("checkbox_checked");
-           //  } else if (cookie_acct.length) {
-                 //account$.attr("value", WXM.Helpers.getCookie("remember_acct"));
-          //   }
 
 
-        account$.focus(function () {
-            loginForm.addClass("login_on_un");
-        })
-        .blur(function () {
-            loginForm.removeClass("login_on_un");
-        });
 
-        jQ("#password").focus(function () {
-            loginForm.addClass("login_on_pwd");
-        }).blur(function () {
-            loginForm.removeClass("login_on_pwd");
-        });
+ <head>
+    <title>登录正信元账号</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    
+    <style>
+        *
+        {
+        	margin:0;
+        	padding:0;
+        	/*font: 14px/18px arial,"宋体b8b\4f53",sans-serif,"Microsoft YaHei",tahoma;*/
+        	font: 12px/1.5em "微软雅黑", Helvetica, sans-serif;
+        	list-style: none;
+        }
+        /*取消mobile浏览器去掉高亮边框*/
+        input
+        {
+            /*两个属性不能同时用，否则会有问题*/
+            -webkit-tap-highlight-color:transparent; /*rgba(0,0,0,0); android 4.0以下*/ /*Overrides the highlight color shown when the user taps a link or a JavaScript clickable element in Safari on iPhone.*/
+            /*-webkit-user-modify:read-write-plaintext-only;*/ /*android 4.0以上*/ /*作用是去掉输入框聚焦时候的白色背景*/
+        }
+        /*=======*/
+        .header
+        {
+        	background-color: #f7f7f7;
+            border-bottom: 1px solid #e3e3e3;
+            height:50px;
+            width:auto;
+            text-align:center;
+        }
+        .header .title-text
+        {
+        	height:18px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #666;
+            background: url(../../Content/Img/mobilelogon/baidu_logo_24_056405eb.png) 18px 8px no-repeat;
+            background-image: -webkit-image-set(url(../../Content/Img/mobilelogon/baidu_logo_24_056405eb.png) 1x,url(../../Content/Img/mobilelogon/baidu_logo_48_cbe2e538.png) 2x);
+            background-image: -moz-image-set(url(../../Content/Img/mobilelogon/baidu_logo_24_056405eb.png) 1x,url(../../Content/Img/mobilelogon/baidu_logo_48_cbe2e538.png) 2x);
+            background-image: -o-image-set(url(../../Content/Img/mobilelogon/baidu_logo_24_056405eb.png) 1x,url(../../Content/Img/mobilelogon/baidu_logo_48_cbe2e538.png) 2x);
+            background-image: -ms-image-set(url(../../Content/Img/mobilelogon/baidu_logo_24_056405eb.png) 1x,url(../../Content/Img/mobilelogon/baidu_logo_48_cbe2e538.png) 2x);
+            
+            padding: 15px 0px 13px 45px;
+            
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-sizing: content-box;
+        }
+      
+        .footer
+        {
+        	text-align:center;
+        	padding-top: 30px;
+        }
+        .footer-text
+        {
+        	width: auto;
+        	font-size: 14px;
+        }
         
-        jQ("#rememberPwd").click(function () {
-            var icon = jQ("#rememberPwdIcon");
-            if (icon.hasClass("checkbox_checked")) {
-                icon.removeClass("checkbox_checked");
-            } else {
-                icon.addClass("checkbox_checked");
-            }
-             });
-
-
-             var _loginForm = createLoginForm({
-                 target: '#login-form', //'<div></div>'
-                 //html     : '<Above>',
-
-                 selector: {
-                     account: '#account',
-                     name: '#name',
-                     password: '#password',
-                     verify: '#verify',
-                     verifyArea: '#verify_area',
-                     verifyImg: '#imgVerify',
-                     changeImgLink: '#changeimg_link',
-                     loginBtn: '#login_button',
-                     rememberAcct: '#rememberPwdIcon',
-                     errorArea: '#err_area',
-                     error: '#err_tips'
-                 }
-
-             });
-
-//             WXM.Event.notify('WXM:init:finish');
-             setTimeout(function () {
-                 account$.focus();
-             }, 10);
-         })(Zepto);
+        .pass-login
+        {
+        	padding-left:3%;
+        	padding-right:3%;
+        	font: 14px/18px arial,"宋体b8b\4f53",sans-serif,"Microsoft YaHei",tahoma;
+        }
+        .pass-login a 
+        {
+            font-size: 12px;
+            text-decoration: none;
+            color: #1b66c7;
+            font-family: Arial, Helvetica, STHeiti,"宋体";
+        }
+        .pass-login .pass-text-input {
+            display: block;
+            position: relative;
+            height: 16px;
+            padding: 12px 0px 12px 0px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            color: #666;
+            transition: .3s;
+            -moz-transition: .3s;
+            -o-transition: .3s;
+            -webkit-transition: .3s;
+        }
+        .pass-login input, 
+        .pass-login textarea, 
+        .pass-login select 
+        {
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+            box-sizing: content-box;
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            -ms-box-sizing: content-box;
+            transition: none;
+            -moz-transition: none;
+            -o-transition: none;
+            -webkit-transition: none;
+            outline: none;
+        }
+        .pass-login label.pass-label-userName, 
+        .pass-login label.pass-label-password, 
+        .pass-login label.pass-label-smsPhone 
+        {
+            background-image: url(input_icons_24_915272c4.png);
+            background-image: -webkit-image-set(url(../../Content/Img/mobilelogon/input_icons_24_915272c4.png) 1x,url(../../Content/Img/mobilelogon/input_icons_48_7ea84398.png) 2x);
+            background-image: -moz-image-set(url(../../Content/Img/mobilelogon/input_icons_24_915272c4.png) 1x,url(../../Content/Img/mobilelogon/input_icons_48_7ea84398.png) 2x);
+            background-image: -o-image-set(url(../../Content/Img/mobilelogon/input_icons_24_915272c4.png) 1x,url(../../Content/Img/mobilelogon/input_icons_48_7ea84398.png) 2x);
+            background-image: -ms-image-set(url(../../Content/Img/mobilelogon/input_icons_24_915272c4.png) 1x,url(../../Content/Img/mobilelogon/input_icons_48_7ea84398.png) 2x);
+        }
+        .pass-login label.pass-label-userName, 
+        .pass-login label.pass-label-password, 
+        .pass-login label.pass-label-smsPhone 
+        {
+            display: block;
+            position: absolute;
+            top: 8px;
+            left: 6px;
+            width: 0;
+            height: 24px;
+            overflow: hidden;
+            padding: 0 0 0 24px;
+            background-image: url(../../Content/Img/mobilelogon/input_icons_24_915272c4.png);
+            background-repeat: no-repeat;
+            z-index: 20;
+        }
+        .pass-login label.pass-label-userName 
+        {
+            background-position: 0 -68px;
+        }
+        .pass-login label.pass-label-userName-focus 
+        {
+            background-position: 0 -108px;
+        }
+        .pass-login label.pass-label-password 
+        {
+            background-position: 0 -147px;
+        }
+        .pass-login label.pass-label-password-foucs 
+        {
+            background-position: 0 -187px;
+        }
+        .pass-login input.pass-text-input-userName, 
+        .pass-login input.pass-text-input-smsPhone, 
+        .pass-login input.pass-text-input-password 
+        {
+        	padding-left: 15%;
+            width:85%;
+            
+        }
+        .pass-login span.pass-generalError
+        {
+        	display: block;
+            height: 30px;
+            line-height: 30px;
+            font-size: 12px;
+            color: #fc4343;
+        }
+        .pass-login .pass-form-item 
+        {
+            position: relative;
+            margin: 0;
+            margin-bottom: 15px;
+            z-index: 18;
+        }
+        .pass-login .pass-form-item-userName
+        {
+        	z-index: 19;
+        }
+        .pass-login .pass-form-item .pass-clearbtn 
+        {
+            position: absolute;
+            top: 14px;
+            right: 12px;
+            height: 16px;
+            width: 16px;
+            background: url(../../Content/Img/mobilelogon/pass_login_icons_51c6a837.png) no-repeat -88px -48px;
+            background-image: -webkit-image-set(url(../../Content/Img/mobilelogon/pass_login_icons_51c6a837.png) 1x,url(../../Content/Img/mobilelogon/pass_login_icons_retina_bd1d5228.png) 2x);
+            background-image: -moz-image-set(url(../../Content/Img/mobilelogon/pass_login_icons_51c6a837.png) 1x,url(../../Content/Img/mobilelogon/pass_login_icons_retina_bd1d5228.png) 2x);
+            background-image: -o-image-set(url(../../Content/Img/mobilelogon/pass_login_icons_51c6a837.png) 1x,url(../../Content/Img/mobilelogon/pass_login_icons_retina_bd1d5228.png) 2x);
+            background-image: -ms-image-set(url(../../Content/Img/mobilelogon/pass_login_icons_51c6a837.png) 1x,url(../../Content/Img/mobilelogon/pass_login_icons_retina_bd1d5228.png) 2x);
+            cursor: pointer;
+        }
+        .pass-login .pass-suggestion-list 
+        {
+            position: absolute;
+            top: 42px;
+            _top: 43px;
+            left: 0;
+            border: 1px solid #dedede;
+            border-top: none;
+            background: #fff;
+            transition: .3s;
+            -moz-transition: .3s;
+            -o-transition: .3s;
+            -webkit-transition: .3s;
+            width:380px;
+        }
+        .pass-login .pass-form-item .pass-item-selectbtn-userName 
+        {
+        	right:28px;
+            position: absolute;
+            display: block;
+            height: 24px;
+            width: 24px;
+            /*background: url(../img/pass_login_icons_51c6a837.png) no-repeat -160px 0;
+            background-image: -webkit-image-set(url(../img/pass_login_icons_51c6a837.png) 1x,url(../img/pass_login_icons_retina_bd1d5228.png) 2x);
+            background-image: -moz-image-set(url(../img/pass_login_icons_51c6a837.png) 1x,url(../img/pass_login_icons_retina_bd1d5228.png) 2x);
+            background-image: -o-image-set(url(../img/pass_login_icons_51c6a837.png) 1x,url(../img/pass_login_icons_retina_bd1d5228.png) 2x);
+            background-image: -ms-image-set(url(../img/pass_login_icons_51c6a837.png) 1x,url(../img/pass_login_icons_retina_bd1d5228.png) 2x);*/
+            top: 10px;
+            right: 31px;
+            cursor: pointer;
+        }
+        .pass-login .pass-form-item.pass-form-item-memberPass 
+        {
+            height: 15px;
+            display:none;
+        }
+        .pass-login .pass-form-item-memberPass input 
+        {
+            vertical-align: middle;
+        }
+        .pass-login .pass-form-item-memberPass label 
+        {
+            display: inline;
+            color: #666;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        .pass-login .pass-button 
+        {
+            display: block;
+            height: 48px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
+            background: #3f89ec;
+            border-radius: 3px;
+            border: none;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            transition: .3s;
+            -moz-transition: .3s;
+            -o-transition: .3s;
+            -webkit-transition: .3s;
+            -moz-background-clip: padding;
+            -webkit-background-clip: padding-box;
+            background-clip: padding-box;
+            background-color: #3f89ec;
+        }
+        .pass-login input[type='submit'] 
+        {
+        	-webkit-appearance: none;
+            box-sizing: content-box;
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            -ms-box-sizing: content-box;
+            background-image: none;
+            width: 100%;
+        }
+        .pass-login .pass-form-item-submit .pass-sms-link-back, 
+        .pass-login .pass-form-item-submit .pass-reglink 
+        {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            _right: 0;
+            cursor: pointer;
+            
+        }
+        .pass-login .pass-form-item-submit .pass-fgtpwd {
+            position: absolute;
+            top: -28px;
+            right: 0;
+            _right: 0;
+            display:none;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#TANGRAM__PSP_8__userName").on('focus', function (e) {
+                $("#TANGRAM__PSP_8__userNameLabel").addClass("pass-label-userName-focus");
+            });
+            $("#TANGRAM__PSP_8__userName").on('blur', function () {
+                $("#TANGRAM__PSP_8__userNameLabel").removeClass("pass-label-userName-focus");
+            });
+            $("#TANGRAM__PSP_8__password").on('focus', function (e) {
+                $("#TANGRAM__PSP_8__passwordLabel").addClass("pass-label-password-foucs");
+            });
+            $("#TANGRAM__PSP_8__password").on('blur', function () {
+                $("#TANGRAM__PSP_8__passwordLabel").removeClass("pass-label-password-foucs");
+            });
+            $("#TANGRAM__PSP_8__userName").on('input', function () {
+                var val = $(this).val();
+                if (val.length > 0) {
+                    $("#TANGRAM__PSP_8__userName_clearbtn").css("display", "block");
+                }
+                else {
+                    $("#TANGRAM__PSP_8__userName_clearbtn").css("display", "none");
+                }
+            });
+            $("#TANGRAM__PSP_8__userName_clearbtn").on('tap', function () {
+                var ele = $("#TANGRAM__PSP_8__userName");
+                ele.val('');
+                ele.focus();
+                $(this).css("display", "none");
+            });
+            $("#TANGRAM__PSP_8__password").on('input', function () {
+                var val = $(this).val();
+                if (val.length > 0) {
+                    $("#TANGRAM__PSP_8__password_clearbtn").css("display", "block");
+                }
+                else {
+                    $("#TANGRAM__PSP_8__password_clearbtn").css("display", "none");
+                }
+            });
+            $("#TANGRAM__PSP_8__password_clearbtn").on('tap', function (e) {
+                var ele = $("#TANGRAM__PSP_8__password");
+                ele.val('');
+                ele.focus();
+                $(this).css("display", "none");
+            });
+        });
     </script>
-    <script language="JavaScript">
+</head>
+<body>
+    
+    <div class="header">
+        <span class="title-text">登录正信元账号</span>
+    </div>
+    
+    <div class="pass-login">
+        <form id="TANGRAM__PSP_8__form" class="pass-form pass-form-normal" method="POST" autocomplete="off">
+            <p id="TANGRAM__PSP_8__errorWrapper" class="pass-generalErrorWrapper">
+                <span id="TANGRAM__PSP_8__error" class="pass-generalError pass-generalError-error"></span>
+            </p>
+            <p id="TANGRAM__PSP_8__hiddenFields" style="display:none">
+                <input type="hidden" id="TANGRAM__PSP_8__codeString" name="codeString" value=""/>
+                <input type="hidden" id="TANGRAM__PSP_8__safeFlag" name="safeFlag" value="0"/>
+                <input type="hidden" id="TANGRAM__PSP_8__u" name="u" value=""/>
+                <input type="hidden" id="TANGRAM__PSP_8__isPhone" name="isPhone" value="false"/>
+                <input type="hidden" id="TANGRAM__PSP_8__staticPage" name="staticPage" value=""/>
+                <input type="hidden" id="TANGRAM__PSP_8__quick_user" name="quick_user" value="0"/>
+                <input type="hidden" id="TANGRAM__PSP_8__logintype" name="logintype" value="dialogLogin"/>
+                <input type="hidden" id="TANGRAM__PSP_8__logLoginType" name="logLoginType" value="pc_loginDialog"/>
+                <input type="hidden" id="TANGRAM__PSP_8__subpro" name="subpro" value=""/>
+                <input type="hidden" id="TANGRAM__PSP_8__idc" name="idc" value=""/>
+                <input type="hidden" id="TANGRAM__PSP_8__loginMerge" name="loginMerge" value="true"/>
+             </p>
+            <p id="TANGRAM__PSP_8__userNameWrapper" class="pass-form-item pass-form-item-userName" style="display:">
+                <label for="TANGRAM__PSP_8__userName" id="TANGRAM__PSP_8__userNameLabel" class="pass-label pass-label-userName">手机/邮箱/用户名</label>
+                <input id="TANGRAM__PSP_8__userName" type="text" name="userName" class="pass-text-input pass-text-input-userName open" autocomplete="off" placeholder="手机/邮箱/用户名"/>
+                <span id="TANGRAM__PSP_8__userName_clearbtn" class="pass-clearbtn pass-clearbtn-userName" style="display: none; visibility: visible; opacity: 1;"></span>
+                <span id="TANGRAM__PSP_8__userNameTip" class="pass-item-tip pass-item-tip-userName" style="display:none">
+                    <span id="TANGRAM__PSP_8__userNameTipText" class="pass-item-tiptext pass-item-tiptext-userName"></span>
+                </span>
+                <ul id="TANGRAM__PSP_8__suggestionWrapper" class="pass-suggestion-list" style="display: none; visibility: hidden; opacity: 1;">
+                    <li class="pass-item-suggsetion" data-select="lbmax0211" data-type="history">lbmax0211
+                        <a data-delete="lbmax0211" title="删除该记录"></a>
+                    </li>
+                </ul>
+                <span class="pass-item-selectbtn pass-item-selectbtn-userName" style="display: none; visibility: hidden; opacity: 1;"></span>
+             </p>
+            <p id="TANGRAM__PSP_8__passwordWrapper" class="pass-form-item pass-form-item-password" style="display:">
+                <label for="TANGRAM__PSP_8__password" id="TANGRAM__PSP_8__passwordLabel" class="pass-label pass-label-password">密码</label>
+                <input id="TANGRAM__PSP_8__password" type="password" name="password" class="pass-text-input pass-text-input-password" placeholder="密码"/>
+                <span id="TANGRAM__PSP_8__password_clearbtn" class="pass-clearbtn pass-clearbtn-password" style="display:none;visibility: visible; opacity: 1;"></span>
+                <span id="TANGRAM__PSP_8__passwordTip" class="pass-item-tip pass-item-tip-password" style="display:none">
+                    <span id="TANGRAM__PSP_8__passwordTipText" class="pass-item-tiptext pass-item-tiptext-password"></span>
+                </span>
+             </p>
+            <p id="TANGRAM__PSP_8__verifyCodeImgWrapper" class="pass-form-item pass-form-item-verifyCode" style="display:none">
+                <label for="TANGRAM__PSP_8__verifyCode" id="TANGRAM__PSP_8__verifyCodeLabel" class="pass-label pass-label-verifyCode">验证码</label>
+                <input id="TANGRAM__PSP_8__verifyCode" type="text" name="verifyCode" class="pass-text-input pass-text-input-verifyCode" maxlength="6" placeholder="验证码"/>
+                <span id="TANGRAM__PSP_8__verifyCodeImgParent" class="pass-verifyCodeImgParent">
+                    <img id="TANGRAM__PSP_8__verifyCodeImg" class="pass-verifyCode" src=""/>
+                </span>
+                <a id="TANGRAM__PSP_8__verifyCodeChange" href="#" class="pass-change-verifyCode">换一张</a>
+                <span id="TANGRAM__PSP_8__verifyCodeError" class="pass-error pass-error-verifyCode"></span>
+                <span id="TANGRAM__PSP_8__verifyCodeTip" class="pass-tip pass-tip-verifyCode"></span>
+                <span id="TANGRAM__PSP_8__verifyCodeSuccess" class="pass-success pass-success-verifyCode"></span>
+             </p>
+            <p id="TANGRAM__PSP_8__memberPassWrapper" class="pass-form-item pass-form-item-memberPass">
+                <input id="TANGRAM__PSP_8__memberPass" type="checkbox" name="memberPass" class="pass-checkbox-input pass-checkbox-memberPass" checked="checked"/>
+                <label for="TANGRAM__PSP_8__memberPass" id="TANGRAM__PSP_8__memberPassLabel" class="">下次自动登录</label>
+             </p>
+            <p id="TANGRAM__PSP_8__submitWrapper" class="pass-form-item pass-form-item-submit">
+                <input id="TANGRAM__PSP_8__submit" type="submit" value="登录" class="pass-button pass-button-submit"/>
+                <a class="pass-reglink" href="#" target="_blank">忘记密码？</a>
+                <a class="pass-fgtpwd" href="#" target="_blank">立即注册</a>
+             </p>
+        </form>
+    </div>
+    <div class="footer">
+        <span class="footer-text">©2014&nbsp;Baoth&nbsp;</span>
+    </div>
+    <script src="../../Scripts/zepto-1.1.4.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/zepto.touch.js" type="text/javascript"></script>
+    <script src="../../Scripts/mobileLogon.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        (function (jQ) {
+            var loginForm = jQ("#TANGRAM__PSP_8__form"),
+                account$ = jQ("#TANGRAM__PSP_8__userName");
+            var _loginForm = createLoginForm({
+                target: '#TANGRAM__PSP_8__form', //'<div></div>'
+                //html     : '<Above>',
+
+                selector: {
+                    account: '#TANGRAM__PSP_8__userName',
+                    name: '#name',
+                    password: '#TANGRAM__PSP_8__password',
+                    verify: '#verify',
+                    verifyArea: '#verify_area',
+                    verifyImg: '#imgVerify',
+                    changeImgLink: '#changeimg_link',
+                    loginBtn: '#TANGRAM__PSP_8__submit',
+                    rememberAcct: '#rememberPwdIcon',
+                    errorArea: '#TANGRAM__PSP_8__errorWrapper',
+                    error: '#TANGRAM__PSP_8__error'
+                }
+
+            });
+
+            setTimeout(function () {
+                account$.focus();
+            }, 10);
+        })(Zepto);
+    </script>
+    <script type="text/javascript">
         $(document).ready(function () {
             if (window != top) {
                 top.location.href = location.href;
             }
         })        
     </script>
- </body>
+</body>
