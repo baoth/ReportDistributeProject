@@ -85,10 +85,15 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     {
                         var entity = new CS_FirstReport { Id = Guid.Parse(ids[i]) };
                         session.Context.DeleteEntity(entity.CreateDeleteCommand());
-                        var filePath = PathTools.SaveHtmlPath + "\\" + customInfo.Account.Id.ToString().Replace("-", "") + "\\" + entity.Id.ToString().Replace("-", "") + ".html";
-                        if (System.IO.File.Exists(filePath))
+                        var dir = Path.Combine(PathTools.SaveHtmlPath, customInfo.Account.Id.ToString().Replace("-", ""), entity.Id.ToString().Replace("-", ""));
+                        //var filePath = PathTools.SaveHtmlPath + "\\" + customInfo.Account.Id.ToString().Replace("-", "") + "\\" + entity.Id.ToString().Replace("-", "") + ".html";
+                        //if (System.IO.File.Exists(filePath))
+                        //{
+                        //    paths.Add(filePath);
+                        //}
+                        if (System.IO.Directory.Exists(dir))
                         {
-                            paths.Add(filePath);
+                            paths.Add(dir);
                         }
                     }
                 }
@@ -98,7 +103,8 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     session.Context.SaveChange();
                     foreach (var item in paths)
 	                {
-                        System.IO.File.Delete(item);
+                        //System.IO.File.Delete(item);
+                        System.IO.Directory.Delete(item,true);
 	                }
                   
                     return Json(new { result = 0 });
@@ -165,11 +171,16 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 if (fi.Extension.ToLower() == ".xls" || fi.Extension.ToLower() == ".xlsx")
                 {
                     htmlName = "x" + htmlName;
-                    ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.RPTemplatePath);
+                    //ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.RPTemplatePath);
+                    ExcelReportBuilderEx erb = new ExcelReportBuilderEx(PathTools.RPTemplatePath);
                     string savePath = Path.Combine(PathTools.BaseDirector,
                             "temp/" + "x" + fname,
                             htmlName);
-                    erb.Build(path, savePath);
+                    //erb.Build(path, savePath);
+
+                    erb.Build(path, Path.Combine(PathTools.BaseDirector,
+                            "temp/" + "x" + fname), "x" + fname);
+                            
 
                     tempFullPath = Path.Combine(PathTools.TempPath, "x" + fname, htmlName);
                 }

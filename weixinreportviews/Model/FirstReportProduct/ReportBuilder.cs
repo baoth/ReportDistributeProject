@@ -190,7 +190,68 @@ namespace weixinreportviews.Model
             }
             
         }
+        /// <summary>
+        /// 创建html
+        /// </summary>
+        /// <param name="filePath">参照文件完整路径</param>
+        /// <param name="savePath">转换成html后保存的文件夹路径</param>
+        /// <param name="savefileName">保存的文件名（无后缀）</param>
+        /// <param name="isDelSource">是否删除参照文件</param>
+        /// <returns></returns>
+        public bool Build(string filePath, string savePath, string savefileName, bool isDelSource = true)
+        {
+            string templatePath = this.TemplatePath;
+            try
+            {
+                Html5Frame mframe = new Html5Frame(templatePath);
 
+                //XElement columns = mframe.GetXElementById("columns");
+                var wbook = new Aspose.Cells.Workbook(filePath);
+
+                string chartdir = Path.Combine(savePath, savefileName);
+                string savefile = Path.Combine(savePath, savefileName + ".html");
+
+                if (System.IO.Directory.Exists(chartdir)) System.IO.Directory.Delete(chartdir);
+                System.IO.Directory.CreateDirectory(chartdir);
+
+                for (int i = 0; i < wbook.Worksheets.Count; i++)
+                {
+                    var wsheet = wbook.Worksheets[i];
+                    ExcelSheetReader reader = new ExcelSheetReader(wsheet);
+                    XElement table = reader.Table();
+                    XElement div = mframe.GetXElementById("table");
+                    if (table != null)
+                    {
+                        if (div != null) div.Add(table);
+                    }
+                    for (int j = 0; j < wsheet.Charts.Count; j++)
+                    {
+                        Aspose.Cells.Charts.Chart mchart = wsheet.Charts[j];
+                        string imagename = "sheet_" + i + "img_" + j + ".jpg";
+                        mchart.ToImage(Path.Combine(chartdir, imagename));
+                        XElement img = new XElement("img");
+                        XAttribute src = new XAttribute("src", savefileName + "/" + imagename);
+                        XAttribute alt = new XAttribute("alt", imagename);
+                        img.Add(src);
+                        img.Add(alt);
+                        if (div != null) div.Add(img);
+                    }
+
+                }
+                mframe.Save(savefile);
+
+                if (isDelSource)
+                {
+                    File.Delete(filePath);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
         
         private void AddColumn(XElement container, string field, string title, string align)
         {
