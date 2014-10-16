@@ -28,7 +28,12 @@ namespace weixinreportviews.Controllers
             try
             {
                 DbSession session = General.CreateDbSession();
+                session.Context.CreateTable<SS_CompanyAccount>();
+                session.Context.CreateTable<SS_Lisence>();
+                session.Context.CreateTable<CS_UserAttention>();
+                session.Context.CreateTable<CS_BindUser>();
                 session.Context.CreateTable<CS_FirstReport>();
+                
                 session.Context.SaveChange();
              return  Json("=====创建完成=======", JsonRequestBehavior.AllowGet);
             }
