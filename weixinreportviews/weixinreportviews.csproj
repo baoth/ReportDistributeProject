@@ -208,10 +208,12 @@
     <Content Include="Content\Css\layer.ext.css" />
     <Content Include="Content\themes\Report\SimpleFrame.css" />
     <Content Include="Global.asax" />
+    <Content Include="ReportViews\ReportTemplete\ExcelReportModul.html" />
     <Content Include="ReportViews\ReportTemplete\ReportModul.html" />
     <Content Include="Scripts\accountindex.js" />
     <Content Include="Scripts\dropzone.js" />
     <Content Include="Scripts\dropzone.min.js" />
+    <Content Include="Scripts\iscroll.js" />
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\mobileLogon.js" />
     <Content Include="Scripts\numeralInput.js" />

@@ -86,11 +86,6 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                         var entity = new CS_FirstReport { Id = Guid.Parse(ids[i]) };
                         session.Context.DeleteEntity(entity.CreateDeleteCommand());
                         var dir = Path.Combine(PathTools.SaveHtmlPath, customInfo.Account.Id.ToString().Replace("-", ""), entity.Id.ToString().Replace("-", ""));
-                        //var filePath = PathTools.SaveHtmlPath + "\\" + customInfo.Account.Id.ToString().Replace("-", "") + "\\" + entity.Id.ToString().Replace("-", "") + ".html";
-                        //if (System.IO.File.Exists(filePath))
-                        //{
-                        //    paths.Add(filePath);
-                        //}
                         if (System.IO.Directory.Exists(dir))
                         {
                             paths.Add(dir);
@@ -103,7 +98,6 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     session.Context.SaveChange();
                     foreach (var item in paths)
 	                {
-                        //System.IO.File.Delete(item);
                         System.IO.Directory.Delete(item,true);
 	                }
                   
@@ -116,6 +110,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             }
             return Json(new { result = 0 });
         }
+
         public ActionResult UploadView ()
         {
            return View("Upload");
@@ -172,13 +167,13 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 {
                     htmlName = "x" + htmlName;
                     //ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.RPTemplatePath);
-                    ExcelReportBuilderEx erb = new ExcelReportBuilderEx(PathTools.RPTemplatePath);
+                    ExcelReportBuilderEx erb = new ExcelReportBuilderEx(PathTools.ExcelRPTemplatePath);
                     string savePath = Path.Combine(PathTools.BaseDirector,
                             "temp/" + "x" + fname,
                             htmlName);
                     //erb.Build(path, savePath);
 
-                    erb.Build(path, Path.Combine(PathTools.BaseDirector,
+                    erb.BuildEx(path, Path.Combine(PathTools.BaseDirector,
                             "temp/" + "x" + fname), "x" + fname);
                             
 

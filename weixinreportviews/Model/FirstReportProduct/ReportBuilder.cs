@@ -133,6 +133,66 @@ namespace weixinreportviews.Model
         }
     }
 
+    public class ExcelReportModul:Html5Frame
+    {
+        private int tabIndex=0;
+
+        /// <summary>
+        /// 页签
+        /// </summary>
+        public XElement Tabs = null;
+
+        /// <summary>
+        /// 页签内容
+        /// </summary>
+        public XElement Sheets = null;
+
+        public ExcelReportModul(string frameurl)
+            : base(frameurl)
+        {
+            Tabs = this.GetXElementById("tabs");
+            Sheets = this.GetXElementById("scroller");
+        }
+
+        /// <summary>
+        /// 添加页签项
+        /// </summary>
+        /// <param name="tabName">页签项名称</param>
+        /// <returns>页签项</returns>
+        public XElement AddTab(string tabName)
+        {
+            if (Tabs != null)
+            {
+                string classattr = tabIndex == 0 ? "tab_nav first" : "tab_nav";
+                XAttribute tclass = new XAttribute("class", classattr);
+                XAttribute tabindex = new XAttribute("tabindex", tabIndex);
+                XElement li = new XElement("li", tclass, tabindex);
+                XElement a = new XElement("a",tabName);
+                li.Add(a);
+                Tabs.Add(li);
+                tabIndex++;
+                return li;
+            }
+
+            return null;
+        }
+        /// <summary>
+        /// 添加页签内容页
+        /// </summary>
+        /// <returns>页签内容页</returns>
+        public XElement AddSheet()
+        {
+            if (Sheets != null)
+            {
+                XAttribute tclass = new XAttribute("class", "sheet");
+                XElement div = new XElement("div", tclass);
+                Sheets.Add(div);
+                return div;
+            }
+            return null;
+        }
+    }
+
     public class ExcelReportBuilderEx
     {
 
@@ -205,7 +265,6 @@ namespace weixinreportviews.Model
             {
                 Html5Frame mframe = new Html5Frame(templatePath);
 
-                //XElement columns = mframe.GetXElementById("columns");
                 var wbook = new Aspose.Cells.Workbook(filePath);
 
                 string chartdir = Path.Combine(savePath, savefileName);
@@ -247,6 +306,63 @@ namespace weixinreportviews.Model
                 return true;
             }
             catch
+            {
+                return false;
+            }
+
+        }
+
+
+        /// <summary>
+        /// 创建html
+        /// </summary>
+        /// <param name="filePath">参照文件完整路径</param>
+        /// <param name="savePath">转换成html后保存的文件夹路径</param>
+        /// <param name="savefileName">保存的文件名（无后缀）</param>
+        /// <param name="isDelSource">是否删除参照文件</param>
+        /// <returns></returns>
+        public bool BuildEx(string filePath, string savePath, string savefileName, bool isDelSource = true)
+        {
+            string templatePath = this.TemplatePath;
+            try
+            {
+                ExcelReportModul mframe = new ExcelReportModul(templatePath);
+
+                var wbook = new Aspose.Cells.Workbook(filePath);
+
+                string chartdir = Path.Combine(savePath, savefileName);
+                string savefile = Path.Combine(savePath, savefileName + ".html");
+
+                if (System.IO.Directory.Exists(chartdir)) System.IO.Directory.Delete(chartdir);
+                System.IO.Directory.CreateDirectory(chartdir);
+
+                for (int i = 0; i < wbook.Worksheets.Count; i++)
+                {
+                    var wsheet = wbook.Worksheets[i];
+                    ExcelSheetReader reader = new ExcelSheetReader(wsheet);
+                    XElement table = reader.Table();
+                    List<XElement> charts = reader.Charts(savePath, savefileName);
+                    if (table == null && charts == null) continue;
+                    mframe.AddTab(wsheet.Name);
+                    var framesheet = mframe.AddSheet();
+                    if (framesheet != null)
+                    {
+                        if (table != null) framesheet.Add(table);
+                        foreach (XElement xe in charts)
+                        {
+                            framesheet.Add(xe);
+                        }
+                    }
+                }
+                mframe.Save(savefile);
+
+                if (isDelSource)
+                {
+                    File.Delete(filePath);
+                }
+                return true;
+            }
+            catch(Exception ex)
             {
                 return false;
             }

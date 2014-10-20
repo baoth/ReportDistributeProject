@@ -124,7 +124,9 @@ namespace weixinreportviews.Model
             
             XAttribute cellpadding = new XAttribute("cellpadding", 0);
             XAttribute cellspacing = new XAttribute("cellspacing", 0);
-            XElement table = new XElement("table", cellpadding, cellspacing);
+            XAttribute rules = new XAttribute("rules", "all");
+            XAttribute styles = new XAttribute("style", "border-top:1px;border-bottom:1px;border-left:1px;border-right:1px;");
+            XElement table = new XElement("table", cellpadding, cellspacing, rules, styles);
 
             int colCount = this.ws.Cells.MaxColumn;
             int rowCount = this.ws.Cells.MaxRow;
@@ -280,13 +282,15 @@ namespace weixinreportviews.Model
         /// <returns></returns>
         public XElement Table()
         {
-
+            bool hasNode = false;
             if (this.ws == null) return null;
 
 
             XAttribute cellpadding = new XAttribute("cellpadding", 0);
             XAttribute cellspacing = new XAttribute("cellspacing", 0);
-            XElement table = new XElement("table", cellpadding, cellspacing);
+            XAttribute rules = new XAttribute("rules", "all");
+            XAttribute styles = new XAttribute("style", "border-top:1px;border-bottom:1px;border-left:1px;border-right:1px;");
+            XElement table = new XElement("table", cellpadding, cellspacing, rules, styles);
 
             int colCount = this.ws.Cells.MaxColumn;
             int rowCount = this.ws.Cells.MaxRow;
@@ -321,8 +325,37 @@ namespace weixinreportviews.Model
                     }
                 }
                 table.Add(tr);
+                hasNode = true;
             }
-            return table;
+
+            return hasNode ? table : null;
+        }
+
+        /// <summary>
+        /// 转换图形为XDocument元素
+        /// </summary>
+        /// <param name="savePath">转换成html后保存的文件夹路径</param>
+        /// <param name="savefileName">保存的文件名（无后缀）</param>
+        /// <returns></returns>
+        public List<XElement> Charts(string savePath, string savefileName)
+        {
+            List<XElement> results = new List<XElement>();
+            string saveDirectory = Path.Combine(savePath, savefileName);
+            for (int j = 0; j < ws.Charts.Count; j++)
+            {
+                Aspose.Cells.Charts.Chart mchart = ws.Charts[j];
+                string imagename = "sheet_" + ws.Index + "img_" + j + ".jpg";
+                mchart.ToImage(Path.Combine(saveDirectory, imagename));
+                
+                XAttribute src = new XAttribute("src", savefileName + "/" + imagename);
+                XAttribute alt = new XAttribute("alt", imagename);
+                string mstyle = string.Format("position:absolute;left:{0}px;top:{1}px;width:{2}px;height:{3}px",
+                    mchart.ChartObject.X, mchart.ChartObject.Y, mchart.ChartObject.Width, mchart.ChartObject.Height);
+                XAttribute style = new XAttribute("style", mstyle);
+                XElement img = new XElement("img",src,alt,style);
+                results.Add(img);
+            }
+            return results;
         }
 
         /// <summary>
@@ -359,4 +392,6 @@ namespace weixinreportviews.Model
         }
         #endregion
     }
+
+    
 }
