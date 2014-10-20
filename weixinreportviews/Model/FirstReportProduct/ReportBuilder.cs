@@ -191,9 +191,28 @@ namespace weixinreportviews.Model
             }
             return null;
         }
+
+        /// <summary>
+        /// 添加页签内容页并赋予宽高
+        /// </summary>
+        /// <param name="width">页面宽</param>
+        /// <param name="height">页面高</param>
+        /// <returns></returns>
+        public XElement AddSheet(double width,double height)
+        {
+            if (Sheets != null)
+            {
+                XAttribute tclass = new XAttribute("class", "sheet");
+                XAttribute tstyle = new XAttribute("style", string.Format("width:{0}px;height:{1}px;",width,height));
+                XElement div = new XElement("div", tclass,tstyle);
+                Sheets.Add(div);
+                return div;
+            }
+            return null;
+        }
     }
 
-    public class ExcelReportBuilderEx
+    public class ExcelReportBuilder
     {
 
         private string _TemplatePath=string.Empty;
@@ -205,51 +224,9 @@ namespace weixinreportviews.Model
           get { return _TemplatePath; }
         }
 
-        public ExcelReportBuilderEx(string TemplatePath)  { this._TemplatePath=TemplatePath;}
+        public ExcelReportBuilder(string TemplatePath) { this._TemplatePath = TemplatePath; }
 
-        /// <summary>
-        /// 创建html
-        /// </summary>
-        /// <param name="filePath">参照文件完整路径</param>
-        /// <param name="savePath">转换成html后保存的完整路径</param>
-        /// <param name="isDelSource">是否删除参照文件</param>
-        /// <returns></returns>
-        public bool Build(string filePath,string savePath,bool isDelSource=true)
-        {
-            string templatePath = this.TemplatePath;
-            try
-            {
-                Html5Frame mframe = new Html5Frame(templatePath);
-                //XElement xele = mframe.GetXElementById("title");
-                //if (xele != null) xele.Value = string.IsNullOrEmpty(this.Title) ? "" : this.Title;
-                //xele = mframe.GetXElementById("date");
-                //if (xele != null) xele.Value = this.BuildDate==null?string.Empty:((DateTime)this.BuildDate).ToShortDateString();
-                
-                XElement columns = mframe.GetXElementById("columns");
-                var wbook=new Aspose.Cells.Workbook(filePath);
-                
-                ExcelReader reader = new ExcelReader(filePath);
-                XElement table = reader.Table();
-                if (table != null)
-                {
-                    XElement div = mframe.GetXElementById("table");
-                    if (div != null) div.Add(table);
-                }
-                //if (System.IO.File.Exists(this.HtmlFilePath)) System.IO.File.Delete(this.HtmlFilePath);
-                mframe.Save(savePath);              
 
-                if (isDelSource)
-                {
-                    File.Delete(filePath);
-                }
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-            
-        }
         /// <summary>
         /// 创建html
         /// </summary>
@@ -259,69 +236,6 @@ namespace weixinreportviews.Model
         /// <param name="isDelSource">是否删除参照文件</param>
         /// <returns></returns>
         public bool Build(string filePath, string savePath, string savefileName, bool isDelSource = true)
-        {
-            string templatePath = this.TemplatePath;
-            try
-            {
-                Html5Frame mframe = new Html5Frame(templatePath);
-
-                var wbook = new Aspose.Cells.Workbook(filePath);
-
-                string chartdir = Path.Combine(savePath, savefileName);
-                string savefile = Path.Combine(savePath, savefileName + ".html");
-
-                if (System.IO.Directory.Exists(chartdir)) System.IO.Directory.Delete(chartdir);
-                System.IO.Directory.CreateDirectory(chartdir);
-
-                for (int i = 0; i < wbook.Worksheets.Count; i++)
-                {
-                    var wsheet = wbook.Worksheets[i];
-                    ExcelSheetReader reader = new ExcelSheetReader(wsheet);
-                    XElement table = reader.Table();
-                    XElement div = mframe.GetXElementById("table");
-                    if (table != null)
-                    {
-                        if (div != null) div.Add(table);
-                    }
-                    for (int j = 0; j < wsheet.Charts.Count; j++)
-                    {
-                        Aspose.Cells.Charts.Chart mchart = wsheet.Charts[j];
-                        string imagename = "sheet_" + i + "img_" + j + ".jpg";
-                        mchart.ToImage(Path.Combine(chartdir, imagename));
-                        XElement img = new XElement("img");
-                        XAttribute src = new XAttribute("src", savefileName + "/" + imagename);
-                        XAttribute alt = new XAttribute("alt", imagename);
-                        img.Add(src);
-                        img.Add(alt);
-                        if (div != null) div.Add(img);
-                    }
-
-                }
-                mframe.Save(savefile);
-
-                if (isDelSource)
-                {
-                    File.Delete(filePath);
-                }
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-
-        }
-
-
-        /// <summary>
-        /// 创建html
-        /// </summary>
-        /// <param name="filePath">参照文件完整路径</param>
-        /// <param name="savePath">转换成html后保存的文件夹路径</param>
-        /// <param name="savefileName">保存的文件名（无后缀）</param>
-        /// <param name="isDelSource">是否删除参照文件</param>
-        /// <returns></returns>
-        public bool BuildEx(string filePath, string savePath, string savefileName, bool isDelSource = true)
         {
             string templatePath = this.TemplatePath;
             try
@@ -342,13 +256,24 @@ namespace weixinreportviews.Model
                     ExcelSheetReader reader = new ExcelSheetReader(wsheet);
                     XElement table = reader.Table();
                     List<XElement> charts = reader.Charts(savePath, savefileName);
-                    if (table == null && charts == null) continue;
+                    List<XElement> pictures = reader.Pictures(savePath, savefileName);
+                    if (table == null && (charts == null || charts.Count == 0) && (pictures == null || pictures.Count == 0)) continue;
+                    SheetClientArea scat = reader.GetTableClientArea();
+                    SheetClientArea scac = reader.GetChartsClientArea();
+                    SheetClientArea scap = reader.GetPicturesClientArea();
+
+                    SheetClientArea area = scat.Max(scac).Max(scap);
+                    
                     mframe.AddTab(wsheet.Name);
-                    var framesheet = mframe.AddSheet();
+                    var framesheet = mframe.AddSheet(area.Width, area.Height);
                     if (framesheet != null)
                     {
                         if (table != null) framesheet.Add(table);
                         foreach (XElement xe in charts)
+                        {
+                            framesheet.Add(xe);
+                        }
+                        foreach (XElement xe in pictures)
                         {
                             framesheet.Add(xe);
                         }
@@ -457,73 +382,4 @@ namespace weixinreportviews.Model
         }
     }
 
-    /// <summary>
-    /// excel 转换成HTML
-    /// </summary>
-    public class ExcelReportBuilder
-    {
-
-        private string _TemplatePath = string.Empty;
-        /// <summary>
-        /// 获取html模板完整路径
-        /// </summary>
-        public string TemplatePath
-        {
-            get { return _TemplatePath; }
-        }
-
-        public ExcelReportBuilder(string TemplatePath) { this._TemplatePath = TemplatePath; }
-        private Aspose.Cells.Workbook oBook;
-        /// <summary>
-        /// 创建html
-        /// </summary>
-        /// <param name="filePath">参照文件完整路径</param>
-        /// <param name="savePath">转换成html后保存的完整路径</param>
-        /// <param name="isDelSource">是否删除参照文件</param>
-        /// <returns></returns>
-        public bool Build(string filePath, string savePath, bool isDelSource = true)
-        {
-            string templatePath = this.TemplatePath;
-            try
-            {
-                Html5Frame mframe = new Html5Frame(templatePath);//模板文件
-
-                
-
-                oBook = new Aspose.Cells.Workbook(filePath);
-                oBook.Save(savePath, Aspose.Cells.SaveFormat.Html);
-                try
-                {
-                    Html5Frame excelframe = new Html5Frame(savePath);
-                    XElement bodyContent = (XElement)excelframe.body.FirstNode;
-                    //XElement body=wordframe.body;
-
-                    if (bodyContent != null)
-                    {
-                        XElement div = mframe.GetXElementById("table");
-                        if (div != null) div.Add(bodyContent);
-                    }
-                    if (File.Exists(savePath))
-                    {
-                        File.Delete(savePath);
-                    }
-                    mframe.Save(savePath);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Trace.WriteLine(ex.Message);
-                }
-                if (isDelSource)
-                {
-                    File.Delete(filePath);
-                }
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-
-        }
-    }
 }

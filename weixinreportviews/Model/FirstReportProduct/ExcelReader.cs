@@ -199,10 +199,25 @@ namespace weixinreportviews.Model
         #endregion
     }
 
+    public class SheetClientArea
+    {
+        public double Width=0;
+        public double Height=0;
+
+        public SheetClientArea Max(SheetClientArea area)
+        {
+            SheetClientArea result = new SheetClientArea();
+            result.Width = this.Width < area.Width ? area.Width : this.Width;
+            result.Height = this.Height < area.Height ? area.Height : this.Height;
+            return result;
+        }
+    }
 
     public class ExcelSheetReader
     {
+        
         #region 私有变量
+        private SheetClientArea _ClientArea = new SheetClientArea();
         private Aspose.Cells.Worksheet ws = null;
         private List<CellAreaReader> MergedCells = new List<CellAreaReader>();
         public class CellAreaReader
@@ -255,6 +270,7 @@ namespace weixinreportviews.Model
         /// <param name="worksheet">excel sheet</param>
         public ExcelSheetReader(Aspose.Cells.Worksheet worksheet)
         {
+
             this.ws = worksheet;
             if (this.ws == null) return;
             if (ws.Cells.MergedCells != null)
@@ -299,7 +315,6 @@ namespace weixinreportviews.Model
                 XElement tr = new XElement("tr");
                 for (int colIndex = 0; colIndex <= colCount; colIndex++)
                 {
-
                     CellAreaReader car = this.MergedCells.Find(e => e.Exists(rowIndex, colIndex));
                     if (car == null)
                     {
@@ -330,6 +345,26 @@ namespace weixinreportviews.Model
 
             return hasNode ? table : null;
         }
+        /// <summary>
+        /// 获取工作表数据的工作区域
+        /// </summary>
+        /// <returns></returns>
+        public SheetClientArea GetTableClientArea()
+        {
+            SheetClientArea result = new SheetClientArea();
+            if (this.ws == null) return result;
+            int colCount = this.ws.Cells.MaxColumn;
+            int rowCount = this.ws.Cells.MaxRow;
+            for (int rowIndex = 0; rowIndex <= rowCount; rowIndex++)
+            {
+                result.Height += this.ws.Cells.Rows[rowIndex].Height; //计算最高值
+            }
+            for (int colIndex = 0; colIndex <= colCount; colIndex++)
+            {
+                result.Width += this.ws.Cells.Columns[colIndex].Width; //计算最宽值
+            }
+            return result;
+        }
 
         /// <summary>
         /// 转换图形为XDocument元素
@@ -344,18 +379,85 @@ namespace weixinreportviews.Model
             for (int j = 0; j < ws.Charts.Count; j++)
             {
                 Aspose.Cells.Charts.Chart mchart = ws.Charts[j];
-                string imagename = "sheet_" + ws.Index + "img_" + j + ".jpg";
+                string imagename = "sheet_crt_" + ws.Index + "img_" + j + ".jpg";
                 mchart.ToImage(Path.Combine(saveDirectory, imagename));
-                
+
                 XAttribute src = new XAttribute("src", savefileName + "/" + imagename);
                 XAttribute alt = new XAttribute("alt", imagename);
                 string mstyle = string.Format("position:absolute;left:{0}px;top:{1}px;width:{2}px;height:{3}px",
                     mchart.ChartObject.X, mchart.ChartObject.Y, mchart.ChartObject.Width, mchart.ChartObject.Height);
                 XAttribute style = new XAttribute("style", mstyle);
-                XElement img = new XElement("img",src,alt,style);
+                XElement img = new XElement("img", src, alt, style);
                 results.Add(img);
             }
             return results;
+        }
+
+        /// <summary>
+        /// 获取工作表图形的工作区域
+        /// </summary>
+        /// <returns></returns>
+        public SheetClientArea GetChartsClientArea()
+        {
+            SheetClientArea result = new SheetClientArea();
+            if (this.ws == null) return result;
+            for (int j = 0; j < ws.Charts.Count; j++)
+            {
+                Aspose.Cells.Charts.Chart mchart = ws.Charts[j];
+                double iwidth = mchart.ChartObject.X + mchart.ChartObject.Width;
+                double iheight = mchart.ChartObject.Y + mchart.ChartObject.Height;
+                if (result.Width < iwidth) result.Width = iwidth;
+                if (result.Height < iheight) result.Height = iheight;
+
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 转换图形为XDocument元素
+        /// </summary>
+        /// <param name="savePath">转换成html后保存的文件夹路径</param>
+        /// <param name="savefileName">保存的文件名（无后缀）</param>
+        /// <returns></returns>
+        public List<XElement> Pictures(string savePath, string savefileName)
+        {
+            List<XElement> results = new List<XElement>();
+            string saveDirectory = Path.Combine(savePath, savefileName);
+            for (int j = 0; j < ws.Pictures.Count; j++)
+            {
+                Aspose.Cells.Drawing.Picture mpic = ws.Pictures[j];
+                string imagename = "sheet_pic_" + ws.Index + "img_" + j + ".jpg";
+                mpic.ToImage(Path.Combine(saveDirectory, imagename), null);
+
+                XAttribute src = new XAttribute("src", savefileName + "/" + imagename);
+                XAttribute alt = new XAttribute("alt", imagename);
+                string mstyle = string.Format("position:absolute;left:{0}px;top:{1}px;width:{2}px;height:{3}px",
+                    mpic.X, mpic.Y, mpic.Width, mpic.Height);
+                XAttribute style = new XAttribute("style", mstyle);
+                XElement img = new XElement("img", src, alt, style);
+                results.Add(img);
+            }
+            return results;
+        }
+
+        /// <summary>
+        /// 获取工作表输入图片的工作区域
+        /// </summary>
+        /// <returns></returns>
+        public SheetClientArea GetPicturesClientArea()
+        {
+            SheetClientArea result = new SheetClientArea();
+            if (this.ws == null) return result;
+            for (int j = 0; j < ws.Pictures.Count; j++)
+            {
+                Aspose.Cells.Drawing.Picture mpic = ws.Pictures[j];
+                double iwidth = mpic.X + mpic.Width;
+                double iheight = mpic.Y + mpic.Height;
+                if (result.Width < iwidth) result.Width = iwidth;
+                if (result.Height < iheight) result.Height = iheight;
+
+            }
+            return result;
         }
 
         /// <summary>
@@ -371,7 +473,6 @@ namespace weixinreportviews.Model
         #endregion
 
         #region 私有方法
-
         private void SetDisplayStyle(XElement ele, Aspose.Cells.Cell cell)
         {
             Aspose.Cells.Style style = cell.GetDisplayStyle();

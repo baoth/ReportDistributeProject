@@ -78,6 +78,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 List<string> ids = id.Split(',').ToList();
                 DbSession session = General.CreateDbSession();
                 List<string> paths = new List<string>();
+                List<string> logos = new List<string>();
                 var customInfo = Session[General.LogonSessionName] as CustomerLoginInfo ;
                 for (int i = 0; i < ids.Count; i++)
                 {
@@ -89,6 +90,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                         if (System.IO.Directory.Exists(dir))
                         {
                             paths.Add(dir);
+                            logos.Add(Path.Combine(PathTools.SaveHtmlPath, customInfo.Account.Id.ToString().Replace("-", ""), entity.Id.ToString().Replace("-", "") + "logo.jpg"));
                         }
                     }
                 }
@@ -96,10 +98,16 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 try
                 {
                     session.Context.SaveChange();
-                    foreach (var item in paths)
-	                {
-                        System.IO.Directory.Delete(item,true);
-	                }
+                    for (int i = 0; i < paths.Count; i++)
+                    {
+                        string item = paths[i];
+                        System.IO.Directory.Delete(item, true);
+                        //删除logo
+                        if (System.IO.File.Exists(logos[i]))
+                        {
+                            System.IO.File.Delete(logos[i]);
+                        }
+                    }
                   
                     return Json(new { result = 0 });
                 }
@@ -154,26 +162,16 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             string tempFullPath = string.Empty;
             try
             {
-                //if (fi.Extension.ToLower() == ".xls" || fi.Extension.ToLower() == ".xlsx")
-                //{
-                //    ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.RPTemplatePath);
-                //    erb.Build(path, Path.Combine(PathTools.BaseDirector,
-                //            "temp",
-                //            htmlName));
-
-                //    tempFullPath = Path.Combine(PathTools.TempPath,htmlName);
-                //}
+                
                 if (fi.Extension.ToLower() == ".xls" || fi.Extension.ToLower() == ".xlsx")
                 {
                     htmlName = "x" + htmlName;
-                    //ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.RPTemplatePath);
-                    ExcelReportBuilderEx erb = new ExcelReportBuilderEx(PathTools.ExcelRPTemplatePath);
+                    ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.ExcelRPTemplatePath);
                     string savePath = Path.Combine(PathTools.BaseDirector,
                             "temp/" + "x" + fname,
                             htmlName);
-                    //erb.Build(path, savePath);
 
-                    erb.BuildEx(path, Path.Combine(PathTools.BaseDirector,
+                    erb.Build(path, Path.Combine(PathTools.BaseDirector,
                             "temp/" + "x" + fname), "x" + fname);
                             
 
@@ -184,7 +182,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     htmlName = "w" + htmlName;
                     WordReportBuilder erb = new WordReportBuilder(PathTools.RPTemplatePath);
                     string savePath=Path.Combine(PathTools.BaseDirector,
-                            "temp/" + "w"+fname,
+                            "temp/" + "w"+ fname,
                             htmlName);
                     erb.Build(path,savePath);
 
