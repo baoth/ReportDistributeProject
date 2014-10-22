@@ -127,15 +127,15 @@ namespace weixinreportviews.Model
                 ArticleItem item = new ArticleItem();
                 item.Title = rp.Title;
                 item.Description = rp.Title;
-                item.Url = string.Format("{0}/{1}", PathTools.WebRoot, rp.Url);
-                item.PicUrl = string.Format("{0}/{1}", PathTools.WebRoot, rp.PicUrl);
+                item.Url = string.Format("{0}/{1}", PathTools.WebRoot, rp.Url.Replace("\\", "/"));
+                item.PicUrl = string.Format("{0}/{1}", PathTools.WebRoot, rp.PicUrl.Replace("\\", "/"));
                 rnm.Articles.Add(item);
             }
-            ArticleItem itemhistory = new ArticleItem();
-            itemhistory.Title = "历史浏览";
-            itemhistory.Description = "历史浏览";
-            itemhistory.Url = string.Empty;
-            rnm.Articles.Add(itemhistory);
+            //ArticleItem itemhistory = new ArticleItem();
+            //itemhistory.Title = "历史浏览";
+            //itemhistory.Description = "历史浏览";
+            //itemhistory.Url = string.Empty;
+            //rnm.Articles.Add(itemhistory);
             return rnm.GetReplyMessage();
         }
 

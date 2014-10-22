@@ -21,7 +21,7 @@ namespace weixinreportviews.Model
             public CellAreaReader(CellArea Area)
             {
                 this._area = Area;
-                int temp=Area.EndRow - Area.StartRow;
+                int temp = Area.EndRow - Area.StartRow;
                 this._rowSpan = temp == 0 ? 0 : temp + 1;
                 temp = Area.EndColumn - Area.StartColumn;
                 this._colSpan = temp == 0 ? 0 : temp + 1;
@@ -29,7 +29,7 @@ namespace weixinreportviews.Model
 
             private CellArea _area;
 
-            public CellArea Area {get{return _area;}}
+            public CellArea Area { get { return _area; } }
 
             private int _rowSpan = -1;
 
@@ -67,7 +67,7 @@ namespace weixinreportviews.Model
         /// <param name="opensheet">打开工作页的名称或索引号</param>
         public ExcelReader(string filepath, object opensheet)
         {
-            
+
             if (!string.IsNullOrEmpty(filepath))
             {
 
@@ -91,7 +91,7 @@ namespace weixinreportviews.Model
                     foreach (CellArea ca in this.ws.Cells.MergedCells) this.MergedCells.Add(new CellAreaReader(ca));
                 }
             }
-            
+
         }
         /// <summary>
         /// 构造函数
@@ -121,7 +121,7 @@ namespace weixinreportviews.Model
 
             if (this.wb == null || this.ws == null) return null;
 
-            
+
             XAttribute cellpadding = new XAttribute("cellpadding", 0);
             XAttribute cellspacing = new XAttribute("cellspacing", 0);
             XAttribute rules = new XAttribute("rules", "all");
@@ -170,7 +170,7 @@ namespace weixinreportviews.Model
         /// </summary>
         /// <param name="exportColumnName">第一行中的数据是否出口到数据表的列名 （默认false）</param>
         /// <returns></returns>
-        public DataTable DataTable(bool exportColumnName=false)
+        public DataTable DataTable(bool exportColumnName = false)
         {
             return this.ws.Cells.ExportDataTable(0, 0, this.ws.Cells.MaxRow, this.ws.Cells.MaxColumn
                 , exportColumnName);
@@ -180,12 +180,12 @@ namespace weixinreportviews.Model
         #region 私有方法
         private void SetDisplayStyle(XElement ele, Aspose.Cells.Cell cell)
         {
-            Aspose.Cells.Style style=cell.GetDisplayStyle();
+            Aspose.Cells.Style style = cell.GetDisplayStyle();
             string stylestr = string.Empty;
-            if (style.ForegroundColor.Name!="0")
-            stylestr += string.Format("background-color:rgb({0},{1},{2});",
-                style.ForegroundColor.R, style.ForegroundColor.G, style.ForegroundColor.B);
-            stylestr +=string.Format("color:rgb({0},{1},{2});",
+            if (style.ForegroundColor.Name != "0")
+                stylestr += string.Format("background-color:rgb({0},{1},{2});",
+                    style.ForegroundColor.R, style.ForegroundColor.G, style.ForegroundColor.B);
+            stylestr += string.Format("color:rgb({0},{1},{2});",
                 style.Font.Color.R, style.Font.Color.G, style.Font.Color.B);
             stylestr += string.Format("font:{0} {1} {2}px auto {3},sans-serif;",
                 style.Font.IsItalic ? "italic" : "normal", style.Font.IsBold ? "bold" : "normal",
@@ -201,8 +201,8 @@ namespace weixinreportviews.Model
 
     public class SheetClientArea
     {
-        public double Width=0;
-        public double Height=0;
+        public double Width = 0;
+        public double Height = 0;
 
         public SheetClientArea Max(SheetClientArea area)
         {
@@ -215,11 +215,14 @@ namespace weixinreportviews.Model
 
     public class ExcelSheetReader
     {
-        
+
         #region 私有变量
         private SheetClientArea _ClientArea = new SheetClientArea();
         private Aspose.Cells.Worksheet ws = null;
         private List<CellAreaReader> MergedCells = new List<CellAreaReader>();
+
+
+
         public class CellAreaReader
         {
             public CellAreaReader(CellArea Area)
@@ -260,6 +263,7 @@ namespace weixinreportviews.Model
             {
                 return this.Area.StartRow == rowIndex && this.Area.StartColumn == colIndex;
             }
+
         }
         #endregion
 
@@ -306,10 +310,10 @@ namespace weixinreportviews.Model
             XAttribute cellspacing = new XAttribute("cellspacing", 0);
             XAttribute rules = new XAttribute("rules", "all");
             XAttribute styles = new XAttribute("style", "border-top:1px;border-bottom:1px;border-left:1px;border-right:1px;");
-            XElement table = new XElement("table", cellpadding, cellspacing, rules, styles);
+            XElement table = new XElement("table", cellpadding, cellspacing);
 
-            int colCount = this.ws.Cells.MaxColumn;
-            int rowCount = this.ws.Cells.MaxRow;
+            int colCount = this.ws.Cells.MaxDataColumn;
+            int rowCount = this.ws.Cells.MaxDataRow;
             for (int rowIndex = 0; rowIndex <= rowCount; rowIndex++)
             {
                 XElement tr = new XElement("tr");
@@ -325,7 +329,7 @@ namespace weixinreportviews.Model
                     else if (car.IsInitailCell(rowIndex, colIndex))
                     {
                         XElement td = new XElement("td", this.ws.Cells[rowIndex, colIndex].StringValue);
-                        this.SetDisplayStyle(td, this.ws.Cells[rowIndex, colIndex]);
+                        this.SetDisplayStyle(td, this.ws.Cells[rowIndex, colIndex], car);
                         if (car.ColSpan != 0)
                         {
                             XAttribute attr = new XAttribute("colspan", car.ColSpan);
@@ -473,23 +477,64 @@ namespace weixinreportviews.Model
         #endregion
 
         #region 私有方法
-        private void SetDisplayStyle(XElement ele, Aspose.Cells.Cell cell)
+        private void SetDisplayStyle(XElement ele, Aspose.Cells.Cell cell, CellAreaReader cellarea = null)
         {
             Aspose.Cells.Style style = cell.GetDisplayStyle();
             string stylestr = string.Empty;
             if (style.ForegroundColor.Name != "0")
-                stylestr += string.Format("background-color:rgb({0},{1},{2});",
-                    style.ForegroundColor.R, style.ForegroundColor.G, style.ForegroundColor.B);
-            stylestr += string.Format("color:rgb({0},{1},{2});",
-                style.Font.Color.R, style.Font.Color.G, style.Font.Color.B);
+                stylestr += string.Format("background-color:{0};",
+                    System.Drawing.ColorTranslator.ToHtml(style.ForegroundColor));
+            stylestr += string.Format("color:{0};",
+                System.Drawing.ColorTranslator.ToHtml(style.Font.Color));
             stylestr += string.Format("font:{0} {1} {2}px auto {3},sans-serif;",
                 style.Font.IsItalic ? "italic" : "normal", style.Font.IsBold ? "bold" : "normal",
                 style.Font.Size, style.Font.Name);
             stylestr += string.Format("text-align:{0};", style.HorizontalAlignment.ToString().ToLower());
-            stylestr += string.Format("height:{0}px;", this.ws.Cells.GetRowHeightPixel(cell.Row));
-            stylestr += string.Format("width:{0}px;", this.ws.Cells.GetColumnWidthPixel(cell.Column));
+
+            //设置高宽
+
+            if (cellarea == null)
+            {
+                stylestr += string.Format("height:{0}px;", this.ws.Cells.GetRowHeightPixel(cell.Row));
+                stylestr += string.Format("width:{0}px;", this.ws.Cells.GetColumnWidthPixel(cell.Column));
+            }
+            else
+            {
+                int mheight = 0, mwidth = 0;
+                for (int i = cellarea.Area.StartRow; i <= cellarea.Area.EndRow; i++)
+                {
+                    mheight += this.ws.Cells.GetRowHeightPixel(i);
+                }
+                for (int j = cellarea.Area.StartColumn; j <= cellarea.Area.EndColumn; j++)
+                {
+                    mwidth += this.ws.Cells.GetColumnWidthPixel(j);
+                }
+                stylestr += string.Format("height:{0}px;", mheight);
+                stylestr += string.Format("width:{0}px;", mwidth);
+            }
+            //获取border
+            BorderCollection thisborders = style.Borders;
+            BorderCollection leftborders = cell.Column == 0 ? null : GetRepresentCell(cell.Row, cell.Column - 1).GetDisplayStyle().Borders;
+            BorderCollection topborders = cell.Row == 0 ? null : GetRepresentCell(cell.Row - 1, cell.Column).GetDisplayStyle().Borders;
+            stylestr += thisborders[BorderType.LeftBorder].LineStyle == CellBorderType.None ? string.Empty :
+                leftborders != null && leftborders[BorderType.RightBorder].LineStyle != CellBorderType.None ? string.Empty :
+                string.Format("border-left:1px solid {0};", System.Drawing.ColorTranslator.ToHtml(thisborders[BorderType.LeftBorder].Color));
+            stylestr += thisborders[BorderType.TopBorder].LineStyle == CellBorderType.None ? string.Empty :
+                topborders != null && topborders[BorderType.BottomBorder].LineStyle != CellBorderType.None ? string.Empty :
+                string.Format("border-top:1px solid {0};", System.Drawing.ColorTranslator.ToHtml(thisborders[BorderType.TopBorder].Color));
+            stylestr += thisborders[BorderType.RightBorder].LineStyle == CellBorderType.None ? string.Empty :
+                string.Format("border-right:1px solid {0};", System.Drawing.ColorTranslator.ToHtml(thisborders[BorderType.RightBorder].Color));
+            stylestr += thisborders[BorderType.BottomBorder].LineStyle == CellBorderType.None ? string.Empty :
+                string.Format("border-bottom:1px solid {0};", System.Drawing.ColorTranslator.ToHtml(thisborders[BorderType.BottomBorder].Color));
+
             XAttribute attr = new XAttribute("style", stylestr);
             ele.Add(attr);
+        }
+        private Aspose.Cells.Cell GetRepresentCell(int row, int column)
+        {
+            CellAreaReader car = this.MergedCells.Find(e => e.Exists(row, column));
+            if (car == null) return this.ws.Cells[row, column];
+            return this.ws.Cells[car.Area.StartRow, car.Area.StartColumn];
         }
         #endregion
     }
