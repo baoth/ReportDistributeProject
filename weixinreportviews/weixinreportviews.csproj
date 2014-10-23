@@ -38,7 +38,7 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aspose.Cells, Version=8.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+    <Reference Include="Aspose.Cells, Version=7.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Cbin\Aspose.Cells.dll</HintPath>
     </Reference>
@@ -119,9 +119,11 @@
     <Content Include="Content\Css\bootstrap-theme.css" />
     <Content Include="Content\Css\bootstrap.css" />
     <Content Include="Content\Css\bootstrap.icons.css" />
+    <Content Include="Content\Css\bootstrap.min.css" />
     <Content Include="Content\Css\button.css" />
     <Content Include="Content\Css\font-awesome\4.1.0\css\font-awesome-ie7.min.css" />
     <Content Include="Content\Css\font-awesome\4.1.0\css\font-awesome.min.css" />
+    <Content Include="Content\Css\FReportHome\layout_head.css" />
     <Content Include="Content\Css\Logon\form.css" />
     <Content Include="Content\Css\Logon\logon.css" />
     <Content Include="Content\Css\Logon\ieform.css" />
@@ -146,6 +148,11 @@
     <Content Include="Content\Css\Switch\main.css" />
     <Content Include="Content\Css\Upload\basic.css" />
     <Content Include="Content\Css\Upload\dropzone.css" />
+    <Content Include="Content\Img\avatar.png" />
+    <Content Include="Content\Img\bg_login_banner.png" />
+    <Content Include="Content\Img\icon_menu_developer.png" />
+    <Content Include="Content\Img\icon_menu_setup.png" />
+    <Content Include="Content\Img\icon_menu_statistics.png" />
     <Content Include="Content\Img\load1.gif" />
     <Content Include="Content\Img\back_disabled.png" />
     <Content Include="Content\Img\back_enabled.png" />
@@ -178,6 +185,11 @@
     <Content Include="Content\Img\layerskin\xubox_title0.png" />
     <Content Include="Content\Img\logo1e.ico" />
     <Content Include="Content\Img\manage_01.png" />
+    <Content Include="Content\Img\mobilelogon\baidu_logo_24_056405eb.png" />
+    <Content Include="Content\Img\mobilelogon\input_icons_24_915272c4.png" />
+    <Content Include="Content\Img\mobilelogon\input_icons_48_7ea84398.png" />
+    <Content Include="Content\Img\mobilelogon\pass_login_icons_51c6a837.png" />
+    <Content Include="Content\Img\mobilelogon\pass_login_icons_retina_bd1d5228.png" />
     <Content Include="Content\Img\mp_qrcode1e7d69.gif" />
     <Content Include="Content\Img\page_login_old_z1fcd41.png" />
     <Content Include="Content\Img\search.png" />
@@ -196,10 +208,12 @@
     <Content Include="Content\Css\layer.ext.css" />
     <Content Include="Content\themes\Report\SimpleFrame.css" />
     <Content Include="Global.asax" />
-    <Content Include="ReportViews\ReportTemplete\简易框架.html" />
+    <Content Include="ReportViews\ReportTemplete\ExcelReportModul.html" />
+    <Content Include="ReportViews\ReportTemplete\ReportModul.html" />
     <Content Include="Scripts\accountindex.js" />
     <Content Include="Scripts\dropzone.js" />
     <Content Include="Scripts\dropzone.min.js" />
+    <Content Include="Scripts\iscroll.js" />
     <Content Include="Scripts\jquery.form.js" />
     <Content Include="Scripts\mobileLogon.js" />
     <Content Include="Scripts\numeralInput.js" />
@@ -301,7 +315,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>15372</DevelopmentServerPort>
+          <DevelopmentServerPort>23393</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

@@ -518,7 +518,7 @@ namespace weixinreportviews.Model
                 tableNameCreator = QueryB
             });
             DataTable dt = this.Context.QueryTable(Query);
-            if (dt != null && dt.Rows.Count > 0) TotalCount = (int)dt.Rows[0]["TotalCount"];
+            if (dt != null && dt.Rows.Count > 0) TotalCount = Convert.ToInt32(dt.Rows[0]["TotalCount"]);
             
             return this.Context.ConversionEntity<T>(dt);
         }

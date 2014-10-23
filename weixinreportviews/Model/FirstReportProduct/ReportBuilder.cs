@@ -133,6 +133,85 @@ namespace weixinreportviews.Model
         }
     }
 
+    public class ExcelReportModul:Html5Frame
+    {
+        private int tabIndex=0;
+
+        /// <summary>
+        /// 页签
+        /// </summary>
+        public XElement Tabs = null;
+
+        /// <summary>
+        /// 页签内容
+        /// </summary>
+        public XElement Sheets = null;
+
+        public ExcelReportModul(string frameurl)
+            : base(frameurl)
+        {
+            Tabs = this.GetXElementById("tabs");
+            Sheets = this.GetXElementById("scroller");
+        }
+
+        /// <summary>
+        /// 添加页签项
+        /// </summary>
+        /// <param name="tabName">页签项名称</param>
+        /// <returns>页签项</returns>
+        public XElement AddTab(string tabName)
+        {
+            if (Tabs != null)
+            {
+                string classattr = tabIndex == 0 ? "tab_nav first" : "tab_nav";
+                XAttribute tclass = new XAttribute("class", classattr);
+                XAttribute tabindex = new XAttribute("tabindex", tabIndex);
+                XElement li = new XElement("li", tclass, tabindex);
+                XElement a = new XElement("a",tabName);
+                li.Add(a);
+                Tabs.Add(li);
+                tabIndex++;
+                return li;
+            }
+
+            return null;
+        }
+        /// <summary>
+        /// 添加页签内容页
+        /// </summary>
+        /// <returns>页签内容页</returns>
+        public XElement AddSheet()
+        {
+            if (Sheets != null)
+            {
+                XAttribute tclass = new XAttribute("class", "sheet");
+                XElement div = new XElement("div", tclass);
+                Sheets.Add(div);
+                return div;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 添加页签内容页并赋予宽高
+        /// </summary>
+        /// <param name="width">页面宽</param>
+        /// <param name="height">页面高</param>
+        /// <returns></returns>
+        public XElement AddSheet(double width,double height)
+        {
+            if (Sheets != null)
+            {
+                XAttribute tclass = new XAttribute("class", "sheet");
+                XAttribute tstyle = new XAttribute("style", string.Format("width:{0}px;height:{1}px;",width,height));
+                XElement div = new XElement("div", tclass,tstyle);
+                Sheets.Add(div);
+                return div;
+            }
+            return null;
+        }
+    }
+
     public class ExcelReportBuilder
     {
 
@@ -145,37 +224,62 @@ namespace weixinreportviews.Model
           get { return _TemplatePath; }
         }
 
-        public ExcelReportBuilder(string TemplatePath)  { this._TemplatePath=TemplatePath;}
+        public ExcelReportBuilder(string TemplatePath) { this._TemplatePath = TemplatePath; }
+
 
         /// <summary>
         /// 创建html
         /// </summary>
         /// <param name="filePath">参照文件完整路径</param>
-        /// <param name="savePath">转换成html后保存的完整路径</param>
+        /// <param name="savePath">转换成html后保存的文件夹路径</param>
+        /// <param name="savefileName">保存的文件名（无后缀）</param>
         /// <param name="isDelSource">是否删除参照文件</param>
         /// <returns></returns>
-        public bool Build(string filePath,string savePath,bool isDelSource=true)
+        public bool Build(string filePath, string savePath, string savefileName, bool isDelSource = true)
         {
             string templatePath = this.TemplatePath;
             try
             {
-                Html5Frame mframe = new Html5Frame(templatePath);
-                //XElement xele = mframe.GetXElementById("title");
-                //if (xele != null) xele.Value = string.IsNullOrEmpty(this.Title) ? "" : this.Title;
-                //xele = mframe.GetXElementById("date");
-                //if (xele != null) xele.Value = this.BuildDate==null?string.Empty:((DateTime)this.BuildDate).ToShortDateString();
+                ExcelReportModul mframe = new ExcelReportModul(templatePath);
 
-                XElement columns = mframe.GetXElementById("columns");
+                var wbook = new Aspose.Cells.Workbook(filePath);
 
-                ExcelReader reader = new ExcelReader(filePath);
-                XElement table = reader.Table();
-                if (table != null)
+                string chartdir = Path.Combine(savePath, savefileName);
+                string savefile = Path.Combine(savePath, savefileName + ".html");
+
+                if (System.IO.Directory.Exists(chartdir)) System.IO.Directory.Delete(chartdir);
+                System.IO.Directory.CreateDirectory(chartdir);
+
+                for (int i = 0; i < wbook.Worksheets.Count; i++)
                 {
-                    XElement div = mframe.GetXElementById("table");
-                    if (div != null) div.Add(table);
+                    var wsheet = wbook.Worksheets[i];
+                    ExcelSheetReader reader = new ExcelSheetReader(wsheet);
+                    XElement table = reader.Table();
+                    List<XElement> charts = reader.Charts(savePath, savefileName);
+                    List<XElement> pictures = reader.Pictures(savePath, savefileName);
+                    if (table == null && (charts == null || charts.Count == 0) && (pictures == null || pictures.Count == 0)) continue;
+                    SheetClientArea scat = reader.GetTableClientArea();
+                    SheetClientArea scac = reader.GetChartsClientArea();
+                    SheetClientArea scap = reader.GetPicturesClientArea();
+
+                    SheetClientArea area = scat.Max(scac).Max(scap);
+                    
+                    mframe.AddTab(wsheet.Name);
+                    var framesheet = mframe.AddSheet(area.Width, area.Height);
+                    if (framesheet != null)
+                    {
+                        if (table != null) framesheet.Add(table);
+                        foreach (XElement xe in charts)
+                        {
+                            framesheet.Add(xe);
+                        }
+                        foreach (XElement xe in pictures)
+                        {
+                            framesheet.Add(xe);
+                        }
+                    }
                 }
-                //if (System.IO.File.Exists(this.HtmlFilePath)) System.IO.File.Delete(this.HtmlFilePath);
-                mframe.Save(savePath);              
+                mframe.Save(savefile);
 
                 if (isDelSource)
                 {
@@ -183,13 +287,12 @@ namespace weixinreportviews.Model
                 }
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
                 return false;
             }
-            
-        }
 
+        }
         
         private void AddColumn(XElement container, string field, string title, string align)
         {
@@ -245,22 +348,26 @@ namespace weixinreportviews.Model
                 oDoc = new Aspose.Words.Document(filePath);
                 oDoc.Save(savePath,Aspose.Words.SaveFormat.Html);
 
-                Html5Frame wordframe = new Html5Frame(savePath);
-                XElement bodyContent = (XElement)wordframe.body.FirstNode;
-                //XElement body=wordframe.body;
+                try
+                {
+                    Html5Frame wordframe = new Html5Frame(savePath);
+                    XElement bodyContent = (XElement)wordframe.body.FirstNode;
+                    //XElement body=wordframe.body;
 
-                if (bodyContent != null)
-                {
-                    XElement div = mframe.GetXElementById("table");
-                    if (div != null) div.Add(bodyContent);
+                    if (bodyContent != null)
+                    {
+                        XElement div = mframe.GetXElementById("table");
+                        if (div != null) div.Add(bodyContent);
+                    }
+                    //删除word 转换的HTML
+                    if (File.Exists(savePath))
+                    {
+                        File.Delete(savePath);
+                    }
+                    //word 转换后的HTML
+                    mframe.Save(savePath);
                 }
-                //删除word 转换的HTML
-                if (File.Exists(savePath))
-                {
-                    File.Delete(savePath);
-                }
-                //word 转换后的HTML
-                mframe.Save(savePath);
+                catch { }
                 if (isDelSource)
                 {
                     File.Delete(filePath);
@@ -274,4 +381,5 @@ namespace weixinreportviews.Model
 
         }
     }
+
 }

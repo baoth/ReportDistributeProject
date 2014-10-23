@@ -162,15 +162,24 @@
         };
         var PageAction = function () {
             function GoBack() {
-                var urlaccount = '/FReportMain/Grid';
-                window.parent.ControlIFrame(urlaccount);
+                if (window.parent.init_page != undefined) {
+                    window.parent.init_page();
+                }
+                else {
+                    var urlaccount = '/FReportMain/Grid';
+                    window.parent.ControlIFrame(urlaccount);
+                }
 
             }
             function Look() {
+
                 var url = $('#txtUrl').val();
                 var hostval = window.location.host;
                 if (url) {
                     if (hostval.indexOf('localhost') == 0) {
+                        window.open(url + "?r=" + 10 * Math.random());
+                    }
+                    else if (url.indexOf('http') == 0) {
                         window.open(url + "?r=" + 10 * Math.random());
                     }
                     else {
@@ -242,7 +251,7 @@
                 init: function () {
 
                     this.on("success", function (file, responseText, s) {
-
+                        
                         $('#txtUrl').val(responseText.data.replace(/\\/g, '/'));
                         $("#txtUrlMsg").html();
                         $('#b-look').removeClass("disabled");
@@ -262,7 +271,7 @@
         })
     </script>
 </head>
-<body style="background: #f6f6f6; border:0px; margin:10px;"> @*background: #f6f6f6;*@
+<body style="background: white; border:0px; margin:10px;"> @*background: #f6f6f6;*@
        <div style="margin: 0px auto; width: 100%; height: auto; "> @*background: url(../../Content/Img/border.jpg)*@
         <table width="100%">
         <tr>

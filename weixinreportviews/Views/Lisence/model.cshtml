@@ -7,15 +7,14 @@
 <html>
 <head>
     <title></title>
-   
-    <link href="../../Content/Css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+   @* <link href="../../Content/Css/bootstrap.css" rel="stylesheet" type="text/css" />*@
     <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
     <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />
 
     <link href="../../Content/Css/select.css" rel="stylesheet" type="text/css" />     
     @*日期样式*@
-    <link href="../../Content/Css/DateTime/bootstrap-datetimepicker.css" rel="stylesheet"
-        type="text/css" />
+    <link href="../../Content/Css/DateTime/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css" />
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
 
     @*开关按钮引用start *@
@@ -101,9 +100,9 @@
           
     <script language="javascript" type="text/javascript">
         $(document).ready(function () {
-            Init();           
+            Init();
             SetDefault();
-            BindEvent();           
+            BindEvent();
 
         });
         function BindEvent() {
@@ -113,15 +112,15 @@
 
         }
 
-        $.GetSelectProductKey = function () {          
+        $.GetSelectProductKey = function () {
             var a = $(".mod_category_item li").filter(".selected").children();
-            var keycode = a.attr("keycode");           
+            var keycode = a.attr("keycode");
             return keycode;
         }
-        $.SetSelectProductKey = function (keyValue) {            
-          var a= $(".mod_category_item li a").filter(function (index) {
-                return $(this).attr("keycode") ==keyValue;
-           });
+        $.SetSelectProductKey = function (keyValue) {
+            var a = $(".mod_category_item li a").filter(function (index) {
+                return $(this).attr("keycode") == keyValue;
+            });
             a.parent().addClass("selected");
             a.parent().siblings().removeClass();
         }
@@ -138,7 +137,7 @@
             return true;
         }
         function CheckDateTime() {
-            
+
             var EffectiveDate = $("#EffectiveDate").val();
             var ExpiryDate = $("#ExpiryDate").val();
             if (EffectiveDate && ExpiryDate) {
@@ -148,13 +147,13 @@
                 }
                 else {
                     $("#SpanExpiryDateMsg").html("");
-                 }
+                }
             }
             return true;
-       }
-       function Check() {
-           if (CheckLisencePoint() == false) return false;
-           if (CheckDateTime() == false) return false;
+        }
+        function Check() {
+            if (CheckLisencePoint() == false) return false;
+            if (CheckDateTime() == false) return false;
             return true;
         }
 
@@ -165,11 +164,11 @@
         }
 
         function Save() {
-            
+
             //检查
             if (Check() == false) return;
             var AccountId = $("#AccountId").val();
-            var Id = $("#Id").val() ;
+            var Id = $("#Id").val();
             var ProductKind = $.GetSelectProductKey(); //$("#ProductKind").val();
             var OrderNumber = $("#OrderNumber").val();
             var CreateDate = $("#CreateDate").val();
@@ -177,8 +176,8 @@
             var EffectiveDate = $("#EffectiveDate").val();
             //var EffectiveYear = $("#EffectiveYear").val();
             var ExpiryDate = $("#ExpiryDate").val();
-            var LisencePoint = $("#LisencePoint").val();   
-            debugger       
+            var LisencePoint = $("#LisencePoint").val();
+            debugger
             var Stoped = $("#CheckSwitch").bootstrapSwitch("state");
             Stoped = !Stoped;
 
@@ -209,10 +208,10 @@
         function SetDefault() {
             var keyValue = $("#ProductKind").val();
             $.SetSelectProductKey(keyValue);
-          
+
             var Stoped = $("#Stoped").val();
             var flag = false;
-            if (Stoped.toLowerCase()=="true") {
+            if (Stoped.toLowerCase() == "true") {
                 flag = true;
             }
             flag = !flag;
@@ -250,13 +249,13 @@
         function CloseBack() {
             var as = $("#ActionSource").val();
             var urlaccount = '/Lisence/Grid';
-            
+
             if (as) {
                 var id = $("#AccountId").val();
                 var name = $("#AccountName").val();
                 urlaccount = '/Lisence/AccountLisence?id=' + id + '&name=' + name;
             }
-            
+
             window.parent.ControlIFrame(urlaccount);
 
         }
@@ -272,7 +271,7 @@
             return false;
         }
 
-      
+
         //比较两个时间大小
         function dateCompare(startdate, enddate) {
             var arr = startdate.split("-");

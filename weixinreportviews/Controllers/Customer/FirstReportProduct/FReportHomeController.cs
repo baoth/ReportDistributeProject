@@ -17,7 +17,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             if (Session[weixinreportviews.Model.General.LogonSessionName] != null)
             {
                 var obj = (CustomerLoginInfo)Session[weixinreportviews.Model.General.LogonSessionName];
-                ViewData["Name"] = obj.Account.LoginKey;
+                ViewData["Name"] = obj.Account.Name;
                 ViewData["Id"] = obj.Account.Id;
             }
             if (General.PhoneBroswer(Request))

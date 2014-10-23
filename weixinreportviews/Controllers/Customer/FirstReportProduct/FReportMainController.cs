@@ -78,6 +78,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 List<string> ids = id.Split(',').ToList();
                 DbSession session = General.CreateDbSession();
                 List<string> paths = new List<string>();
+                List<string> logos = new List<string>();
                 var customInfo = Session[General.LogonSessionName] as CustomerLoginInfo ;
                 for (int i = 0; i < ids.Count; i++)
                 {
@@ -85,10 +86,11 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                     {
                         var entity = new CS_FirstReport { Id = Guid.Parse(ids[i]) };
                         session.Context.DeleteEntity(entity.CreateDeleteCommand());
-                        var filePath = PathTools.SaveHtmlPath + "\\" + customInfo.Account.Id.ToString().Replace("-", "") + "\\" + entity.Id.ToString().Replace("-", "") + ".html";
-                        if (System.IO.File.Exists(filePath))
+                        var dir = Path.Combine(PathTools.SaveHtmlPath, customInfo.Account.Id.ToString().Replace("-", ""), entity.Id.ToString().Replace("-", ""));
+                        if (System.IO.Directory.Exists(dir))
                         {
-                            paths.Add(filePath);
+                            paths.Add(dir);
+                            logos.Add(Path.Combine(PathTools.SaveHtmlPath, customInfo.Account.Id.ToString().Replace("-", ""), entity.Id.ToString().Replace("-", "") + "logo.jpg"));
                         }
                     }
                 }
@@ -96,10 +98,16 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 try
                 {
                     session.Context.SaveChange();
-                    foreach (var item in paths)
-	                {
-                        System.IO.File.Delete(item);
-	                }
+                    for (int i = 0; i < paths.Count; i++)
+                    {
+                        string item = paths[i];
+                        System.IO.Directory.Delete(item, true);
+                        //删除logo
+                        if (System.IO.File.Exists(logos[i]))
+                        {
+                            System.IO.File.Delete(logos[i]);
+                        }
+                    }
                   
                     return Json(new { result = 0 });
                 }
@@ -110,6 +118,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             }
             return Json(new { result = 0 });
         }
+
         public ActionResult UploadView ()
         {
            return View("Upload");
@@ -153,21 +162,27 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
             string tempFullPath = string.Empty;
             try
             {
+                
                 if (fi.Extension.ToLower() == ".xls" || fi.Extension.ToLower() == ".xlsx")
                 {
-                    ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.RPTemplatePath);
-                    erb.Build(path, Path.Combine(PathTools.BaseDirector,
-                            "temp",
-                            htmlName));
+                    htmlName = "x" + htmlName;
+                    ExcelReportBuilder erb = new ExcelReportBuilder(PathTools.ExcelRPTemplatePath);
+                    string savePath = Path.Combine(PathTools.BaseDirector,
+                            "temp/" + "x" + fname,
+                            htmlName);
 
-                    tempFullPath = Path.Combine(PathTools.TempPath,htmlName);
+                    erb.Build(path, Path.Combine(PathTools.BaseDirector,
+                            "temp/" + "x" + fname), "x" + fname);
+                            
+
+                    tempFullPath = Path.Combine(PathTools.TempPath, "x" + fname, htmlName);
                 }
                 else if (fi.Extension.ToLower() == ".doc" || fi.Extension.ToLower()==".docx")
                 {
                     htmlName = "w" + htmlName;
                     WordReportBuilder erb = new WordReportBuilder(PathTools.RPTemplatePath);
                     string savePath=Path.Combine(PathTools.BaseDirector,
-                            "temp/" + "w"+fname,
+                            "temp/" + "w"+ fname,
                             htmlName);
                     erb.Build(path,savePath);
 
@@ -355,7 +370,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
              var tempType = tempFullFileName.Substring(0, 1);
              var tempFileName = tempFullFileName.Substring(0, tempFullFileName.LastIndexOf("."));  
              
-             if (tempType == "w" && tempFileName.Length > 32)//word 转换
+             if ((tempType=="x" || tempType == "w") && tempFileName.Length > 32)//word excel 转换
              {
                  var copyPath = System.IO.Path.Combine(PathTools.BaseDirector, tempPath.Substring(0, tempPath.LastIndexOf('/'))).Replace("/", "\\");//.Substring(0, tempPath.LastIndexOf('/') - 1).Replace("/","\\"), tempFileName
                  var toPath=System.IO.Path.Combine(newPathDir, id.ToString().Replace("-",""));
@@ -392,7 +407,7 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
 
              // 子文件夹
              foreach (string sub in Directory.GetDirectories(fromPath))
-                 CopyFolder(sub + "\\", toPath + Path.GetFileName(sub) + "\\",saveFileName);
+                 CopyFolder(sub + "\\", toPath + "\\" + Path.GetFileName(sub) + "\\",saveFileName);
 
              // 文件
              foreach (string file in Directory.GetFiles(fromPath))
@@ -402,12 +417,10 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                  if (extension == ".html")
                  {                    
                      System.IO.File.Copy(file,Path.Combine(toPath,saveFileName), true);
-                    // System.IO.File.Delete(copyPath);
                  }
                  else
                  {
                      System.IO.File.Copy(file, Path.Combine(toPath, Path.GetFileName(file)), true);
-                     //System.IO.File.Delete(file);
                  }
              }
                
