@@ -21,7 +21,9 @@
     
     <script type="text/javascript">
         window.SetFrameHeight = function (h) {
-            $('#childiframe').height(h||1000);
+            h = h || 1000;
+            h = h < 800 ? 800 : h;
+            $('#childiframe').height(h);
         }
         $(document).ready(function () {
             $('.menu_item').bind('click', function () {
