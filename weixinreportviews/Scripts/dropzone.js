@@ -1108,7 +1108,9 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
       }
     };
 
-    Dropzone.prototype.addFile = function(file) {
+    Dropzone.prototype.addFile = function(file) {debugger
+      this.emit("addBeforefile");//custom event
+      //this.removeAllFiles();
       file.upload = {
         progress: 0,
         total: file.size,
