@@ -169,6 +169,7 @@ $(document).ready(function () {
             if (window.layerFilter) {
                 layer.close(window.layerFilter);
             }
+            window.parent.SetFrameHeight($('body').height() + 50);
         },
         "aoColumns": [
             { data: null, defaultContent: '', bSortable: false, sWidth:'1%',

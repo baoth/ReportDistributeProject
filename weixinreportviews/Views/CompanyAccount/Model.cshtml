@@ -28,7 +28,8 @@
                 layer.ext = function () {
                     layer.promptExtend(); //.prompt();
                 }
-            })
+            });
+            window.parent.SetFrameHeight($('body').height() + 50);
         });
         function BindEvent() {
             $("a[name='edit']").bind("click", function (e) {
