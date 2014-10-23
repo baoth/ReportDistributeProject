@@ -127,8 +127,8 @@ namespace weixinreportviews.Model
                 ArticleItem item = new ArticleItem();
                 item.Title = rp.Title;
                 item.Description = rp.Title;
-                item.Url = string.Format("{0}/{1}", PathTools.WebRoot, rp.Url);
-                item.PicUrl = string.Format("http://{0}/{1}", PathTools.WebRoot, rp.PicUrl);
+                item.Url = string.Format("{0}/{1}", PathTools.WebRoot, rp.Url);//e7d8e8e441cb44bda292b2a59df46000logo.jpg");//rp.Url);
+                item.PicUrl = string.Format("{0}/{1}", PathTools.WebRoot,rp.PicUrl);
                 rnm.Articles.Add(item);
             }
             ArticleItem itemhistory = new ArticleItem();

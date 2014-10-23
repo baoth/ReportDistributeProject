@@ -90,8 +90,8 @@ namespace weixinreportviews.Model
             get
             {
                 string url = string.Empty;
-                var pathUrl = "ReportViews\\" + this.AccountId + "\\" + this.Id + ".html";
-                var newPathUrl = "ReportViews\\" + this.AccountId + "\\" + this.Id+ "\\" + this.Id + ".html";
+                var pathUrl = "ReportViews/" + this.AccountId + "/" + this.Id + ".html";
+                var newPathUrl = "ReportViews/" + this.AccountId + "/" + this.Id+ "/" + this.Id + ".html";
                 var basePath = PathTools.BaseDirector;
                 if (System.IO.File.Exists(System.IO.Path.Combine(basePath,newPathUrl.Replace("-",""))))
                 {
@@ -111,7 +111,7 @@ namespace weixinreportviews.Model
             get
             {
                 string url = string.Empty;
-                var pathUrl = "ReportViews\\" + this.AccountId.ToString() + "\\" + this.Id.ToString() + "logo.jpg";
+                var pathUrl = "ReportViews/" + this.AccountId.ToString().Replace("-","") + "/" + this.Id.ToString().Replace("-","") + "logo.jpg";
                 if (System.IO.File.Exists(System.IO.Path.Combine(PathTools.BaseDirector, pathUrl))) url = pathUrl;
                 return url;
             }
