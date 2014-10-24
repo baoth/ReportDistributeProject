@@ -54,7 +54,7 @@ namespace weixinreportviews.Controllers
             }
            
 
-            return View("Model");
+            return View("Model1");
         }
 
         /// <summary>

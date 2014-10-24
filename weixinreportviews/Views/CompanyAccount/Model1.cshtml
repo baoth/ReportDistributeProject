@@ -1,0 +1,247 @@
+﻿@{
+    Layout = "../Master/_CheckSession.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <link href="../../Content/Css/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css" />      
+    <link href="../../Content/Css/bootstrap.css" rel="stylesheet" type="text/css" />
+     <link href="../../Content/Css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/button.css" rel="stylesheet" type="text/css" />   
+    <link href="../../Content/Css/select.css" rel="stylesheet" type="text/css" /> 
+
+    <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>        
+   
+   <script src="../../Scripts/layer.js" type="text/javascript"></script>
+    <script src="../../Scripts/numeralInput.js" type="text/javascript"></script>
+
+    <link href="../../Content/Css/help.css" rel="stylesheet" type="text/css" />
+     <script language="javascript" type="text/javascript">
+        var passwordField = "password";
+        var phoneField = "phone";
+        var addressField = "address";
+        $(document).ready(function () {
+            BindEvent();
+            layer.use('../../Scripts/layer.ext.js', function () {
+                layer.ext = function () {
+                    layer.promptExtend(); //.prompt();
+                }
+            });
+            window.parent.SetFrameHeight($('body').height() + 50);
+        });
+        function BindEvent() {
+            $("a[name='edit']").bind("click", function (e) {
+                
+                var updateField = $(e.target).parent().attr("t");
+                var pType = 0;
+                var title = "提示";
+                var len = 100;
+                var heigth = "200px";
+                var width = "300px";
+                if (updateField == passwordField) {
+                    pType = 1;
+                    title = "修改密码";
+                    len = 50;
+                    heigth = "150px";
+                }
+                else if (updateField == addressField) {
+                    pType = 3;
+                    title = "修改地址";
+                    len = 150;
+                }
+                else if (updateField == phoneField) {
+                    title = "修改电话";
+                    len = 20;
+                    heigth = "180px";
+                }
+                //密码文本 CheckPhone fieldName == 'phone'
+                layer.promptExtend({ title: title, type: pType, length: len, fieldName: updateField, height: heigth, width: width }, function (val, index, elem) {
+                    Save(val, updateField);
+                })
+            });
+
+        }
+        function MsgPrompt(title, ptype, value) {
+            layer.prompt({ title: title, type: ptype, val: value }, function (val, index, elem) {
+                if (updateField == phoneField) {
+                    if (CheckPhone(val) == false) {
+                        MsgPrompt(title,ptype,val);
+                        return;
+                    }
+                }
+                else if (updateField == addressField) {
+
+                }
+                Save(val, updateField);
+            })
+        }
+        
+       
+
+        function Save(val, updateField) {    debugger        
+            var Id = $("#GUID").val(); 
+            if (Id == "" || Id == undefined) { 
+                layer.msg("无效账号！");
+                return;
+            }
+           
+            var Name = $("#Name").val();
+            var OrderNumber = $("#OrderNumber").val();
+            var LoginKey = $("#LoginKey").val();
+            var Password = ""; //$("#Password").val();
+            if (updateField == passwordField) {
+                Password = val;
+            }
+            var Phone = $("#Phone").val();
+            if (updateField ==phoneField) {
+                Phone = val;
+                //if (CheckPhone(Phone) == false) return;
+            }
+            var Creator = $("#Creator").val();
+            var CreateDate = $("#CreateDate").val();
+            var Address = $("#Address").val();
+            if (updateField ==addressField) {
+                Address = val;
+            }
+            var Stoped = $("#Stoped").val()=="true"?true:false;
+            var data = { Name: Name, OrderNumber: OrderNumber, LoginKey: LoginKey, Address: Address, Phone: Phone, Stoped: Stoped, Password: Password, Id: Id, Creator: Creator, CreateDate: CreateDate, updateField:updateField };
+                $.ajax({
+                    url: "/CompanyAccount/Save",
+                    data: data,
+                    dataType: "JSON",
+                    type: "POST",
+                    success: function (data) {
+                        if (data != null) {
+                            if (data.result == 0) {
+                                layer.msg("操作成功！");
+                                CloseBack(Id);
+                            }
+                            else {
+                                layer.msg("保存失败！");
+                            }
+                        }
+                        else {
+                            layer.msg("保存失败！");
+                        }
+                    }
+
+                });
+        }
+
+        function CloseBack(id) {
+            var urlaccount = '/CompanyAccount/Model?Id='+id;
+                window.parent.ControlIFrame(urlaccount);
+          
+        }
+        
+        //校验Phone
+       function CheckPhone(val) {
+            return true;
+    }
+
+    </script>
+    <style>
+        body 
+        {
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+            font-family: "Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","微软雅黑","黑体",Arial,sans-serif;
+            color: #222;
+            font-size: 14px;
+        }
+        h4
+        {
+             font-size: 14px;
+        }
+        ul
+        {
+        padding-left: 0;
+        list-style-type: none;
+        display: block;
+        list-style-type: disc;
+        -webkit-margin-before: 1em;
+        -webkit-margin-after: 1em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        -webkit-padding-start: 40px;
+        }
+        li {
+         list-style-type: none;
+        display: block;
+        text-align: -webkit-match-parent;
+        }
+    </style>
+</head>
+<body style="background: white; border:0px; margin:10px;"> @*background: #f6f6f6;*@
+    <div style="text-align:center;margin: 0px auto; " class="accountinfo">
+   <div class="main_bd">    
+    <div class="account_setting_area" id="settingArea">        
+        <ul>
+            <li class="account_setting_item">  <h4>订&nbsp 单&nbsp 号:&nbsp&nbsp&nbsp&nbsp </h4>  <div class="meta_opr"> </div> <div class="meta_content"> @ViewData["OrderNumber"]  </div></li>
+            <li class="account_setting_item">  <h4>公司名称:&nbsp&nbsp &nbsp&nbsp </h4>  <div class="meta_opr"> </div> <div class="meta_content"> @ViewData["Name"]  </div></li>
+            <li class="account_setting_item">  <h4>账&nbsp&nbsp&nbsp&nbsp&nbsp 号:&nbsp&nbsp&nbsp&nbsp </h4>  <div class="meta_opr"> </div> <div class="meta_content"> @ViewData["LoginKey"]  </div></li>
+            <li class="account_setting_item">  <h4>电&nbsp&nbsp&nbsp&nbsp&nbsp 话:&nbsp&nbsp&nbsp&nbsp </h4>  <div class="meta_opr"> </div> <div class="meta_content"> @ViewData["Phone"]<a href="#" name="edit" t='phone' title="修改电话"><i class="fa fa-pencil-square-o"></i></a> </div><div id="divPhoneMsg"></div></li>
+            <li class="account_setting_item">  <h4>地&nbsp&nbsp&nbsp&nbsp&nbsp 址:&nbsp&nbsp&nbsp&nbsp</h4>  <div class="meta_opr"> </div> <div class="meta_content"> @ViewData["Address"] <a href="#" name="edit" t='address' title="修改地址"><i class="fa fa-pencil-square-o"></i></a> </div></li>
+            <li class="account_setting_item">  <h4>密&nbsp&nbsp&nbsp&nbsp&nbsp 码:&nbsp&nbsp&nbsp&nbsp</h4>  <div class="meta_opr"> </div> <div class="meta_content">****** <a href="#" name="edit" t='password'  title="修改密码"><i class="fa fa-pencil-square-o"></i></a></div></li>
+            <li class="account_setting_item"> 
+                <table border=1px  style="border-color:#E3E0D5; width:100%;height:100%">
+                    
+                    <thead>
+                        <tr style="height:35px;text-align:center">
+                        <th style="width:35px;text-align:center">序号</th>
+                        <th style="width:150px;text-align:center">订单号</th>
+                        <th style="width:250px;text-align:center">授权有效期</th>
+                        <th style="width:250px;text-align:center">授权点</th>
+                        <th style="width:250px;text-align:center"> 停用</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            @{
+                                var str = string.Empty;
+                                var list = (List<weixinreportviews.Model.SS_LisenceView>)ViewData["SS_LisenceList"];
+                                if (list != null && list.Count > 0)
+                                {
+                                    int i=1;
+                                    foreach (weixinreportviews.Model.SS_LisenceView item in list)
+                                    {
+                                        <tr style="height:35px">
+                                            <td>@i</td>
+                                            <td>@item.OrderNumber</td>
+                                            <td>@item.EffectiveDateDisplay 至 @item.ExpiryDateDisplay</td>
+                                            <td>@item.LisencePoint</td>
+                                            <td>@item.StopedDisplay</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                            }
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+    </div>
+      <div style="display:none">  
+          
+       <input  id="Creator"  type="hidden" value="@ViewData["Creator"]" />
+       <input id="GUID" name="Id" type="hidden" value="@ViewData["Id"]" />
+       <input id="AcitonId"  type="hidden" value="@ViewData["AC"]" />
+       <input type="hidden" id="Stoped" name="Stoped" value="@ViewData["Stoped"]" />
+       <input id="ProductKind" value="@ViewData["ProductKind"]"  name="LoginKey"  type="hidden" />
+       <input id="Name" name="Name" value="@ViewData["Name"]" class="input-xlarge" type="hidden" />
+       <input id="OrderNumber" value="@ViewData["OrderNumber"]" name="OrderNumber" class="input-xlarge" type="hidden" />
+       <input id="LoginKey" value="@ViewData["LoginKey"]"  name="LoginKey" class="input-xlarge" type="hidden" />            
+      
+       <input  id="Phone"  name="Phone" value="@ViewData["Phone"]" type="hidden" />
+       <input id="CreateorId" name="CreateorId" value="@ViewData["CreateorName"]" type="hidden" />
+       <input  id="CreateDate" name="CreateDate" value="@ViewData["CreateDate"]"  type="hidden" />
+       <input id="ModifyDate" name="ModifyDate" value="@ViewData["ModifyDate"]" type="hidden" /> 
+       <input id="Address"  name="Address" value="@ViewData["Address"]"  type="hidden" />
+         
+      </div>
+
+</body>
+</html>
