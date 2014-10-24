@@ -59,7 +59,10 @@
       <HintPath>Cbin\QSmart.Weixin.Core.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -124,6 +127,7 @@
     <Content Include="Content\Css\font-awesome\4.1.0\css\font-awesome-ie7.min.css" />
     <Content Include="Content\Css\font-awesome\4.1.0\css\font-awesome.min.css" />
     <Content Include="Content\Css\FReportHome\layout_head.css" />
+    <Content Include="Content\Css\helpm.css" />
     <Content Include="Content\Css\Logon\form.css" />
     <Content Include="Content\Css\Logon\logon.css" />
     <Content Include="Content\Css\Logon\ieform.css" />
@@ -148,6 +152,7 @@
     <Content Include="Content\Css\Switch\main.css" />
     <Content Include="Content\Css\Upload\basic.css" />
     <Content Include="Content\Css\Upload\dropzone.css" />
+    <Content Include="Content\Css\help.css" />
     <Content Include="Content\Img\avatar.png" />
     <Content Include="Content\Img\bg_login_banner.png" />
     <Content Include="Content\Img\icon_menu_developer.png" />
@@ -271,6 +276,7 @@
     <Content Include="Views\CompanyAccount\Model.cshtml" />
     <Content Include="Views\Logon\MobileIndex.cshtml" />
     <Content Include="Views\FReportHome\MobileIndex.cshtml" />
+    <Content Include="Views\CompanyAccount\Model1.cshtml" />
     <None Include="Views\Test\connext.cshtml" />
     <None Include="Views\Test\connext1.cshtml" />
     <Content Include="Content\Css\f.css" />
@@ -315,7 +321,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>23393</DevelopmentServerPort>
+          <DevelopmentServerPort>40578</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

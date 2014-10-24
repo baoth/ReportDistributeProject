@@ -20,6 +20,11 @@
     </style>
     
     <script type="text/javascript">
+        window.SetFrameHeight = function (h) {
+            h = h || 1000;
+            h = h < 800 ? 800 : h;
+            $('#childiframe').height(h);
+        }
         $(document).ready(function () {
             $('.menu_item').bind('click', function () {
 
@@ -89,6 +94,7 @@
             var char = url.indexOf('?') >= 0 ? "&" : "?"
             return url + char + name + "=" + val;
         };
+
     </script>
     
 </head>
@@ -157,8 +163,8 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="main_hd" style="height:100%">
-                        <iframe id="childiframe" src=""  class="manage_r" style="border:0px;width:100%;height:100%"></iframe>
+                    <div class="main_hd" style="height:100%"> 
+                        <iframe id="childiframe" src=""  class="manage_r" scrolling=no style="border:0px;width:100%;height:100%"></iframe>
                     </div>
                 </div>
              </div>
