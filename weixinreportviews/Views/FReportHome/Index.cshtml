@@ -7,8 +7,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>微信第一表</title>
-    <link href="../../Content/Css/public.css" rel="stylesheet" type="text/css" />
+    
     <link href="../../Content/Css/layer.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Css/FReportHome/layout_head.css" rel="stylesheet" type="text/css" />
+        
     <script src="../../Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="../../Scripts/layer.js" type="text/javascript"></script>
     <style type="text/css">
@@ -18,12 +20,25 @@
     </style>
     
     <script type="text/javascript">
+        window.SetFrameHeight = function (h) {
+            h = h || 1000;
+            h = h < 800 ? 800 : h;
+            $('#childiframe').height(h);
+        }
         $(document).ready(function () {
-            $('.column li').bind('click', function () {
-                $(".column li").removeClass("column5");
-                var c = $(this).attr('controll');
-                $(this).addClass("column5");
+            $('.menu_item').bind('click', function () {
+
+                var c = $(this).attr('ctarget');
+                var t = $(this).attr('ctitle');
+
                 $("#childiframe").attr("src", c);
+                $("#main_hd_title").html(t);
+                $('.menu_item').each(function () {
+                    $(this).removeClass('selected');
+                });
+                $(this).addClass('selected');
+                
+                $('body,html').animate({ scrollTop: 0 }, 1); //页面置顶
             })
             $("#logout").bind("click", function (e) {
                 $.LogOut(e);
@@ -35,7 +50,13 @@
                 url = AddParams("Id", id, url);
                 ControlIFrame(url);
             });
+
+            $("#init_page").trigger("click");
+            
         });
+        window.init_page = function () {
+            $("#init_page").trigger("click")
+        };
         window.ControlIFrame = function (url) {
             $("#childiframe").attr("src", url);
         };
@@ -73,32 +94,80 @@
             var char = url.indexOf('?') >= 0 ? "&" : "?"
             return url + char + name + "=" + val;
         };
+
     </script>
     
 </head>
-<body>
-<div class="manage">
-    <div class="manage_l">
-        <div class="w_logo">  <img src="../../Content/Img/manage_01.png" /></div>
-        <div class="userface" style="display:none;"><img src="../../Content/Img/userface.png"></div>
-        <p class="username">
-        <span class="username2">
-        <a href="#" action="/CompanyAccount/model" companyId="@ViewData["Id"]" id="companyName">@ViewData["Name"]</a>
-        </span> | 
-        <span class="username2"> @* ViewData["Name"]*@
-        <a href="#" action="/Logon/LogOut" id="logout">退出</a>
-        </span></p>
-        <div class="column">
-            <ul>
-                <li class="column1 column5" controll="/FReportMain/Grid"><a href="#" onclick="return false;" >报表发布</a></li>
-                <li class="column2 "  controll="/FReportUserAttention/Index"><a href="#"  onclick="return false;">绑定管理</a></li>
-            </ul>
+ 
+<body class="zh_CN">
+        <div class="head" id="header">
+            <div class="head_box">
+                <div class="inner wrp">
+                    <h1 class="logo"><a href="#" title="微信公众平台"></a></h1>
+                    <div class="account">
+                        <div class="account_meta account_info account_meta_primary">
+                            <a href="#" class="nickname">@ViewData["Name"]</a>
+                            <span class="type_wrp">
+                                <a href="#" class="type icon_service_label">服务号</a>
+                                <a href="#" class="type icon_verify_label success">已认证</a>
+                            </span>
+                            <a href="#"><img src="../Content/Img/avatar.png" class="avatar"></a>
+                        </div>
+                        <div id="accountArea" class="account_meta account_inbox account_meta_primary">
+                                <a href="#" class="account_inbox_switch">
+                                    <i class="icon_inbox">通知</i>&nbsp;                
+                                </a>
+                            </div>
+                        <div class="account_meta account_logout account_meta_primary">
+                            <a id="logout" href="#" action="/Logon/LogOut">退出</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
- <!--   <div class="manage_r">-->
-    <iframe id="childiframe" src="/FReportMain/Grid"  class="manage_r" style="border:0px;"></iframe>
-<!--</div>-->
-</div>
+        <div id="body" class="body page_index">
+            <div id="js_container_box" class="container_box cell_layout side_l">
+                <div class="col_side">
+                    <div class="menu_box" id="menuBar">
+                        <dl class="menu" style="border-top:0px;">
+                            <dt class="menu_title">
+                                <i class="icon_menu" style="background:url(../Content/Img/icon_menu_statistics.png) no-repeat;"></i>报表        
+                            </dt> 
 
+				            <dd class="menu_item" ctarget="/FReportMain/Model" ctitle="新表发布"><a href="#" onclick="return false;">新表发布</a></dd>
+					        <dd class="menu_item" ctarget="/FReportMain/Grid" ctitle="报表管理" id="init_page"><a href="#" onclick="return false;">报表管理</a></dd>
+		                </dl>
+                        <dl class="menu">
+                            <dt class="menu_title">
+                                <i class="icon_menu" style="background:url(../Content/Img/icon_menu_setup.png) no-repeat;"></i>设置        
+                            </dt> 
+				            <dd class="menu_item" ctarget="/FReportUserAttention/Index" ctitle="人员绑定"><a href="#" onclick="return false;">人员绑定</a></dd>
+		                </dl>
+                        <dl class="menu">
+                            <dd  class="menu_item clickable" ctitle="账户信息">
+                                <a href="#" action="/CompanyAccount/model" companyId="@ViewData["Id"]" id="companyName">       
+                                    <i class="icon_menu" style="background:url(../Content/Img/icon_menu_developer.png) no-repeat;"></i>
+                                    账户信息
+                                </a>    
+                            </dd>
+	                    </dl>
+                    </div>
+                </div>
+                <div class="col_main">
+                    <div class="main_hd">
+                        <h2 id="main_hd_title">信息</h2>
+                        <div class="title_tab" id="topTab">
+                            <ul class="tab_navs title_tab" data-index="0">
+                                @*<li data-index="0" class="tab_nav first js_top  selected" data-id="dev"><a href="#">配置项</a></li>
+                                <li data-index="1" class="tab_nav  js_top " data-id="group-alert"><a href="#">接口报警</a></li>*@
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="main_hd" style="height:100%"> 
+                        <iframe id="childiframe" src=""  class="manage_r" scrolling=no style="border:0px;width:100%;height:100%"></iframe>
+                    </div>
+                </div>
+             </div>
+        </div>
 </body>
 </html>

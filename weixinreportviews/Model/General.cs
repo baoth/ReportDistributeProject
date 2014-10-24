@@ -15,8 +15,8 @@ namespace weixinreportviews.Model
     {
         public const string LogonSessionName = "userInfo";        
         public const string Token = "tiantian315";
-        public const string AppId = "wxadcc12090e7138b3";
-        public const string AppSecret = "722dfaf58953c47ffd9ac9548c727461";
+        public const string AppId = "wx1204eece4b257b93";
+        public const string AppSecret = "02be849ec6193d35bebf4bb0edc44443";
         public const string authurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxadcc12090e7138b3&redirect_uri=http%3A%2F%2Fwww.baoth.com%2fHome&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
 
         public static DbSession CreateDbSession() { return new DbSessionInstance(); }
@@ -518,7 +518,7 @@ namespace weixinreportviews.Model
                 tableNameCreator = QueryB
             });
             DataTable dt = this.Context.QueryTable(Query);
-            if (dt != null && dt.Rows.Count > 0) TotalCount = (int)dt.Rows[0]["TotalCount"];
+            if (dt != null && dt.Rows.Count > 0) TotalCount = Convert.ToInt32(dt.Rows[0]["TotalCount"]);
             
             return this.Context.ConversionEntity<T>(dt);
         }

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using weixinreportviews.Model;
 using System.Text;
 using System.Text.RegularExpressions;
+using QSmart.Weixin.Core;
 
 namespace weixinreportviews.Controllers
 {
@@ -27,7 +28,12 @@ namespace weixinreportviews.Controllers
             try
             {
                 DbSession session = General.CreateDbSession();
+                session.Context.CreateTable<SS_CompanyAccount>();
+                session.Context.CreateTable<SS_Lisence>();
+                session.Context.CreateTable<CS_UserAttention>();
+                session.Context.CreateTable<CS_BindUser>();
                 session.Context.CreateTable<CS_FirstReport>();
+                
                 session.Context.SaveChange();
              return  Json("=====创建完成=======", JsonRequestBehavior.AllowGet);
             }
@@ -63,6 +69,49 @@ namespace weixinreportviews.Controllers
         public ActionResult TestF() 
         {
             return View("Filter");
+        }
+
+        public JsonResult CreateWeixinMenu()
+        {
+            try
+            {
+                WeixinCore cc = General.CreateWeixinCore();
+                WeixinMenu wm = new WeixinMenu();
+                WeixinMenuButton wmb = new WeixinMenuButton
+                {
+                    type = "click",
+                    name = "报表",
+                    key = "firstreport"
+                };
+                WeixinMenuButton wmbv = new WeixinMenuButton
+                {
+                    type = "view",
+                    name = "官网",
+                    url = "http://www.nkwang.cn/"
+                };
+                wm.button.Add(wmb);
+                wm.button.Add(wmbv);
+                cc.CreateMenu(wm);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+ //            {
+ //    "button":[
+ //    {	
+ //         "type":"click",
+ //         "name":"报表",
+ //         "key":"firstreport"
+ //     },
+ //     {
+ //         "type":"view",
+ //         "name":"官网",
+ //         "url":"http:/www.nkwang.cn/"
+           
+ //      }]
+ //}
+            return Json("success");
         }
     }
 }

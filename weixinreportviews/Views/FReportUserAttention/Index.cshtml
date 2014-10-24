@@ -234,6 +234,7 @@
                     }
                     $.setSwitch();
                     BindreDTEvent();
+                    window.parent.SetFrameHeight($('body').height()+50);
                 },
                 "aoColumns": [
                               { data: null, defaultContent: '', bSortable: false, sWidth: "3%",
@@ -529,7 +530,7 @@
     </script>
 
 </head>
-<body style=" min-height: 100%;margin:10px;">
+<body style=" min-height: 100%;margin:10px;" >
 
      <div style="width:800px;height:50px;" >          
         <a href="#" id="b-del"  action="Delete" class="disabled button button-rounded button-flat-highlight">删除</a>
@@ -579,4 +580,9 @@
 		<a href="#" action="Delete" title="删除"><i class="icon-trash"></i></a>
 	</div>
 </body>
+<script>
+//    (function () {
+//        window.parent.SetFrameHeight($('body').height());
+//    })()
+</script>
 </html>

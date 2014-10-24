@@ -29,7 +29,6 @@
                 acceptedFiles: ".xls,.doc,.docx",
                 init: function () {
                     this.on("success", function (file) {
-                        alert(1);
                         console.log("File " + file.name + "uploaded");
                     });
                     this.on("removedfile", function (file) {
