@@ -188,6 +188,10 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
 
                     tempFullPath = Path.Combine(PathTools.TempPath,"w"+fname, htmlName);
                 }
+                else if (fi.Extension.ToLower() == ".pdf")
+                {
+
+                }
             }
             catch(Exception ex)
             {
