@@ -220,7 +220,7 @@ namespace weixinreportviews.Model
         private SheetClientArea _ClientArea = new SheetClientArea();
         private Aspose.Cells.Worksheet ws = null;
         private List<CellAreaReader> MergedCells = new List<CellAreaReader>();
-
+        private int tablewidth = 0;
 
 
         public class CellAreaReader
@@ -309,7 +309,6 @@ namespace weixinreportviews.Model
             XAttribute cellpadding = new XAttribute("cellpadding", 0);
             XAttribute cellspacing = new XAttribute("cellspacing", 0);
             XAttribute rules = new XAttribute("rules", "all");
-            XAttribute styles = new XAttribute("style", "border-top:1px;border-bottom:1px;border-left:1px;border-right:1px;");
             XElement table = new XElement("table", cellpadding, cellspacing);
 
             int colCount = this.ws.Cells.MaxDataColumn;
@@ -319,6 +318,10 @@ namespace weixinreportviews.Model
                 XElement tr = new XElement("tr");
                 for (int colIndex = 0; colIndex <= colCount; colIndex++)
                 {
+                    if (rowIndex == 0)
+                    {
+                        this.tablewidth += this.ws.Cells.GetColumnWidthPixel(colIndex);
+                    }
                     CellAreaReader car = this.MergedCells.Find(e => e.Exists(rowIndex, colIndex));
                     if (car == null)
                     {
@@ -343,10 +346,17 @@ namespace weixinreportviews.Model
                         tr.Add(td);
                     }
                 }
+
                 table.Add(tr);
                 hasNode = true;
             }
-
+            string stylestr = string.Empty;
+            if (this.tablewidth != 0)
+                stylestr = string.Format("table-layout:fixed;width:{0}px", this.tablewidth);
+            else
+                stylestr = "table-layout:fixed;";
+            XAttribute styles = new XAttribute("style", stylestr);
+            table.Add(styles);
             return hasNode ? table : null;
         }
         /// <summary>
@@ -361,11 +371,11 @@ namespace weixinreportviews.Model
             int rowCount = this.ws.Cells.MaxRow;
             for (int rowIndex = 0; rowIndex <= rowCount; rowIndex++)
             {
-                result.Height += this.ws.Cells.Rows[rowIndex].Height; //计算最高值
+                result.Height += this.ws.Cells.GetRowHeightPixel(rowIndex); //计算最高值
             }
             for (int colIndex = 0; colIndex <= colCount; colIndex++)
             {
-                result.Width += this.ws.Cells.Columns[colIndex].Width; //计算最宽值
+                result.Width += this.ws.Cells.GetColumnWidthPixel(colIndex); //计算最宽值
             }
             return result;
         }
@@ -490,17 +500,21 @@ namespace weixinreportviews.Model
                 style.Font.IsItalic ? "italic" : "normal", style.Font.IsBold ? "bold" : "normal",
                 style.Font.Size, style.Font.Name);
             stylestr += string.Format("text-align:{0};", style.HorizontalAlignment.ToString().ToLower());
+            stylestr += "white-space:nowrap;overflow:hidden;"; //隐藏多余文字
 
             //设置高宽
-
+            int mheight = 0, mwidth = 0;
             if (cellarea == null)
             {
-                stylestr += string.Format("height:{0}px;", this.ws.Cells.GetRowHeightPixel(cell.Row));
-                stylestr += string.Format("width:{0}px;", this.ws.Cells.GetColumnWidthPixel(cell.Column));
+                mheight = this.ws.Cells.GetRowHeightPixel(cell.Row);
+                mwidth = this.ws.Cells.GetColumnWidthPixel(cell.Column);
+
+                stylestr += string.Format("height:{0}px;line-height:{0}px", mheight);
+                stylestr += string.Format("width:{0}px;", mwidth);
             }
             else
             {
-                int mheight = 0, mwidth = 0;
+
                 for (int i = cellarea.Area.StartRow; i <= cellarea.Area.EndRow; i++)
                 {
                     mheight += this.ws.Cells.GetRowHeightPixel(i);
@@ -509,7 +523,8 @@ namespace weixinreportviews.Model
                 {
                     mwidth += this.ws.Cells.GetColumnWidthPixel(j);
                 }
-                stylestr += string.Format("height:{0}px;", mheight);
+
+                stylestr += string.Format("height:{0}px;line-height:{0}px", mheight);
                 stylestr += string.Format("width:{0}px;", mwidth);
             }
             //获取border

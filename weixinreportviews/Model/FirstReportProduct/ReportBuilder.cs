@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using QSmart.Core.Object;
 using System.IO;
 using System.Data;
+using System.Text;
 
 namespace weixinreportviews.Model
 {
@@ -212,6 +213,9 @@ namespace weixinreportviews.Model
         }
     }
 
+    /// <summary>
+    /// excel 转换成HTML
+    /// </summary>
     public class ExcelReportBuilder
     {
 
@@ -382,4 +386,153 @@ namespace weixinreportviews.Model
         }
     }
 
+    /// <summary>
+    /// pdf 转换成HTML
+    /// </summary>
+    public class PdfReportBuilder
+    {
+        private string _TemplatePath = string.Empty;
+        /// <summary>
+        /// 获取html模板完整路径
+        /// </summary>
+        public string TemplatePath
+        {
+            get { return _TemplatePath; }
+        }
+
+        public PdfReportBuilder(string TemplatePath) { this._TemplatePath = TemplatePath; }
+        private Aspose.Pdf.Document oDoc;
+
+        /// <summary>
+        /// 创建html
+        /// </summary>
+        /// <param name="filePath">参照文件完整路径</param>
+        /// <param name="savePath">转换成html后保存的文件夹路径</param>
+        /// <param name="savefileName">保存的文件名（无后缀）</param>
+        /// <param name="isDelSource">是否删除参照文件</param>
+        /// <returns></returns>
+        public bool Build(string filePath, string savePath, string savefileName, bool isDelSource = true)
+        {
+
+            string templatePath = this.TemplatePath;
+            string savefile = Path.Combine(savePath, savefileName + ".html");
+            try
+            {
+                //Html5Frame mframe = new Html5Frame(templatePath);//模板文件
+
+                oDoc = new Aspose.Pdf.Document(filePath);
+                if (!System.IO.Directory.Exists(savePath)) System.IO.Directory.CreateDirectory(savePath);
+                oDoc.Save(savefile, Aspose.Pdf.SaveFormat.Html);
+
+                try
+                {
+                    System.Collections.ArrayList mytxt = new System.Collections.ArrayList();
+                    StreamReader sr = new StreamReader(savefile, Encoding.UTF8);
+                    while (!sr.EndOfStream)
+                    {
+                        string mline = sr.ReadLine();
+                        mytxt.Add(mline);
+                        if (mline.Trim() == "<head>")
+                        {
+                            mytxt.Add("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0\"/>");
+                            mytxt.Add("<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />");
+                            mytxt.Add("<meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />");
+                            mytxt.Add("<style type=\"text/css\">");
+                            mytxt.Add("div{width:2000px;height:1000px;}");
+                            mytxt.Add("</style>");
+                        }
+
+                    }
+                    sr.Close();
+                    StreamWriter writer = new StreamWriter(savefile);
+                    for (int i = 0; i < mytxt.Count; i++)
+                    {
+                        writer.WriteLine(mytxt[i]);
+                    }
+                    writer.Close();
+
+                    //string con = "";
+                    //FileStream fs = new FileStream(savefile, FileMode.Open, FileAccess.Read);
+                    //StreamReader sr = new StreamReader(fs);
+                    //con = sr.ReadToEnd();
+                    //con = con.Replace("&nbsp;", "<![CDATA[&nbsp;]]>");
+                    //sr.Close();
+                    //fs.Close();
+                    //FileStream fs2 = new FileStream(savefile, FileMode.Open, FileAccess.Write);
+                    //StreamWriter sw = new StreamWriter(fs2);
+                    //sw.WriteLine(con);
+                    //sw.Close();
+                    //fs2.Close();
+                    
+
+                    //XDocument xdoc = XDocument.Load(savefile);
+                    //var head = xdoc.Root.Element("head");
+                    //XAttribute metaname1 = new XAttribute("name", "viewport");
+                    //XAttribute metacount1 = new XAttribute("content", "width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0");
+                    //XElement meata1 = new XElement("meta", metaname1, metacount1);
+                    //head.Add(meata1);
+                    //XAttribute metaname2 = new XAttribute("name", "apple-mobile-web-app-capable");
+                    //XAttribute metacount2 = new XAttribute("content", "yes");
+                    //XElement meata2 = new XElement("meta", metaname2, metacount2);
+                    //head.Add(meata2);
+                    //XAttribute metaname3 = new XAttribute("name", "apple-mobile-web-app-status-bar-style");
+                    //XAttribute metacount3 = new XAttribute("content", "black");
+                    //XElement meata3 = new XElement("meta", metaname3, metacount3);
+                    //head.Add(meata3);
+                    //xdoc.Save(savefile);
+
+                    //fs = new FileStream(savefile, FileMode.Open, FileAccess.Read);
+                    //sr = new StreamReader(fs);
+                    //con = sr.ReadToEnd();
+                    //con = con.Replace("<![CDATA[&nbsp;]]>", "&nbsp;");
+                    //sr.Close();
+                    //fs.Close();
+                    //fs2 = new FileStream(savefile, FileMode.Open, FileAccess.Write);
+                    //sw = new StreamWriter(fs2);
+                    //sw.WriteLine(con);
+                    //sw.Close();
+                    //fs2.Close();
+
+
+                    //Html5Frame pdfframe = new Html5Frame(savefile);
+                    //XNode bodyContent = (XElement)pdfframe.body.FirstNode;
+
+                    //if (bodyContent != null)
+                    //{
+
+
+                    //    XElement div = mframe.GetXElementById("scroller");
+                    //    if (div != null && bodyContent != null)
+                    //    {
+                    //        do
+                    //        {
+                    //            div.Add(bodyContent);
+                    //            bodyContent = bodyContent.NextNode;
+                    //        } while (bodyContent != null);
+
+                    //    }
+                    //    var links = pdfframe.head.Elements("link");
+                    //    foreach (XElement lnk in links)
+                    //    {
+                    //        mframe.head.Add(lnk);
+                    //    }
+                    //}
+
+                    ////pdf 转换后的HTML
+                    //mframe.Save(savefile);
+                }
+                catch { }
+                if (isDelSource)
+                {
+                    File.Delete(filePath);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+    }
 }

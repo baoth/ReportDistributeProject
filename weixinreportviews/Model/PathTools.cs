@@ -36,6 +36,10 @@ namespace weixinreportviews.Model
         {
             get { return System.IO.Path.Combine(PathTools.BaseDirector, System.Configuration.ConfigurationManager.AppSettings["ExcelRPTemplate"]); }
         }
+        public static string PdfRPTemplatePath
+        {
+            get { return System.IO.Path.Combine(PathTools.BaseDirector, System.Configuration.ConfigurationManager.AppSettings["PdfRPTemplate"]); }
+        }
         public static string AddWebHeadAddress(string path) 
         {
             if (string.IsNullOrEmpty(path)) return "";

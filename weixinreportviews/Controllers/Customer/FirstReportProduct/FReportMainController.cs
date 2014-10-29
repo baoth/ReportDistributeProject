@@ -190,7 +190,17 @@ namespace weixinreportviews.Controllers.Customer.FirstReportProduct
                 }
                 else if (fi.Extension.ToLower() == ".pdf")
                 {
+                    htmlName = "x" + htmlName;
+                    PdfReportBuilder erb = new PdfReportBuilder(PathTools.PdfRPTemplatePath);
+                    string savePath = Path.Combine(PathTools.BaseDirector,
+                            "temp/" + "x" + fname,
+                            htmlName);
 
+                    erb.Build(path, Path.Combine(PathTools.BaseDirector,
+                            "temp/" + "x" + fname), "x" + fname);
+
+
+                    tempFullPath = Path.Combine(PathTools.TempPath, "x" + fname, htmlName);
                 }
             }
             catch(Exception ex)
