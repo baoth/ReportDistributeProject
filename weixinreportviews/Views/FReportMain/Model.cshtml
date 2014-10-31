@@ -288,7 +288,7 @@
 
         <tr>
             <td class="tdText">
-                <label ><font color="red">*</font>报表名称  &nbsp </label>
+                <label >报表名称 &nbsp <font color="red">(必填)</font>   </label>
                 <div>
                  <input placeholder="请输入报表名称" maxlength="30" class="input-xlarge" id="txtBBMC" onblur="CheckField1('txtBBMC','Title','报表名称')" name="txtBBMC" value="@ViewData["Title"]"  type="text" />
 
@@ -313,7 +313,7 @@
         </tr>
         <tr>
             <td class="tdText" colspan="2">
-                <label>图片  &nbsp </label>
+                <label>图片&nbsp <font color="red">(建议10K以下大小)</font>  &nbsp </label>
                 <div style="width:100px;height:100px;background-color:White;overflow:hidden">
                     <img id="logo" src="" style="width:100px;height:100px;"/>
                     <input style="display:none;" id="txtLogo" type="text" />
@@ -335,6 +335,7 @@
         </tr>
       </table>
        </div>
+       <font color="red">(必填)</font>
        <div  class="dropzone" ></div>
       @* <iframe id='itest' style="top:400px;width:100%;height:400px;position:absolute;z-index:1;" frameborder=0 src="http://www.baidu.com" scrolling=auto >*@
        

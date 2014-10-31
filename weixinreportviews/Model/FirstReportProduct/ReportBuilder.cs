@@ -111,6 +111,13 @@ namespace weixinreportviews.Model
             return result;
         }
 
+        public List<XElement> GetXElementByTag(string name)
+        {
+            List<XElement> results = new List<XElement>();
+            QueryByTag(name, this.body.Elements(), results);
+            return results;
+        }
+
         public void Save(string path) { this.doc.Save(path); }
 
         private void QueryById(string selectorId,IEnumerable<XElement> xeles , ref XElement result)
@@ -130,6 +137,19 @@ namespace weixinreportviews.Model
                 }
                 QueryById(selectorId, xele.Elements(), ref result);
                 if (result != null) return;
+            }
+        }
+
+        private void QueryByTag(string selectorTag, IEnumerable<XElement> xeles, List<XElement> results)
+        {
+            if (xeles == null) return;
+            foreach (XElement xele in xeles)
+            {
+                if (xele.Name.LocalName.ToLower() == "td")
+                {
+                    results.Add(xele);
+                }
+                QueryByTag(selectorTag, xele.Elements(), results);
             }
         }
     }
@@ -350,17 +370,35 @@ namespace weixinreportviews.Model
                 Html5Frame mframe = new Html5Frame(templatePath);//模板文件
 
                 oDoc = new Aspose.Words.Document(filePath);
+                float pagewidth = oDoc.PageCount > 0 ? oDoc.GetPageInfo(0).WidthInPoints : 0;
                 oDoc.Save(savePath,Aspose.Words.SaveFormat.Html);
 
                 try
                 {
                     Html5Frame wordframe = new Html5Frame(savePath);
                     XElement bodyContent = (XElement)wordframe.body.FirstNode;
-                    //XElement body=wordframe.body;
+                    IEnumerable<XElement> tds = wordframe.GetXElementByTag("td");
+                    if (tds != null)
+                    {
+                        foreach (XElement td in tds)
+                        {
+                            XAttribute tdstyle = td.Attribute("style");
+                            if (tdstyle != null)
+                            {
+                                tdstyle.Value = tdstyle.Value.Replace("border-left-width:0.5pt", "border-left-width:1px");
+                                tdstyle.Value = tdstyle.Value.Replace("border-bottom-width:0.5pt", "border-bottom-width:1px");
+                                tdstyle.Value = tdstyle.Value.Replace("border-right-width:0.5pt", "border-right-width:1px");
+                                tdstyle.Value = tdstyle.Value.Replace("border-top-width:0.5pt", "border-top-width:1px");
+                            }
+                        }
+
+                    }
 
                     if (bodyContent != null)
                     {
+                        XAttribute styles = new XAttribute("style", string.Format("width:{0}px", pagewidth));
                         XElement div = mframe.GetXElementById("table");
+                        if (pagewidth > 0) div.Add(styles);
                         if (div != null) div.Add(bodyContent);
                     }
                     //删除word 转换的HTML
